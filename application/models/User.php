@@ -3,6 +3,16 @@
 class User extends ActiveRecord\Model
 {
 
+    public static function generate_password($pass)
+    {
+
+        $salt = bin2hex(mcrypt_create_iv(32, MCRYPT_RAND));
+        $hash = hash("sha256", $salt . $pass);
+
+        return $salt . $hash;
+
+    }
+
     public function set_pass($plain_text)
     {
         $this->password = $this->hash_password($plain_text);
@@ -30,15 +40,14 @@ class User extends ActiveRecord\Model
     {
         $user = User::find_by_login($login);
 
-        if(!$user || !$user->access_admin)
+        if (!$user || ($is_admin && !$user->is_access_admin))
             return FALSE;
 
-        if($user->validate_password($password))
-        {
+        if ($user->validate_password($password)) {
             User::login($user->id);
             return $user;
         }
-      else
+        else
             return FALSE;
     }
 
@@ -53,6 +62,29 @@ class User extends ActiveRecord\Model
     {
         $CI =& get_instance();
         $CI->session->sess_destroy();
+    }
+
+    public function get_is_access_admin()
+    {
+        return $this->type == "admin";
+    }
+
+    public function get_plain_address()
+    {
+        return $this->country . ', ' . $this->city . ', ' . $this->address;
+    }
+
+    public function get_plain_type(){
+        switch($this->type){
+            case "admin":
+                return "Администратор";
+            case "manager":
+                return "Менеджер";
+            case "user":
+                return "Пользователь";
+            default:
+                return "Неизвестно";
+        }
     }
 }
 

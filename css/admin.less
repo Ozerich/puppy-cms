@@ -1,0 +1,431 @@
+*, body *{
+    font-family: Verdana;
+    font-size: 12px;
+}
+
+html, body{height: 100%;}
+* html body {height: 100%;}
+
+#main-wrapper {
+    min-height: 100%;
+    position: relative;
+}
+
+a, a:link, a:visited {
+    color: #234;
+    text-decoration: none;
+}
+a:hover, a:active{
+    color: #06c;
+    text-decoration: none;
+}
+
+input[type=submit], button, a.button{
+    border: none;
+    display: inline-block;
+    border: 1px solid #B9D3E6;
+    color: #6E6E6E;
+    font-size: 11px;
+    background-color: #DBE9F3 !important;
+}
+input[type=submit].noimg, button.noimg, a.button.noimg{padding: 5px 20px;}
+input[type=submit]:hover, button:hover, a.button:hover{background-color: #D7FFBF !important;}
+
+/*-----------------------------------------------------------------------------------------------------------------
+    Auth page
+-----------------------------------------------------------------------------------------------------------------*/
+
+body.adminauth{background: #E4E4E4}
+
+#adminauth-block{
+    width: 400px;
+    margin: 80px auto;
+    background: #fff;
+    border: 1px solid #B9D3E6;
+    font-size: 11px;
+}
+
+#adminauth-block .header{
+    background: #FFFFEC;
+    height: 20px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 20px;
+    border-bottom: 1px solid #B9D3E6;
+}
+
+#adminauth-block .error-block{
+    background: #ffe6e8;
+    height: 20px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 20px;
+    color: red;
+    border-bottom: 1px solid #B9D3E6;
+}
+
+#adminauth-block .copyright{
+    background: #F4F9FB;
+    height: 20px;
+    text-align: center;
+    font-size: 10px;
+    line-height: 20px;
+    color: #6B7D91;
+    border-bottom: 1px solid #B9D3E6;
+}
+
+#adminauth-block .copyright a{
+    color: #06C;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#adminauth-block .inputs{padding: 15px;}
+
+#adminauth-block .inputs label{
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+#adminauth-block .inputs input{
+    width: 110px;
+    text-align: center;
+}
+
+#adminauth-block input[type=submit]{
+    margin: 0 auto 15px;
+    width: 130px;
+    height: 23px;
+    padding-left: 20px;
+    display: block;
+    background: url('img/icon_key_go.gif') no-repeat 35px 1px;
+}
+
+/*-----------------------------------------------------------------------------------------------------------------
+    Header
+-----------------------------------------------------------------------------------------------------------------*/
+
+#header{
+    width: 100%;
+    background: #EBEAD5;
+    height: 30px;
+    border-bottom:  1px solid #B9D3E6;
+}
+
+#header .version{
+    display: block;
+    float: left;
+    margin-left: 25px;
+    background: url('img/icon_users_group.gif') no-repeat 0 center;
+    padding-left: 30px;
+    font-weight: bold;
+    height: 100%;
+    line-height: 30px;
+}
+
+#header .user-block{
+    float: right;
+    background: url('img/icon_user_key.gif') no-repeat 0 center;
+    margin-right: 25px;
+    padding-left: 30px;
+    line-height: 30px;
+    height: 100%;
+    font-size: 11px;
+}
+
+#header .user-block .name{color: #6B7D91;}
+#header .user-block .logout{border-bottom: 1px dashed #000}
+
+/*-----------------------------------------------------------------------------------------------------------------
+    Footer
+-----------------------------------------------------------------------------------------------------------------*/
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 30px;
+  background: #EBE6D8;
+  width: 100%;
+  border-top:  1px solid #B9D3E6;
+  margin-top: -30px;
+}
+
+#footer > div{
+    line-height: 30px;
+    height: 100%;
+    font-size: 11px;
+}
+
+#footer .license{
+    float: left;
+    margin-left: 25px;
+}
+
+#footer .copyright{
+    float: right;
+    margin-right: 25px;
+}
+
+#footer .copyright a{border-bottom: 1px dashed #000;}
+
+
+/*------------------------------------------------------------------------------------------------------------------
+    Navigation
+------------------------------------------------------------------------------------------------------------------*/
+
+#nav{
+    width: 150px;
+    float: left;
+    height: 100%;
+    background: #F3F3F3;
+    border-right:  1px solid #B9D3E6;
+}
+
+#nav > ul > li .menu-item{
+    background: #4E70AD;
+    width: 140px;
+    margin: 10px auto;
+    display: block;
+    color: #fff;
+    font-weight: bold;
+    font-size: 10px;
+    padding-left: 5px;
+    height: 19px;
+    line-height: 19px;
+}
+
+#nav > ul > li .menu-item span{
+    display: inline-block;
+    width: 110px;
+    margin-right: 10px;
+}
+
+
+#nav > ul > li .menu-item .toggle_submenu{
+    font-weight: bold;
+    font-size: 13px;
+    color: #fff;
+}
+
+#nav ul.submenu li a{
+    display: block;
+    background: #c7e3f7;
+    text-align: center;
+    height: 25px;
+    line-height: 25px;
+    margin: 5px auto;
+    width: 130px;
+    font-size: 11px;
+    color: #1D426B;
+    border-radius: 10px;
+}
+
+#nav ul.submenu li a:hover{background: #e3e3e3;}
+
+#content{
+    padding: 10px 10px 40px 170px;
+}
+
+
+/*------------------------------------------------------------------------------------------------------------------
+    Crumbs
+------------------------------------------------------------------------------------------------------------------*/
+
+#crumbs {
+    border: 1px solid #DEDEDE;
+    height: 27px;
+    margin-bottom: 10px;
+    border-image: initial;
+}
+
+#crumbs li {
+    float: left;
+    line-height: 27px;
+    padding-left: 10px;
+    color: #777;
+}
+
+#crumbs li a {
+    display: block;
+    padding: 0 15px 0 0;
+    background: url(img/crumbs.gif) no-repeat right center;
+}
+
+#crumbs li a:link, #crumbs li a:visited {
+    text-decoration: none;
+    color: #777;
+}
+
+/*------------------------------------------------------------------------------------------------------------------
+    Item list
+------------------------------------------------------------------------------------------------------------------*/
+
+.item-list{
+    width: 90%;
+    margin-top: 15px;
+    border: 2px solid #DDDEDD;
+}
+
+.item-list thead tr{background: #DDDEDD;}
+
+.item-list tr:nth-child(even){background: #effcff;}
+.item-list tr:nth-child(odd){background: #fafafa;}
+.item-list tr:hover{background: #FFFFCC;}
+
+.item-list td{
+    padding: 5px;
+    border: 1px solid #DDDEDD;
+    cursor: pointer;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.item-list th{
+    background: #EDEDED;
+    padding: 4px;
+    font-size: 10px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.item-list td.email{width: 250px;}
+.item-list td.login{width: 150px;}
+.item-list td.name{width: 350px;}
+.item-list td.type{width: 200px;}
+.item-list td.id{width: 20px;}
+.item-list td.phone{width: 140px;}
+.item-list td.actions{width: 70px;}
+
+.item-list .actions{text-align: center;}
+.item-list .actions a{
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+}
+.item-list .delete-user{background: url('img/icon_user_delete.gif') no-repeat;}
+.item-list .edit-user{background: url('img/icon_user_edit.png') no-repeat;}
+
+/*------------------------------------------------------------------------------------------------------------------
+    Tabs
+------------------------------------------------------------------------------------------------------------------*/
+
+ul#tabs{
+    border-bottom: 1px solid #DDDDDD;
+    margin-bottom: 15px;
+    padding: 2px 0 0 10px;
+    margin-top: 15px;
+}
+
+ul#tabs li{
+    display: inline-block;
+}
+
+ul#tabs li span, ul#tabs li a{
+    background-color: #FFFFFF;
+    border-left: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
+    border-top: 1px solid #DDDDDD;
+    color: #666666;
+    display: inline-block;
+    margin-bottom: -1px;
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 3px 3px 0 0;
+    cursor: pointer;
+}
+
+ul#tabs li.active span, ul#tabs li.active a{
+    border-bottom: 1px solid #FFFFFF;
+    font-weight: bold;
+}
+
+
+/*------------------------------------------------------------------------------------------------------------------
+    Users
+------------------------------------------------------------------------------------------------------------------*/
+
+.add-user{
+    background: url('img/icon_user_add.gif') no-repeat 20px center #DBE9F3;
+    text-align: center;
+    height: 23px;
+    line-height: 23px;
+    padding: 0 15px 0 40px;
+    border: 1px solid #B1D8FF;
+    display: inline-block !important;
+    margin-top: 10px;
+}
+
+#userdata-page{
+    width: 745px;
+    margin: 30px auto;
+}
+
+.user-data{border-collapse: separate;}
+
+.user-data td{border: 1px solid #C8C8C8;}
+
+.user-data .param-name{
+    width: 120px;
+    font-size: 11px;
+    background: #EFECE4;
+    display: inline-block;
+    height: 100%;
+    text-align: right;
+    padding-right: 5px;
+    height: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+    height: 100%;
+}
+
+.user-data .param-input{
+    width: 240px;
+    background: #FAFAF5;
+}
+
+.user-data .param-input input, .user-data .param-input textarea, .user-data .param-input select{
+    width: 234px;
+    margin: 2px 3px;
+}
+
+#userdata-page .statuses{
+    margin:15px auto;
+    border: 1px solid #aaa;
+    border-right: 0;
+    width: 456px;
+    height: 23px;
+}
+
+#userdata-page .statuses label
+{
+    text-align: right;
+    height: 100%;
+    line-height: 23px;
+    width: 120px;
+    display: block;
+    background: #EFECE4;
+    padding-right: 5px;
+    float: left;
+}
+
+#userdata-page .statuses .checkbox{
+    display: inline-block;
+    background: #FAFAF5;
+    width: 25px;
+    height: 100%;
+    text-align: center;
+    float: left;
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+}
+
+#userdata-page .statuses .checkbox input{
+      vertical-align: middle;
+      height: 100%;
+}
+
+#userdata-page .buttons{
+    margin: 0 auto;
+    width: 200px;
+}

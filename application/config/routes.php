@@ -41,9 +41,15 @@
 $route['default_controller'] = "index";
 $route['404_override'] = '';
 
-$route['admin/login'] = 'auth_controller/admin';
+$route['admin/auth'] = 'auth_controller/admin';
+$route['admin/logout'] = 'auth_controller/logout';
+$route['admin'] = 'admin/dashboard_controller';
 
-$route['admin'] = 'dashboard_controller';
+$route['admin/users/(:any)'] = 'admin/users_controller/$1';
+$route['admin/users'] = 'admin/users_controller';
+
+
+
 
 
 /* End of file routes.php */

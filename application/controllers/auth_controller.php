@@ -6,44 +6,23 @@ class Auth_Controller extends MY_Controller
     {
         parent::__construct();
         $this->layout_view = "";
-   }
+    }
 
     public function admin()
     {
-        if($_POST)
-        {
-            $login = $_POST['uname'];
-            $password = $_POST['upass'];
+        if ($_POST) {
+            $login = $_POST['login'];
+            $password = $_POST['password'];
 
             $result = User::validate_login($login, $password, TRUE);
-            if(!$result)
-            {
+            if (!$result) {
                 $this->view_data['error'] = 'Неверный логин или пароль';
+                $this->view_data['login'] = $login;
             }
             else
                 redirect('admin/');
         }
-
-        $this->view_data['page_title'] = 'Login';
     }
-
-    public function login()
-    {
-        if($_POST)
-        {
-            $login = $_POST['uname'];
-            $password = $_POST['upass'];
-
-            $result = User::validate_login($login, $password);
-            if(!$result)
-            {
-                $this->view_data['error'] = 'Неверный логин или пароль';
-            }
-            else
-                redirect('/');
-        }
-    }
-
 
     public function logout()
     {
