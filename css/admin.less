@@ -31,6 +31,13 @@ input[type=submit], button, a.button{
 input[type=submit].noimg, button.noimg, a.button.noimg{padding: 5px 20px;}
 input[type=submit]:hover, button:hover, a.button:hover{background-color: #D7FFBF !important;}
 
+ p.block-header{
+    display: block;
+    border-bottom: 1px solid #aaa;
+    padding: 0 4px 4px;
+    text-align: center;
+}
+
 /*-----------------------------------------------------------------------------------------------------------------
     Auth page
 -----------------------------------------------------------------------------------------------------------------*/
@@ -302,9 +309,12 @@ body.adminauth{background: #E4E4E4}
     width: 16px;
     height: 16px;
     display: inline-block;
+    padding-right: 2px;
 }
 .item-list .delete-user{background: url('img/icon_user_delete.gif') no-repeat;}
 .item-list .edit-user{background: url('img/icon_user_edit.png') no-repeat;}
+.item-list .edit-city{background: url('img/city.png') no-repeat;}
+.item-list .delete{background: url('img/delete.png') no-repeat;}
 
 /*------------------------------------------------------------------------------------------------------------------
     Tabs
@@ -428,4 +438,84 @@ ul#tabs li.active span, ul#tabs li.active a{
 #userdata-page .buttons{
     margin: 0 auto;
     width: 200px;
+}
+
+/*------------------------------------------------------------------------------------------------------------------
+    Cities
+------------------------------------------------------------------------------------------------------------------*/
+
+.newcity-block{
+    width: 200px;
+    padding: 4px 0;
+    margin-top: 10px;
+    border: 1px solid #aaa;
+}
+
+
+
+.newcity-block .param{
+    padding-left: 5px;
+    padding-top: 5px;
+}
+
+.newcity-block label{
+    font-weight: bold;
+}
+
+.newcity-block input[type=submit]{
+    margin: 5px auto;
+    display: block;
+}
+
+
+#city-data{
+    width: 600px;
+    margin: 0 auto;
+    border: 1px solid #aaa;
+    padding: 5px;
+}
+
+#city-data .main-info{
+    width: 300px;
+    margin: 0 auto;
+}
+
+#city-data .main-info .param{
+    margin-bottom: 3px;
+}
+
+#city-data .main-info label{
+    font-weight: bold;
+    text-align: right;
+}
+
+#city-data .finance-block{
+    width: 400px;
+    margin: 10px auto;
+    border: 1px solid #aaa;
+    padding: 5px 0;
+}
+
+#city-data .finance-block .finance-content{padding: 2px 5px;}
+
+#city-data .commission-table{
+    margin-top: 5px;
+    width: 100%;
+}
+
+#city-data .newcommission-block{
+    border-top: 1px solid #aaa;
+    padding-top: 5px;
+    width: 350px;
+    margin: 5px auto 0;
+}
+
+#city-data .newcommission-block input{width: 65px}
+#city-data .newcommission-block button{
+    display: block;
+    margin: 5px auto;
+}
+
+#city-data #city-submit{
+    display: block;
 }

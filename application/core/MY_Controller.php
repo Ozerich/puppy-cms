@@ -19,8 +19,8 @@ class MY_Controller extends CI_Controller
         $this->user = $this->session->userdata('user_id') ? User::find($this->session->userdata('user_id')) : FALSE;
         $this->view_data['user'] = $this->user;
 
-        if (!$this->user && $is_admin)
-            redirect('admin/auth');
+        //if (!$this->user && $is_admin)
+        //    redirect('admin/auth');
 
         if ($is_admin) {
             $this->view_folder = 'admin';

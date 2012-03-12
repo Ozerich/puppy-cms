@@ -23,7 +23,7 @@
         <span class="version">Puppy CMS 1.0</span>
 
         <div class="user-block">
-            Пользователь: <span class="name"><?=$user->login?></span>
+            Пользователь: <span class="name"><?=$user ? $user->login : 'Неизвестный'?></span>
             (<a href="admin/logout" class="logout">выход</a>)
         </div>
         <br class="clear"/>
@@ -36,7 +36,8 @@
                     <a href="#" class="toggle_submenu">—</a>
                 </div>
                 <ul class="submenu">
-                    <li><a href="#"></a></li>
+                    <li><a href="admin/cities">Города</a></li>
+                    <li><a href="admin/animals">Виды животных</a></li>
                 </ul>
             </li>
             <li>
