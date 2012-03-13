@@ -20,7 +20,7 @@
         <td class="id"><?=$animal->id?></td>
         <td class="animal-name"><?=$animal->name?></td>
         <td class="actions">
-            &nbsp;
+            <a href="admin/animals/<?=$animal->id?>" class="edit"></a>
         </td>
     </tr>
         <? endforeach; endif; ?>

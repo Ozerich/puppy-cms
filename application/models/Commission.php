@@ -1,8 +1,8 @@
 <?php
 
-class Commision extends ActiveRecord\Model
+class Commission extends ActiveRecord\Model
 {
-    static $table_name = "commisions";
+    static $table_name = "commissions";
 }
 
 ?>

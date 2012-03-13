@@ -46,6 +46,7 @@ $route['admin/auth'] = 'auth_controller/admin';
 $route['admin/logout'] = 'auth_controller/logout';
 $route['admin'] = 'admin/dashboard_controller';
 
+$route['admin/users/(:num)'] = 'admin/users_controller/edit/$1';
 $route['admin/users/(:any)'] = 'admin/users_controller/$1';
 $route['admin/users'] = 'admin/users_controller';
 
@@ -54,6 +55,7 @@ $route['admin/cities/(:num)'] = 'admin/city_controller/view/$1';
 $route['admin/cities/(:any)'] = 'admin/city_controller/$1';
 
 $route['admin/animals'] = 'admin/animal_controller';
+$route['admin/animals/(:num)'] = 'admin/animal_controller/view/$1';
 $route['admin/animals/(:any)'] = 'admin/animal_controller/$1';
 
 

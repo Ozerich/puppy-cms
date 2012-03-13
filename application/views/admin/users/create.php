@@ -30,7 +30,7 @@
             <td class="param-name"><label for="password">Пароль:</label></td>
             <td class="param-input"><input type="password" name="password" id="password"/></td>
             <td class="param-name"><label for="password2">Повторите пароль:</label></td>
-            <td class="param-input"><input type="password" name="password2" id="password2"/></td>
+            <td class="param-input"><input type="password" id="password2"/></td>
         </tr>
         <tr>
             <td class="param-name"><label for="type">Тип пользователя:</label></td>
@@ -63,7 +63,7 @@
         </tr>
         <tr>
             <td class="param-name"><label for="address">Адрес:</label></td>
-            <td class="param-input"><textarea name="adress" id="address"></textarea></td>
+            <td class="param-input"><textarea name="address" id="address"></textarea></td>
             <td class="param-name"><label for="metro">Метро:</label></td>
             <td class="param-input"><input type="text" name="metro" id="metro"/></td>
         </tr>
@@ -90,7 +90,7 @@
     </div>
 
     <div class="buttons">
-        <input type="submit" class="noimg" value="Добавить"/>
+        <input type="submit" class="noimg" id="useradd-submit" value="Добавить"/>
         <a href="admin/users" class="button noimg">Отмена</a>
     </div>
     </form>

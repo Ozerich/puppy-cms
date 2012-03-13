@@ -24,7 +24,7 @@ class Animal_Controller extends MY_Controller
         redirect('admin/animals');
     }
 
-    public function delete($animal_id = 0)
+    public function view($animal_id = 0)
     {
         $animal = Animal::find_by_id($animal_id);
 
@@ -33,39 +33,55 @@ class Animal_Controller extends MY_Controller
             exit();
         }
 
-        $animal->delete();
+        if ($_POST) {
+            $animal->name = $this->input->post('name');
+            $animal->alias = $this->input->post('alias');
+            $animal->no_organization = $this->input->post('no_org');
 
-        redirect('admin/animals');
+            $animal->save();
+
+            redirect('admin/animals');
+        }
+
+        $this->view_data['organization_list'] = $this->load->view('admin/animal/organization_list.php',
+            array('organizations' => $animal->organizations), true);
+
+        $this->view_data['animal'] = $animal;
     }
 
-    public function view($city_id = 0)
+    public function new_organization($animal_id = 0)
     {
-        $city = City::find_by_id($city_id);
+        $animal = Animal::find_by_id($animal_id);
 
-        if(!$city)
-        {
+        if (!$animal) {
             show_404();
             exit();
         }
 
-        if($_POST){
+        Organization::create(array(
+            'animal_id' => $animal_id,
+            'name' => $this->input->post('org_name'),
+            'description' => $this->input->post('org_description')
+        ));
 
-            $city->name = $this->input->post('name');
-            $city->alias = $this->input->post('alias');
-            $city->valute = $this->input->post('valute');
+        echo $this->load->view('admin/animal/organization_list.php',
+            array('organizations' => $animal->organizations), true);
+        exit();
+    }
 
-            $city->save();
+    public function delete_organization($org_id = 0)
+    {
+        $org = Organization::find_by_id($org_id);
 
-            redirect('admin/cities');
+        if (!$org) {
+            show_404();
+            exit();
         }
 
-        $this->view_data['city'] = $city;
+        $org->delete();
+        exit();
     }
 
-    public function delete_commission($com_id = 0)
-    {
-
-    }
 }
 
 ?>

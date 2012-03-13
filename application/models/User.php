@@ -69,13 +69,19 @@ class User extends ActiveRecord\Model
         return $this->type == "admin";
     }
 
+    public function get_fullname()
+    {
+        return $this->name . " " . $this->surname;
+    }
+
     public function get_plain_address()
     {
         return $this->country . ', ' . $this->city . ', ' . $this->address;
     }
 
-    public function get_plain_type(){
-        switch($this->type){
+    public function get_plain_type()
+    {
+        switch ($this->type) {
             case "admin":
                 return "Администратор";
             case "manager":

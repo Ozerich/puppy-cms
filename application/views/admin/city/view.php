@@ -3,8 +3,10 @@
     <li><span>Настройки города <?=$city->name?></a></span></li>
 </ul>
 
+<input type="hidden" id="city_id" value="<?=$city->id?>"/>
+
 <?=
-form_open("admin/cities/".$city->id)
+form_open("admin/cities/" . $city->id)
 ; ?>
 <div id="city-data">
     <div class="main-info">
@@ -25,34 +27,13 @@ form_open("admin/cities/".$city->id)
                 <label for="valute">Денежная еденица:</label>
                 <input type="text" name="valute" id="valute" value="<?=$city->valute?>" maxlength="10">
             </div>
-            <table class="commission-table item-list">
-                <thead
-                <tr>
-                    <th>От</th>
-                    <th>До</th>
-                    <th>Комиссия</th>
-                    <th>Действия</th>
-                </tr>
-                </thead>
-                <tbody>
-                <? if ($city->commissions): foreach ($city->commissions as $commission): ?>
-                <tr>
-                    <input type="hidden" class="commission_id" value="<?=$commission->id?>"/>
-                    <td><?=$commission->from?></td>
-                    <td><?=$commission->to?></td>
-                    <td><?=$commission->value?></td>
-                    <td>
-                        <a href="#" class="delete-commission delete-link"></a>
-                    </td>
-                </tr>
-                    <? endforeach; else: ?>
-                <tr class="empty">
-                    <td colspan="10">Нет комиссии</td>
-                </tr>
-                    <? endif; ?>
-                </tbody>
-            </table>
+            <div class="param">
+                <label for="bank">Банковский счет:</label>
+                <input type="text" name="bank" id="bank" value="<?=$city->bank?>" maxlength="100">
+            </div>
+            <div id="commission_list-wr"><?=$commission_list?></div>
             <div class="newcommission-block">
+                <p class="block-header">Новая комиссия</p>
                 <label for="from">От:</label>
                 <input type="text" name="from" id="from" maxlength="9"/>
                 <label for="to">До:</label>
@@ -63,6 +44,25 @@ form_open("admin/cities/".$city->id)
             </div>
         </div>
     </div>
+
+    <div class="organization-block">
+        <p class="block-header">Организации:</p>
+        <? foreach (Animal::all() as $animal): ?>
+        <div class="animal">
+            <span class="animal-name"><?=$animal->name?></span>
+
+            <div class="organizations">
+                <? foreach ($animal->organizations as $organization): ?>
+                <div class="organization-item">
+                    <input <?= $organization_enable[$organization->id] ? 'checked' : ''?> name="organization_enable[<?=$organization->id?>]" type="checkbox" id="organization_<?=$organization->id?>"/>
+                    <label for="organization_<?=$organization->id?>"><?=$organization->name?></label>
+                </div>
+                <? endforeach; ?>
+            </div>
+        </div>
+        <? endforeach;?>
+    </div>
+
     <input type="submit" id="city-submit" class="noimg" value="Сохранить"/>
 </div>
 
