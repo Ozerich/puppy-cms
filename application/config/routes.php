@@ -58,6 +58,10 @@ $route['admin/animals'] = 'admin/animal_controller';
 $route['admin/animals/(:num)'] = 'admin/animal_controller/view/$1';
 $route['admin/animals/(:any)'] = 'admin/animal_controller/$1';
 
+$route['admin/kinds'] = 'admin/kind_controller';
+$route['admin/kinds/(:num)'] = 'admin/kind_controller/view/$1';
+$route['admin/kinds/(:any)'] = 'admin/kind_controller/$1';
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

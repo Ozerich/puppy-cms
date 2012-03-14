@@ -274,6 +274,35 @@ body.adminauth{background: #E4E4E4}
     Item list
 ------------------------------------------------------------------------------------------------------------------*/
 
+.newitem-block{
+    width: 200px;
+    padding: 4px 0;
+    margin-top: 10px;
+    border: 1px solid #aaa;
+}
+
+.newitem-block .param{
+    padding-left: 5px;
+    padding-top: 5px;
+}
+
+.newitem-block label{
+    font-weight: bold;
+}
+
+.newitem-block input[type=submit]{
+    margin: 5px 5px;
+    display: block;
+}
+
+
+.newitem-block select,.newitem-block input[type=text]{
+    display: block;
+    margin: 5px 0;
+    width: 180px;
+}
+.newitem-block select{width: 184px;}
+
 .item-list{
     width: 90%;
     margin-top: 15px;
@@ -452,29 +481,6 @@ ul#tabs li.active span, ul#tabs li.active a{
     Cities
 ------------------------------------------------------------------------------------------------------------------*/
 
-.newcity-block{
-    width: 200px;
-    padding: 4px 0;
-    margin-top: 10px;
-    border: 1px solid #aaa;
-}
-
-
-
-.newcity-block .param{
-    padding-left: 5px;
-    padding-top: 5px;
-}
-
-.newcity-block label{
-    font-weight: bold;
-}
-
-.newcity-block input[type=submit]{
-    margin: 5px 5px;
-    display: block;
-}
-
 
 #city-data{
     width: 600px;
@@ -483,18 +489,21 @@ ul#tabs li.active span, ul#tabs li.active a{
     padding: 5px;
 }
 
-#city-data .main-info{
+.main-info{
     width: 300px;
     margin: 0 auto;
 }
 
-#city-data .main-info .param{
-    margin-bottom: 3px;
+.main-info .param{
+    margin-bottom: 5px;
 }
 
-#city-data .main-info label{
+.main-info label{
     font-weight: bold;
     text-align: right;
+    margin-right: 10px;
+    width: 110px;
+    display: inline-block;
 }
 
 #city-data .finance-block{
@@ -605,3 +614,51 @@ ul#tabs li.active span, ul#tabs li.active a{
 #animal-data .neworganization-block #org_name{width: 150px;}
 #animal-data .neworganization-block button{margin: 5px 20px;}
 #animal-data .neworganization-block label{margin-bottom: 10px;}
+
+/*------------------------------------------------------------------------------------------------------------------
+    Kinds
+------------------------------------------------------------------------------------------------------------------*/
+
+#kind-data{
+    width: 600px;
+    margin: 0 auto;
+}
+
+#kind-data .newsubkind-block{
+    border: 1px solid #aaa;
+    margin: 10px 0 10px;
+    width: 300px;
+}
+
+#kind-data .newsubkind-block .newsubkind-content{
+    padding: 5px 10px;
+}
+
+#kind-data .fields .field-item{
+    margin-bottom: 10px;
+    float: left;
+    width: 200px;
+}
+#kind-data .fields .field-item label{
+    width: 100px;
+    display: inline-block;
+}
+
+#kind-data .kind-texts .kind-city{margin-bottom: 10px;}
+
+#kind-data .kind-texts .text-item{
+    width: 290px;
+    float: left;
+    margin-right: 5px;
+}
+
+#kind-data .kind-texts .text-item label{
+    display: block;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+#kind-data .kind-texts .text-item textarea{
+    width: 285px;
+    height: 200px;
+}

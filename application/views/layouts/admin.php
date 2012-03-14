@@ -58,8 +58,8 @@
                     <a href="#" class="toggle_submenu">—</a>
                 </div>
                 <ul class="submenu">
-                    <li><a href="#">Породы</a></li>
-                    <li><a href="#">Щенки</a></li>
+                    <li><a href="admin/kinds">Породы</a></li>
+                    <li><a href="admin/catalog">Щенки</a></li>
                 </ul>
             </li>
 

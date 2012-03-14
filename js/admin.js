@@ -68,6 +68,17 @@ function BindOrganizationEvents() {
     });
 }
 
+
+function BindSubkindEvents() {
+    $('#subkind-list .delete-subkind').click(function () {
+        var id = $(this).parents('tr').remove().find('.subkind_id').val();
+        $.ajax({
+            url:'admin/kinds/delete_subkind/' + id
+        });
+        return false;
+    });
+}
+
 $(document).ready(function () {
 
     $('.toggle_submenu').click(function () {
@@ -133,4 +144,27 @@ $(document).ready(function () {
 
         return true;
     });
+
+
+    $('#newsubkind-submit').click(function () {
+        if ($('.newsubkind-block input[type=text]').check_empty()) {
+            var form = $('.newsubkind-block');
+            var data = $(form).find('*').serialize();
+            $(form).disable_form();
+            $.ajax({
+                url:'admin/kinds/new_subkind/' + $('#kind_id').val(),
+                data:data,
+                type:'post',
+                success:function (data) {
+                    $('#subkind_list-wr').empty().html(data);
+                    BindSubkindEvents();
+                },
+                complete:function () {
+                    $(form).reset().enable_form();
+                }
+            });
+        }
+        return false;
+    });
+    BindSubkindEvents();
 });

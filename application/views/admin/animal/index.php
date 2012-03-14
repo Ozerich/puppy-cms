@@ -28,7 +28,7 @@
 </table>
 
 <?=form_open('admin/animals/create') ?>
-<div class="newcity-block">
+<div class="newitem-block">
     <p class="block-header">Новый вид</p>
     <div class="param">
         <label for="name">Название:</label>
