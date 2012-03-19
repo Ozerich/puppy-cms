@@ -167,4 +167,19 @@ $(document).ready(function () {
         return false;
     });
     BindSubkindEvents();
+
+
+    $('.kind-city .arrow').click(function () {
+        $(this).parents('.kind-city').find('.block-content').slideToggle();
+        if ($(this).hasClass('arrow-up'))
+            $(this).removeClass('arrow-up').addClass('arrow-down');
+        else
+            $(this).removeClass('arrow-down').addClass('arrow-up');
+        return false;
+    });
+
+    $("#article-view #preview").cleditor({width: '100%', height: 200});
+    $("#article-view #text").cleditor({width: '100%', height: 500});
+    $("#content-view textarea").cleditor({width: '100%', height: 250});
+    $("#kind-data .kind-settings .text-item textarea").cleditor({width: '100%', height: 180});
 });

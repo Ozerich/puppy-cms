@@ -27,6 +27,14 @@ form_open("admin/kinds/" . $kind->id)
             <label for="alias">URL-alias:</label>
             <input type="text" name="alias" value="<?=$kind->alias?>" id="alias" maxlength="20"/>
         </div>
+        <div class="param text">
+            <label for="header_template">Шаблон для заголовка объявления</label>
+            <textarea name="header_template" id="header_template"><?=$kind->header_template?></textarea>
+        </div>
+        <div class="param text">
+            <label for="preview_template">Шаблон для текста короткого объявления</label>
+            <textarea name="preview_template" id="preview_template"><?=$kind->preview_template?></textarea>
+        </div>
     </div>
 
     <div id="subkind_list-wr"><?=$subkind_list?></div>
@@ -42,30 +50,75 @@ form_open("admin/kinds/" . $kind->id)
 
     <div class="fields">
         <p class="block-header">Используемые параметры:</p>
-        <? foreach(ItemField::all() as $field): ?>
-            <div class="field-item">
-                <label for="field_<?=$field->id?>"><?=$field->name?></label>
-                <input <?=$fields[$field->id] == 1 ? 'checked' : ''?> type="checkbox" id="field_<?=$field->id?>" name="fields[<?=$field->id?>]">
-            </div>
+        <? foreach (ItemField::all() as $field): ?>
+        <div class="field-item">
+            <label for="field_<?=$field->id?>"><?=$field->name?></label>
+            <input <?=$fields[$field->id] == 1 ? 'checked' : ''?> type="checkbox" id="field_<?=$field->id?>"
+                                                                  name="fields[<?=$field->id?>]">
+        </div>
         <? endforeach; ?>
         <br class="clear"/>
     </div>
 
-    <div class="kind-texts">
+    <div class="kind-settings">
 
         <? foreach (City::all() as $city): ?>
         <div class="kind-city">
-            <p class="block-header"><?=$city->name?></p>
-
-            <div class="text-item">
-                <label for="before_<?=$city->id?>">До таблицы:</label>
-                <textarea id="before_<?=$city->id?>" name="before[<?=$city->id?>]"><?=$before[$city->id]?></textarea>
+            <div class="block-header">
+                <span><?=$city->name?></span>
+                <a href="#" class="arrow arrow-up"></a>
+                <br class="clear"/>
             </div>
-            <div class="text-item">
-                <label for="after_<?=$city->id?>">После таблицы:</label>
-                <textarea id="after_<?=$city->id?>" name="after[<?=$city->id?>]"><?=$after[$city->id]?></textarea>
+            <div class="block-content">
+                <div class="item">
+                    <label for="title_<?=$city->id?>">Заголовок сайта:</label>
+                    <input type="text" name="title[<?=$city->id?>]" id="title_<?=$city->id?>"
+                           value="<?=$kind_settings[$city->id] ? $kind_settings[$city->id]->title : ''?>"/>
+                </div>
+                <div class="item">
+                    <label for="metakeywords_<?=$city->id?>">META Keywords:</label>
+                    <input type="text" name="meta_keywords[<?=$city->id?>]" id="metakeywords_<?=$city->id?>"
+                           value="<?=$kind_settings[$city->id] ? $kind_settings[$city->id]->meta_keywords : ''?>"/>
+                </div>
+                <div class="item">
+                    <label for="metadescription_<?=$city->id?>">META Description:</label>
+                    <input type="text" name="meta_description[<?=$city->id?>]" id="metadescription_<?=$city->id?>"
+                           value="<?=$kind_settings[$city->id] ? $kind_settings[$city->id]->meta_description : ''?>"/>
+                </div>
+                <div class="item">
+                    <label for="phone_<?=$city->id?>">Телефон:</label>
+                    <input type="text" name="phone[<?=$city->id?>]" id="phone_<?=$city->id?>"
+                           value="<?=$kind_settings[$city->id] ? $kind_settings[$city->id]->phone : ''?>"/>
+                </div>
+                <div class="text-item">
+                    <label for="before_<?=$city->id?>">До таблицы:</label>
+                    <textarea id="before_<?=$city->id?>"
+                              name="before[<?=$city->id?>]"><?=$kind_settings[$city->id] ? $kind_settings[$city->id]->beforelist_text : ''?></textarea>
+                </div>
+                <div class="text-item">
+                    <label for="after_<?=$city->id?>">После таблицы:</label>
+                    <textarea id="after_<?=$city->id?>"
+                              name="after[<?=$city->id?>]"><?=$kind_settings[$city->id] ? $kind_settings[$city->id]->afterlist_text : ''?></textarea>
+                </div>
+                <div class="text-item">
+                    <label for="free_agreement_<?=$city->id?>">Текст соглашения для типа объявления "Бесплатно"</label>
+                    <textarea class="agreement" name="free_agreement[<?=$city->id?>]"
+                              id="free_agreement_<?=$city->id?>"><?=$kind_settings[$city->id] ? $kind_settings[$city->id]->free_agreement : ''?></textarea>
+                </div>
+                <div class="text-item">
+                    <label for="paid1_agreement_<?=$city->id?>">Текст соглашения для типа объявления "Платное
+                        Недорого"</label>
+                    <textarea class="agreement" name="paid1_agreement[<?=$city->id?>]"
+                              id="paid1_agreement_<?=$city->id?>"><?=$kind_settings[$city->id] ? $kind_settings[$city->id]->paid1_agreement : ''?></textarea>
+                </div>
+                <div class="text-item">
+                    <label for="paid2_agreement_<?=$city->id?>">Текст соглашения для типа объявления "Платное Без
+                        Проблем"</label>
+                    <textarea class="agreement" name="paid2_agreement[<?=$city->id?>]"
+                              id="paid2_agreement_<?=$city->id?>"><?=$kind_settings[$city->id] ? $kind_settings[$city->id]->paid2_agreement : ''?></textarea>
+                </div>
+                <br class="clear"/>
             </div>
-            <br class="clear"/>
         </div>
         <? endforeach; ?>
 

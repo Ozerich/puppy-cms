@@ -33,7 +33,7 @@ class MY_Controller extends CI_Controller
         $controller_class = strpos(strtolower($this->router->class), '_controller') !== FALSE ? substr($this->router->class, 0, -11) : $this->router->class;
 
         if ($this->content_view !== FALSE && empty($this->content_view))
-            $this->content_view = $this->view_folder . "/" . $controller_class . "/" . str_replace('_', '', $this->router->method) . (($this->template_path) ? '/' . $this->template_path : '');
+            $this->content_view = $this->view_folder . "/" . $controller_class . "/" . $this->router->method . (($this->template_path) ? '/' . $this->template_path : '');
 
         $content = file_exists(APPPATH . "views/" . $this->content_view . EXT)
                 ? $this->load->view($this->content_view, $this->view_data, TRUE) : FALSE;

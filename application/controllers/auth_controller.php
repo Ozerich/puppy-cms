@@ -6,6 +6,7 @@ class Auth_Controller extends MY_Controller
     {
         parent::__construct();
         $this->layout_view = "";
+
     }
 
     public function admin()

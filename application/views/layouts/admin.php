@@ -7,8 +7,11 @@
 
     <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" title="no title"/>
     <link rel="stylesheet/less" href="css/admin.less" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="css/jquery.cleditor.css" />
 
     <script src="js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.cleditor.min.js"></script>
     <script src="js/less-1.1.5.min.js"></script>
     <script src="js/admin.js"></script>
 
@@ -38,6 +41,8 @@
                 <ul class="submenu">
                     <li><a href="admin/cities">Города</a></li>
                     <li><a href="admin/animals">Виды животных</a></li>
+                    <li><a href="admin/config/mails">Шаблоны писем</a></li>
+                    <li><a href="admin/config/medals">Медали</a></li>
                 </ul>
             </li>
             <li>
@@ -60,6 +65,16 @@
                 <ul class="submenu">
                     <li><a href="admin/kinds">Породы</a></li>
                     <li><a href="admin/catalog">Щенки</a></li>
+                </ul>
+            </li>
+            <li>
+                <div class="menu-item">
+                    <span>Сайт</span>
+                    <a href="#" class="toggle_submenu">—</a>
+                </div>
+                <ul class="submenu">
+                    <li><a href="admin/config/content">Контент</a></li>
+                    <li><a href="admin/articles">Статьи</a></li>
                 </ul>
             </li>
 

@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
 /*
 | -------------------------------------------------------------------------
 | URI ROUTING
@@ -61,6 +61,13 @@ $route['admin/animals/(:any)'] = 'admin/animal_controller/$1';
 $route['admin/kinds'] = 'admin/kind_controller';
 $route['admin/kinds/(:num)'] = 'admin/kind_controller/view/$1';
 $route['admin/kinds/(:any)'] = 'admin/kind_controller/$1';
+
+$route['admin/articles'] = 'admin/article_controller';
+$route['admin/articles/(:any)'] = 'admin/article_controller/$1';
+
+$route['admin/config'] = 'admin/config_controller';
+$route['admin/config/medal/(:num)'] = 'admin/config_controller/view_medal/$1';
+$route['admin/config/(:any)'] = 'admin/config_controller/$1';
 
 
 /* End of file routes.php */

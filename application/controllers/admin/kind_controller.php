@@ -53,18 +53,31 @@ class Kind_Controller extends MY_Controller
             $kind->animal_id = $this->input->post('animal');
             $kind->name = $this->input->post('name');
             $kind->alias = $this->input->post('alias');
+            $kind->preview_template = $this->input->post('preview_template');
+            $kind->header_template = $this->input->post('header_template');
             $kind->save();
 
             KindField::table()->delete(array('kind_id' => $kind_id));
             if (isset($_POST['fields']))
                 foreach ($_POST['fields'] as $field_id => $val)
                     KindField::create(array('field_id' => $field_id, 'kind_id' => $kind_id));
+            KindSetting::table()->delete(array('kind_id' => $kind->id));
 
-            KindText::table()->delete(array('kind_id' => $kind->id));
-            foreach ($_POST['before'] as $city_id => $text)
-                KindText::create(array('city_id' => $city_id, 'kind_id' => $kind_id, 'text' => $text, 'type' => 'before'));
-            foreach ($_POST['after'] as $city_id => $text)
-                KindText::create(array('city_id' => $city_id, 'kind_id' => $kind_id, 'text' => $text, 'type' => 'after'));
+            foreach ($_POST['title'] as $city_id => $t) {
+                KindSetting::create(array(
+                    'kind_id' => $kind_id,
+                    'city_id' => $city_id,
+                    'title' => $_POST['title'][$city_id],
+                    'beforelist_text' => $_POST['before'][$city_id],
+                    'afterlist_text' => $_POST['after'][$city_id],
+                    'phone' => $_POST['phone'][$city_id],
+                    'meta_keywords' => $_POST['meta_keywords'][$city_id],
+                    'meta_description' => $_POST['meta_description'][$city_id],
+                    'free_agreement' => $_POST['free_agreement'][$city_id],
+                    'paid1_agreement' => $_POST['paid1_agreement'][$city_id],
+                    'paid2_agreement' => $_POST['paid2_agreement'][$city_id],
+                ));
+            }
 
             redirect('admin/kinds');
         }
@@ -79,14 +92,9 @@ class Kind_Controller extends MY_Controller
         foreach ($data as $kf)
             $this->view_data['fields'][$kf->field_id] = 1;
 
-        $this->view_data['before'] = $this->view_data['after'] = array();
-        foreach (City::all() as $city_id => $city) {
-            $text = KindText::find(array('conditions' => array('city_id = ? AND kind_id = ? AND type = "before"', $city->id, $kind_id)));
-            $this->view_data['before'][$city->id] = $text ? $text->text : '';
-
-            $text = KindText::find(array('conditions' => array('city_id = ? AND kind_id = ? AND type = "after"', $city->id, $kind_id)));
-            $this->view_data['after'][$city->id] = $text ? $text->text : '';
-        }
+        $this->view_data['kind_settings'] = array();
+        foreach (City::all() as $city_id => $city)
+            $this->view_data['kind_settings'][$city->id] = KindSetting::find(array('conditions' => array('city_id = ? AND kind_id = ?', $city->id, $kind_id)));
 
         $this->view_data['subkind_list'] = $this->load->view('admin/kind/subkind_list.php', array('subkinds' => $kind->subkinds), true);
     }

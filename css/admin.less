@@ -44,6 +44,15 @@ input[type=text].error,input[type=password].error{
     color: #fff;
 }
 
+
+.arrow-down, .arrow-up{
+    display: block;
+    width: 16px;
+    height: 16px;
+}
+.arrow-down{background: url('img/arrow_down.png') no-repeat;}
+.arrow-up{background: url('img/arrow_up.png') no-repeat;}
+
 /*-----------------------------------------------------------------------------------------------------------------
     Auth page
 -----------------------------------------------------------------------------------------------------------------*/
@@ -275,10 +284,13 @@ body.adminauth{background: #E4E4E4}
 ------------------------------------------------------------------------------------------------------------------*/
 
 .newitem-block{
-    width: 200px;
+    width: 250px;
     padding: 4px 0;
     margin-top: 10px;
     border: 1px solid #aaa;
+    display: inline-block;
+    margin-right: 20px;
+    vertical-align: top;
 }
 
 .newitem-block .param{
@@ -299,9 +311,9 @@ body.adminauth{background: #E4E4E4}
 .newitem-block select,.newitem-block input[type=text]{
     display: block;
     margin: 5px 0;
-    width: 180px;
+    width: 95%;
 }
-.newitem-block select{width: 184px;}
+.newitem-block select{width: 95%;}
 
 .item-list{
     width: 90%;
@@ -339,6 +351,7 @@ body.adminauth{background: #E4E4E4}
 .item-list td.phone,.item-list th.phone{width: 140px;}
 .item-list td.actions,.item-list th.actions{width: 70px;}
 .item-list td.organization-name,.item-list th.organization-name{width: 80px;}
+.item-list td.alias,.item-list th.alias{width: 180px;}
 
 .item-list .actions{text-align: center;}
 .item-list .actions a{
@@ -490,13 +503,14 @@ ul#tabs li.active span, ul#tabs li.active a{
 }
 
 .main-info{
-    width: 300px;
+    width: 500px;
     margin: 0 auto;
 }
 
-.main-info .param{
-    margin-bottom: 5px;
-}
+.main-info .param{margin-bottom: 5px;}
+.main-info .param input[type=text], .main-info .param select{width: 372px;}
+
+.main-info input[type=submit]{margin: 4px 230px;}
 
 .main-info label{
     font-weight: bold;
@@ -505,6 +519,14 @@ ul#tabs li.active span, ul#tabs li.active a{
     width: 110px;
     display: inline-block;
 }
+.main-info .param.text label{
+    display: block;
+    width: auto;
+    text-align:left;
+    margin: 7px 0;
+}
+
+.main-info .param.text textarea{width: 100%; height: 60px;}
 
 #city-data .finance-block{
     width: 400px;
@@ -644,21 +666,125 @@ ul#tabs li.active span, ul#tabs li.active a{
     display: inline-block;
 }
 
-#kind-data .kind-texts .kind-city{margin-bottom: 10px;}
 
-#kind-data .kind-texts .text-item{
-    width: 290px;
-    float: left;
-    margin-right: 5px;
+#kind-data .block-header{
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
 }
 
-#kind-data .kind-texts .text-item label{
+#kind-data .block-header span{
+    text-align: center;
+    display: inline-block;
+    width: 96%;
+}
+
+#kind-data .block-header .arrow{
+    display: inline-block;
+}
+
+#kind-data .kind-settings .kind-city{margin-bottom: 10px;}
+
+#kind-data .kind-settings .item{margin: 5px 0}
+
+#kind-data .kind-settings .item input{
+    width: 441px;
+}
+
+#kind-data .kind-settings .item label{
+    font-weight: bold;
+    width: 150px;
+    display: inline-block;
+}
+
+#kind-data .kind-settings .text-item{
+    margin: 5px 0;
+    width: 100%;
+}
+
+#kind-data .kind-settings .text-item label{
     display: block;
     font-weight: bold;
     margin-bottom: 3px;
 }
 
-#kind-data .kind-texts .text-item textarea{
+#kind-data .kind-settings .text-item textarea{
     width: 285px;
     height: 200px;
 }
+
+
+/*------------------------------------------------------------------------------------------------------------------
+    Articles
+------------------------------------------------------------------------------------------------------------------*/
+
+#new-article-block, #new-articlecategory-block{width: 300px;}
+
+.subarticles{width: 680px;margin: 15px auto;}
+.subarticles #subarticle-list{
+    width: 100%;
+}
+
+
+#article-view {width: 900px; margin: 0 auto;}
+
+#article-view .param{margin: 8px 0}
+#article-view .param label{
+    font-weight: bold;
+    display: inline-block;
+    width: 180px;
+}
+#article-view .param.text label{margin-bottom: 5px;}
+#article-view .param input[type=text]{width: 712px;}
+#article-view .param input#alias{width: 150px;}
+
+/*------------------------------------------------------------------------------------------------------------------
+    Content
+------------------------------------------------------------------------------------------------------------------*/
+
+#content-view{width: 900px; margin: 0 auto;}
+
+#content-view .param{margin: 8px 0}
+#content-view .param label{
+    font-weight: bold;
+    display: inline-block;
+    width: 180px;
+}
+#content-view .param.text label{margin-bottom: 5px;width: auto;}
+#content-view .param input[type=text]{width: 712px;}
+#content-view .param input#alias{width: 150px;}
+
+/*------------------------------------------------------------------------------------------------------------------
+    Config
+------------------------------------------------------------------------------------------------------------------*/
+
+.config-data{width: 900px; margin: 0 auto;}
+.config-data#mail-config{width: 500px;}
+
+.config-data .param{margin: 8px 0}
+.config-data .param label{
+    font-weight: bold;
+    display: inline-block;
+    width: 180px;
+}
+.config-data .param.text label{margin-bottom: 5px;width: auto;}
+.config-data .param.text textarea{width: 100%;height: 120px}
+.config-data .param input[type=text]{width: 312px;}
+.config-data .param input#alias{width: 150px;}
+
+#mail-config .param.text textarea{height: 200px}
+
+.add-medal{
+    background: url('img/add_medal.png') no-repeat 20px center #DBE9F3;
+    text-align: center;
+    height: 23px;
+    line-height: 23px;
+    padding: 0 15px 0 40px;
+    border: 1px solid #B1D8FF;
+    display: inline-block !important;
+    margin-top: 10px;
+}
+
+#view-medal-block{width: 400px;}
+#view-medal-block label{width: 100px;}
+#view-medal-block input[type=text]{width: 230px;}

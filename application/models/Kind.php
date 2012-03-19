@@ -11,7 +11,7 @@ class Kind extends ActiveRecord\Model
 
     public function get_subkinds()
     {
-        return Kind::find_all_by_parent_id($this->id);
+        return Kind::all(array('conditions' => array('parent_id = ?', $this->id)));
     }
 
 }
