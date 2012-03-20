@@ -92,6 +92,11 @@ class User extends ActiveRecord\Model
                 return "Неизвестно";
         }
     }
+
+    public function get_city()
+    {
+        return City::find_by_id($this->city_id);
+    }
 }
 
 ?>

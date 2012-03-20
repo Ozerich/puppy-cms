@@ -25,6 +25,37 @@ class Auth_Controller extends MY_Controller
         }
     }
 
+    public function register()
+    {
+        if ($_POST) {
+            $user = User::create(array(
+                'type' => 'user',
+                'email' => $this->input->post('email'),
+                'pass' => $this->input->post('password'),
+                'name' => $this->input->post('name'),
+                'surname' => $this->input->post('surname'),
+                'city_id' => $this->input->post('city'),
+                'metro' => $this->input->post('metro'),
+                'phone' => $this->input->post('phone'),
+                'address' => $this->input->post('address'),
+                'register_time' => time_to_mysqldatetime(time()),
+                'is_ban' => 0,
+            ));
+            User::login($user->id);
+            redirect('');
+        }
+        else show_404();
+    }
+
+    public function user()
+    {
+        if ($this->user)
+            redirect('profile');
+
+        $this->layout_view = 'application';
+        $this->set_page_title('Вход в систему');
+    }
+
     public function logout()
     {
         User::logout();

@@ -49,15 +49,13 @@ class Users_Controller extends MY_Controller
         }
 
         if ($_POST) {
-            $user->login = $this->input->post('login');
             $user->email = $this->input->post('email');
-            $user->login = $this->input->post('login');
+            $user->pass = $this->input->post('password');
             $user->type = $this->input->post('type');
             $user->name = $this->input->post('name');
             $user->surname = $this->input->post('surname');
             $user->address = $this->input->post('address');
-            $user->country = $this->input->post('country');
-            $user->city = $this->input->post('city');
+            $user->city_id = $this->input->post('city');
             $user->phone = $this->input->post('phone');
             $user->metro = $this->input->post('metro');
             $user->information = $this->input->post('information');
@@ -80,14 +78,12 @@ class Users_Controller extends MY_Controller
     {
         if ($_POST) {
             User::create(array(
-                'login' => $this->input->post('login'),
                 'email' => $this->input->post('email'),
                 'pass' => $this->input->post('password'),
                 'type' => $this->input->post('type'),
                 'name' => $this->input->post('name'),
                 'surname' => $this->input->post('surname'),
-                'country' => $this->input->post('country'),
-                'city' => $this->input->post('city'),
+                'city_id' => $this->input->post('city'),
                 'address' => $this->input->post('address'),
                 'phone' => $this->input->post('phone'),
                 'metro' => $this->input->post('metro'),

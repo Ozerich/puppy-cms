@@ -38,9 +38,14 @@
 |
 */
 
-$route['default_controller'] = "index";
+$route['default_controller'] = "main_controller";
 $route['404_override'] = '';
 
+$route['login'] = 'auth_controller/user';
+$route['register'] = 'auth_controller/register';
+
+$route['profile'] = 'profile_controller';
+$route['profile/(:any)'] = 'profile_controller/$1';
 
 $route['admin/auth'] = 'auth_controller/admin';
 $route['admin/logout'] = 'auth_controller/logout';
@@ -68,6 +73,11 @@ $route['admin/articles/(:any)'] = 'admin/article_controller/$1';
 $route['admin/config'] = 'admin/config_controller';
 $route['admin/config/medal/(:num)'] = 'admin/config_controller/view_medal/$1';
 $route['admin/config/(:any)'] = 'admin/config_controller/$1';
+
+
+
+
+
 
 
 /* End of file routes.php */
