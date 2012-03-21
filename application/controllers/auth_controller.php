@@ -42,7 +42,7 @@ class Auth_Controller extends MY_Controller
                 'is_ban' => 0,
             ));
             User::login($user->id);
-            redirect('');
+            redirect('profile');
         }
         else show_404();
     }
