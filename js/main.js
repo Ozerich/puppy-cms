@@ -21,6 +21,7 @@ function FinishUploadFiles(errors) {
 
     if (errors == true) {
         var error_block = $('.error-block').show().find('ul').empty().append('<li>Ошибка загрузки файлов</li>');
+        $('#new_item_submit').show();
         return false;
     }
 
@@ -51,9 +52,9 @@ function FinishUploadFiles(errors) {
             document.location = 'profile';
         },
         error:function () {
+            $('#new_item_submit').show();
         },
         complete:function () {
-            $('#new_item_submit').show();
             $('#data_loader').hide();
         }
     });

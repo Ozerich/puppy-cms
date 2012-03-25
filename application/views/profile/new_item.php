@@ -6,18 +6,18 @@
     <div class="param">
         <label for="kind">Порода:</label>
         <select id="kind" name="kind">
-            <? foreach (Animal::all() as $animal): ?>
+            <? foreach (Animal::all() as $i => $animal): ?>
             <option value="-" disabled="disabled">---<?=$animal->name?></option>
-            <? foreach ($animal->kinds as $kind): ?>
+            <? foreach ($animal->kinds as $j => $kind): ?>
                 <? if ($kind->subkinds): ?>
                     <option value="-" disabled="disabled">------<?=$kind->name?></option>
-                    <? foreach ($kind->subkinds as $subkind): ?>
-                                <option is_weight="<?=$subkind->is_weight?>" is_height="<?=$subkind->is_height?>"
+                    <? foreach ($kind->subkinds as $z => $subkind): ?>
+                                <option <?=(!$i && !$j && !$z ? 'selected' : '')?> is_weight="<?=$subkind->is_weight?>" is_height="<?=$subkind->is_height?>"
                                         animal=<?=$animal->id?> value="<?=$subkind->id?>">
                                     <?=$subkind->name?></option>
                                 <? endforeach; ?>
                     <? else: ?>
-                        <option is_weight="<?=$kind->is_weight?>" is_height="<?=$kind->is_height?>"
+                        <option <?=(!$i && !$j ? 'selected' : '')?> is_weight="<?=$kind->is_weight?>" is_height="<?=$kind->is_height?>"
                                 animal=<?=$animal->id?> value="<?=$kind->id?>"><?=$kind->name?></option>
                         <? endif; ?>
                 <? endforeach; ?>
