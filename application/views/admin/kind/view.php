@@ -50,7 +50,7 @@ form_open("admin/kinds/" . $kind->id)
 
     <div class="fields">
         <p class="block-header">Используемые параметры:</p>
-        <? foreach (ItemField::all() as $field): ?>
+        <? foreach (Field::all() as $field): ?>
         <div class="field-item">
             <label for="field_<?=$field->id?>"><?=$field->name?></label>
             <input <?=$fields[$field->id] == 1 ? 'checked' : ''?> type="checkbox" id="field_<?=$field->id?>"

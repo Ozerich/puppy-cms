@@ -1,7 +1,7 @@
 <div class="block">
     <div class="block-header">
-        <span class="header-left">Личный кабинет <span id="header_email"><?=$this->user->email?></span></span>
-        <span class="header-right">Для оплат <?=$this->user->city->bank?></span>
+        <div class="header-left">Личный кабинет <span id="header_email"><?=$this->user->email?></span></div>
+        <div class="header-right">Для оплат <?=$this->user->city->bank?></div>
         <br/>
     </div>
     <div class="block-content">
@@ -30,7 +30,8 @@
                 <span><?=$this->user->city->name?></span>
                 <select id="person_city" name="city">
                     <? foreach (City::all() as $city): ?>
-                    <option <?=$city->id == $this->user->city_id ? 'selected' : ''?> value="<?=$city->id?>"><?=$city->name?></option>
+                    <option <?=$city->id == $this->user->city_id ? 'selected' : ''?>
+                        value="<?=$city->id?>"><?=$city->name?></option>
                     <? endforeach; ?>
                 </select>
             </div>
@@ -60,3 +61,12 @@
 
     </div>
 </div>
+
+<div class="block">
+    <div class="block-header">Ваши объявления</div>
+    <div class="block-content">
+        <?=$item_list?>
+    </div>
+</div>
+
+<a href="create" class="button">Добавить объявление</a>

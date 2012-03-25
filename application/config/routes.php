@@ -46,6 +46,7 @@ $route['register'] = 'auth_controller/register';
 
 $route['profile'] = 'profile_controller';
 $route['profile/(:any)'] = 'profile_controller/$1';
+$route['create'] = 'profile_controller/new_item';
 
 $route['admin/auth'] = 'auth_controller/admin';
 $route['admin/logout'] = 'auth_controller/logout';

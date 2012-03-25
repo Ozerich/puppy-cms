@@ -26,7 +26,7 @@
         <span class="version">Puppy CMS 1.0</span>
 
         <div class="user-block">
-            Пользователь: <span class="name"><?=$user ? $user->login : 'Неизвестный'?></span>
+            Пользователь: <span class="name"><?=$user ? $user->email : 'Неизвестный'?></span>
             (<a href="admin/logout" class="logout">выход</a>)
         </div>
         <br class="clear"/>

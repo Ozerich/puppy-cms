@@ -10,10 +10,39 @@ class Profile_Controller extends MY_Controller
             redirect('login');
     }
 
-    public function index()
+    private function proc_image($item_id = 0, $type = 'main', $image = '')
     {
 
+        $file_ext = substr($image, strrpos($image, '.') + 1);
+        if ($file_ext === false)
+            return '';
+
+        $file_name = $item_id . '-' . $type . '.' . $file_ext;
+
+        @rename('img/tmp/' . $image, Config::get('item_images_dir') . $file_name);
+        return $file_name;
+    }
+
+    public function index()
+    {
+        $this->view_data['item_list'] = $this->load->view('profile/item_list.php', array('items' => array()), true);
         $this->set_page_title('Личный кабинет');
+    }
+
+    public function new_item()
+    {
+
+        $this->view_data['settings'] = $this->view_data['organizations'] = array();
+        foreach (Kind::all() as $kind)
+            $this->view_data['settings'][$kind->id] = KindSetting::get($kind->id, $this->user->city->id);
+
+        foreach (Animal::all() as $animal) {
+            $this->view_data['organizations'][$animal->id] = array();
+            foreach ($animal->organizations as $org)
+                if (CityOrganization::check($this->user->city->id, $org->id))
+                    $this->view_data['organizations'][$animal->id][] = $org;
+        }
+        $this->set_page_title('Новое объявление');
     }
 
 
@@ -38,6 +67,107 @@ class Profile_Controller extends MY_Controller
         $this->user->city_id = $this->input->post('city');
         $this->user->metro = $this->input->post('metro');
         $this->user->save();
+
+        exit();
+    }
+
+    public function calc_price()
+    {
+        $price = $this->input->post('price');
+
+        if (!is_numeric($price))
+            echo '0';
+        else
+            echo Commission::get_commission($this->user->city->id, $price) + $price;
+
+        exit();
+    }
+
+    public function upload_image($elem_id)
+    {
+        $this->load->library('upload');
+
+        $this->upload->initialize(array(
+            'upload_path' => 'img/tmp',
+            'allowed_types' => 'gif|jpg|png',
+            'encrypt_name' => TRUE
+        ));
+
+        $data = array();
+
+        if (!$this->upload->do_upload(key($_FILES)))
+            $data = 'error';
+        else
+        {
+            $file_data = $this->upload->data();
+            $data = json_encode(array('id' => $elem_id, 'filename' => $file_data['file_name']));
+        }
+
+        echo $data;
+        exit();
+    }
+
+    public function add_item()
+    {
+        $kind = Kind::find_by_id($this->input->post('kind'));
+        $animal_id = $kind->animal_id;
+
+        $price = $this->input->post('price');
+
+        if (!is_numeric($price))
+            show_404();
+
+        $site_price = Commission::get_commission($this->user->city_id, $price) + $price;
+
+        $item = Item::create(array(
+            'user_id' => $this->user->id,
+            'city_id' => $this->user->city_id,
+            'kind_id' => $kind->id,
+            'animal_id' => $animal_id,
+            'plant_count' => $this->input->post('plant_count'),
+            'plant_name' => $this->input->post('plant_name'),
+            'birthday' => inputdate_to_mysqldate($this->input->post('birthday')),
+            'organization_id' => $this->input->post('organization'),
+            'mother_name' => $this->input->post('mother_name'),
+            'mother_age' => $this->input->post('mother_age'),
+            'mother_weight' => $this->input->post('mother_weight'),
+            'mother_height' => $this->input->post('mother_height'),
+            'mother_prizes' => $this->input->post('mother_prizes'),
+            'father_name' => $this->input->post('father_name'),
+            'father_age' => $this->input->post('father_age'),
+            'father_weight' => $this->input->post('father_weight'),
+            'father_height' => $this->input->post('father_height'),
+            'father_prizes' => $this->input->post('father_prizes'),
+            'sex' => $this->input->post('sex'),
+            'video' => $this->input->post('video'),
+            'description' => $this->input->post('description'),
+            'another' => $this->input->post('another'),
+            'price' => $price,
+            'site_price' => $site_price,
+            'type' => $this->input->post('pay_type'),
+            'image' => $this->proc_image('main', $this->input->post('main_image_filename')),
+        ));
+
+        $item->mother_image = $this->proc_image($item->id, 'mother', $this->input->post('mother_image_filename'));
+        $item->father_image = $this->proc_image($item->id, 'father', $this->input->post('father_image_filename'));
+        $item->image = $this->proc_image($item->id, 'mainphoto', $this->input->post('main_image_filename'));
+        $item->save();
+
+        ItemDocument::reset($item->id);
+        ItemImage::reset($item->id);
+        ItemField::reset($item->id);
+
+        $documents = explode(',', $this->input->post('documents'));
+
+        foreach ($documents as $doc)
+            ItemDocument::create(array('item_id' => $item->id, 'document_id' => $doc));
+
+        for ($i = 1; $i <= Config::get('item_images_count'); $i++)
+            ItemImage::create(array('item_id' => $item->id, 'pos' => $i, 'image' => $this->proc_image($item->id, 'photo_' . $i,
+                $this->input->post('image' . $i . '_filename'))));
+
+        foreach ($kind->fields as $field)
+            ItemField::create(array('item_id' => $item->id, 'field_id' => $field->id, 'value' => $this->input->post('param_' . $field->id)));
 
         exit();
     }

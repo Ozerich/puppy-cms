@@ -25,8 +25,8 @@
         </div>
         <? endif; ?>
         <div class="inputs">
-            <label for="login">Логин:</label>
-            <input type="text" name="login" id="login" value="<?=isset($login) ? $login : ''?>"/>
+            <label for="email">e-mail:</label>
+            <input type="text" name="email" id="email" value="<?=isset($email) ? $email : ''?>"/>
             <label for="password">Пароль:</label>
             <input type="password" name="password" id="password"/>
         </div>

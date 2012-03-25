@@ -47,6 +47,12 @@ jQuery.fn.enable_form = function () {
     $(this).find('input, select, textarea').removeAttr('disabled');
 }
 
+function delete_document(event, id) {
+    $(event.target).parents('tr').remove();
+    $.get('admin/animals/delete_document/' + id);
+    return false;
+}
+
 
 function BindCommissionEvents() {
     $('#commission-list .delete-commission').click(function () {
@@ -129,6 +135,27 @@ $(document).ready(function () {
         }
         return false;
     });
+
+    $('#newdocument-submit').click(function () {
+        if ($('.newdocument-block').find('input[type=text]').check_empty()) {
+            var form = $('.newdocument-block');
+            var data = $(form).find('*').serialize();
+            $(form).disable_form();
+            $.ajax({
+                url:'admin/animals/new_document/' + $('#animal_id').val(),
+                data:data,
+                type:'post',
+                success:function (data) {
+                    $('#document_list-wr').empty().html(data);
+                },
+                complete:function () {
+                    $(form).reset().enable_form();
+                }
+            });
+        }
+        return false;
+    });
+
     BindOrganizationEvents();
 
 
@@ -178,8 +205,8 @@ $(document).ready(function () {
         return false;
     });
 
-    $("#article-view #preview").cleditor({width: '100%', height: 200});
-    $("#article-view #text").cleditor({width: '100%', height: 500});
-    $("#content-view textarea").cleditor({width: '100%', height: 250});
-    $("#kind-data .kind-settings .text-item textarea").cleditor({width: '100%', height: 180});
+    $("#article-view #preview").cleditor({width:'100%', height:200});
+    $("#article-view #text").cleditor({width:'100%', height:500});
+    $("#content-view textarea").cleditor({width:'100%', height:250});
+    $("#kind-data .kind-settings .text-item textarea").cleditor({width:'100%', height:180});
 });

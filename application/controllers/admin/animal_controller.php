@@ -45,8 +45,23 @@ class Animal_Controller extends MY_Controller
 
         $this->view_data['organization_list'] = $this->load->view('admin/animal/organization_list.php',
             array('organizations' => $animal->organizations), true);
+        $this->view_data['document_list'] = $this->load->view('admin/animal/document_list.php',
+            array('documents' => $animal->documents), true);
+
 
         $this->view_data['animal'] = $animal;
+    }
+
+    public function new_document($animal_id = 0)
+    {
+        $animal = Animal::find_by_id($animal_id);
+        if (!$animal)
+            show_404();
+
+        Document::create(array('animal_id' => $animal_id, 'name' => $this->input->post('doc_name')));
+        echo $this->load->view('admin/animal/document_list.php',
+            array('documents' => $animal->documents), true);
+        exit();
     }
 
     public function new_organization($animal_id = 0)
@@ -69,14 +84,24 @@ class Animal_Controller extends MY_Controller
         exit();
     }
 
+
+    public function delete_document($doc_id = 0)
+    {
+        $doc = Document::find_by_id($doc_id);
+
+        if (!$doc)
+            show_404();
+
+        $doc->delete();
+        exit();
+    }
+
     public function delete_organization($org_id = 0)
     {
         $org = Organization::find_by_id($org_id);
 
-        if (!$org) {
+        if (!$org)
             show_404();
-            exit();
-        }
 
         $org->delete();
         exit();

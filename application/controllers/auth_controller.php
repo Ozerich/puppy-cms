@@ -12,13 +12,13 @@ class Auth_Controller extends MY_Controller
     public function admin()
     {
         if ($_POST) {
-            $login = $_POST['login'];
+            $email = $_POST['email'];
             $password = $_POST['password'];
 
-            $result = User::validate_login($login, $password, TRUE);
+            $result = User::validate_login($email, $password, TRUE);
             if (!$result) {
-                $this->view_data['error'] = 'Неверный логин или пароль';
-                $this->view_data['login'] = $login;
+                $this->view_data['error'] = 'Неверный email или пароль';
+                $this->view_data['email'] = $email;
             }
             else
                 redirect('admin/');
@@ -51,6 +51,20 @@ class Auth_Controller extends MY_Controller
     {
         if ($this->user)
             redirect('profile');
+
+        if ($_POST) {
+            $email = $_POST['email'];
+            $password = $_POST['password'];
+
+            $result = User::validate_login($email, $password);
+            if (!$result) {
+                $this->view_data['error'] = 'Неверный e-mail или пароль';
+                $this->view_data['email'] = $email;
+            }
+            else
+                redirect('profile');
+        }
+
 
         $this->layout_view = 'application';
         $this->set_page_title('Вход в систему');

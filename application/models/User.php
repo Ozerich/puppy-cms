@@ -36,9 +36,9 @@ class User extends ActiveRecord\Model
         return $password_hash == $hash;
     }
 
-    public static function validate_login($login, $password, $is_admin = FALSE)
+    public static function validate_login($email, $password, $is_admin = FALSE)
     {
-        $user = User::find_by_login($login);
+        $user = User::find_by_email($email);
 
         if (!$user || ($is_admin && !$user->is_access_admin))
             return FALSE;

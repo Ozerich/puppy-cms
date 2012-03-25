@@ -1,13 +1,15 @@
-
+<?=form_open('login');?>
 <div class="block" id="login-block">
     <div class="block-header">Вход:</div>
 
     <div class="block-content">
-
+        <div class="error-block">
+            <?=isset($error) ? $error : ''?>
+        </div>
         <div class="login-block">
             <div class="login-param">
                 <label for="email">E-Mail:</label>
-                <input type="text" name="email" id="email"/>
+                <input type="text" name="email" value="<?=isset($email) ? $email : ''?>" id="email"/>
             </div>
 
             <div class="login-param">
@@ -24,6 +26,7 @@
 
     </div>
 </div>
+</form>
 
 <div class="block" id="register-block">
     <p class="block-header">Регистрация:</p>

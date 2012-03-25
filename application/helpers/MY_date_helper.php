@@ -63,7 +63,7 @@ function inputdate_to_mysqldate($date = "")
     if($date == "")
         return "";
 
-    $time = mktime(0,0,0,substr($date, 2, 2), substr($date,0,2), substr($date, 4));
+    $time = mktime(0,0,0,substr($date, 3, 2), substr($date,0,2), substr($date, 6));
     return time_to_mysqldate($time);
 }
 

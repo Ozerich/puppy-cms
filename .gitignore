@@ -1,3 +1,5 @@
 /.idea/*
 config/database.php
+img/tmp/*
+img/items/*
 /.idea

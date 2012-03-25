@@ -85,7 +85,7 @@ class Kind_Controller extends MY_Controller
         $this->view_data['kind'] = $kind;
 
         $this->view_data['fields'] = array();
-        foreach (ItemField::all() as $if)
+        foreach (Field::all() as $if)
             $this->view_data['fields'][$if->id] = 0;
 
         $data = KindField::find_all_by_kind_id($kind_id);

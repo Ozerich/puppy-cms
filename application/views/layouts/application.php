@@ -7,8 +7,11 @@
 
     <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" title="no title"/>
     <link rel="stylesheet/less" href="css/main.less" type="text/css"/>
+    <link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.18.custom.css" type="text/css"/>
 
     <script src="js/jquery-1.7.1.min.js"></script>
+    <script src="js/jquery-ui-1.8.18.custom.min.js"></script>
+    <script src="js/ajaxfileupload.js"></script>
     <script src="js/less-1.1.5.min.js"></script>
     <script src="js/main.js"></script>
 
@@ -77,7 +80,7 @@
             <button id="submit-filter">Показать</button>
         </div>
 
-        <a href="#" id="new-item">Дать объявление</a>
+        <a href="create" id="new-item">Дать объявление</a>
 
         <div id="left-content">
             <?=Config::get('html_left');?>

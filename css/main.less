@@ -23,19 +23,25 @@ body{
 }
 
 
-button, input[type=submit]{
+button, input[type=submit], a.button{
     background: #f65b00;
     border: 0;
+    display: inline-block;
     .border-radius(10px, 10px, 10px, 10px);
     color: #fff;
     font-weight: bold;
-    padding: 4px 20px;
+    padding: 7px 20px;
     font-size: 18px;
+
+    &:hover{
+        text-decoration: none;
+        background: #f53700;
+    }
 }
 
 
 
-textarea, input[type=text], input[type=password]{
+textarea, input[type=text], input[type=password] {
     background: #fae6da;
     border: 0;
 
@@ -45,7 +51,7 @@ textarea, input[type=text], input[type=password]{
     }
 }
 
- input[type=text], input[type=password][type{height: 25px;width: 100%;}
+ input[type=text], input[type=password], select{height: 25px;width: 100%;}
 
 label{
     color: #f75c00;
@@ -125,6 +131,7 @@ label{
 
 #header{
     height: 140px;
+    margin-bottom: 5px;
 }
 
 #header-left, #header-right{
@@ -161,7 +168,7 @@ label{
 
 
 
-
+.block{margin-bottom: 15px;}
 .block .block-header{
     .verticalGradient(0, rgba(254,136,17,1), 100%, rgba(245,99,17,1));
     color: white;
@@ -246,3 +253,201 @@ label{
 }
 
 #profile_data #save_profile{margin-top: 27px;}
+
+.profile-empty{
+    text-align: center;
+    padding: 20px 0;
+    font: 50px cursive;
+    color: #666;
+}
+
+#new-item{padding: 5px 20px 5px 10px;}
+
+#new-item .top-info .param{
+    display: inline-block;
+    text-align: center;
+    margin-right: 15px;
+}
+#new-item .top-info .param.birthday-param{width: 194px; margin-right: 0;}
+#new-item .top-info .param.plant-param{width: 358px;}
+
+#new-item .top-info .param label{display: block;}
+
+#new-item .organization-block{
+    .border-radius(4px, 4px, 4px, 4px);
+    border: 1px solid #938c8c;
+    margin: 10px 0;
+    padding: 3px;
+    display: none;
+}
+#new-item .organizations-wr .organization-block:first-child{display: block;}
+
+#new-item .organization-block .header{
+    font-size: 11px;
+    color: #413e3d;
+    margin-bottom: 3px;
+    span{
+        color: #f65b00;
+        font-weight: bold;
+        font-size: 13px;
+    }
+}
+
+#new-item .organization-block label{
+    font-size: 11px;
+    color: #030202;
+    font-weight: normal;
+    padding-top: 4px;
+}
+
+#new-item .parent{
+    width: 48%;
+    display: inline-block;
+    .border-radius(4px, 4px, 4px, 4px);
+    border: 1px solid #938c8c;
+    padding: 3px;
+
+    &#father{float: right;}
+}
+
+#new-item .parent .params-block .param{
+    display: inline-block;
+
+    &.name{width: 70%;}
+    &.age{width: 25%;}
+    &.weight{width: 70px;}
+    &.height{width: 70px;}
+}
+
+#new-item .parent .header{
+    text-align: center;
+    color: #f75c00;
+    font-weight: bold;
+    border-bottom: 1px solid #938c8c;
+    padding-bottom: 3px;
+    margin-bottom: 5px;
+}
+
+#new-item .parent .param label{margin-top: 3px;}
+
+#new-item .main-params{
+    .border-radius(4px, 4px, 4px, 4px);
+    border: 1px solid #938c8c;
+    padding: 3px;
+    margin: 10px 0;
+    display: none;
+}
+
+#new-item .main-params-wr .main-params:first-child{display: block;}
+
+#new-item .main-params .param{
+    display: inline-block;
+    margin-right: 15px;
+
+    &.weight{width: 70px;}
+    &.height{width: 70px;}
+    &.sex{width: 90px;}
+}
+
+#new-item .bottom-params{margin-right: 200px;}
+#new-item .bottom-params .param label{display: block;}
+#new-item .bottom-params .param.video{width: 350px;margin-bottom: 10px;}
+#new-item .bottom-params .param textarea{width: 100%; height: 100px;}
+
+
+#new-item .images{
+    .border-radius(4px, 4px, 4px, 4px);
+    border: 1px solid #938c8c;
+    padding: 3px;
+    margin: 15px 0;
+}
+
+#new-item .images .image{margin: 5px 0;}
+
+#new-item .param.another input{width: 90%;}
+#new-item .param.another p.sample{font-size: 10px;}
+
+#new-item .param.price{margin-top:10px;}
+#new-item .param.price .valute{font-weight: bold; color: #F75C00;margin-left: 5px;}
+#new-item .param.price label{display:inline-block;padding-top: 2px;}
+#new-item .param.price input{width: 80px}
+#new-item .param.price .price-commission{display: inline-block}
+#new-item .param.price .price-commission .value{font-weight: bold; color: #F75C00;}
+
+#new-item .agreement{
+     .border-radius(4px, 4px, 4px, 4px);
+     border: 1px solid #938c8c;
+     padding: 8px;
+     margin: 15px 0;
+     display: none;
+}
+
+#new-item .agreement-type label{padding-top: 2px;}
+#new-item .agreement-type select{width: 200px;}
+#new-item .agreement .agreement-content{display: none;}
+#new-item .agreement .agreement-content#agreement_free{display: block;}
+#new-item .agreement .agreement-checkbox{margin-top: 10px;}
+#new-item .agreement .agreement-checkbox label{font-size: 11px;}
+#new-item .agreement .agreement-checkbox input{margin-right: 2px;}
+
+#new_item_submit{margin: 20px auto;display: block;}
+
+
+#new-item .documents{
+     .border-radius(4px, 4px, 4px, 4px);
+     border: 1px solid #938c8c;
+     padding: 8px;
+     margin: 15px 0;
+     width: 150px;
+     display: none;
+     float: right;
+}
+#new-item .documents-wr .documents:first-child{display: block;}
+
+#new-item .documents .header{text-align: center; display: block;}
+#new-item .documents label.document{
+    color: #030202;
+    font-weight: normal;
+    font-size: 12px;
+    display: block;
+    margin-left: 7px;
+}
+#new-item .documents label input{margin-right: 7px;}
+
+#new-item #price-loader{
+    width: 16px;
+    height: 16px;
+    background: url('img/price-loader.gif') no-repeat;
+    display: none;
+}
+
+#new-item .error-block{
+    width: 510px;
+    margin: 10px auto 0 auto;
+    background: #e6e0bf;
+    .border-radius(4px, 4px, 4px, 4px);
+    border: 1px solid #938c8c;
+    padding: 5px 10px 3px;
+    display: none;
+}
+
+#new-item .error-block ul{margin-left: 40px; list-style-type: circle}
+#new-item .error-block li{
+    color: red;
+    font-weight: bold;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+#new-item .load-status{
+    margin: 10px auto;
+    width: 220px;
+    display: none;
+}
+
+#new-item .load-status .status{
+    text-align: center;
+    color: #F75C00;
+    font-weight: bold;
+    font-size: 18px;
+}
