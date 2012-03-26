@@ -221,7 +221,7 @@
     <label for="item_price">Цена:</label>
     <input type="text" name="price" id="item_price"/><span class="valute"><?=$this->user->city->valute?></span>
 
-    <div class="price-commission">Цена на сайте с учетом сумма оплаты за услуги сайта:
+    <div class="price-commission">Цена на сайте с учетом суммы оплаты за услуги сайта:
         <span class="value"><span id="addprice_value">0</span> <?=$this->user->city->valute?></span>
 
         <div id="price-loader"></div>
@@ -281,6 +281,6 @@
 </div>
 
 
-<input type="submit" id="new_item_submit" value="Сохранить данные щенка и опубликовать объявление"/>
+<input type="submit" id="new_item_submit" value="Сохранить данные и опубликовать объявление"/>
 </div>
 </form>
