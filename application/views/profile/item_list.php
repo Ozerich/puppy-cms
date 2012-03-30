@@ -3,10 +3,10 @@
     У вас нет объявлений
 </div>
 <? else: ?>
-<table id="profile-list">
+<table id="profile_list">
     <thead>
     <tr>
-        <th>Фотография</th>
+        <th class="photo-col">Фотография</th>
         <th>Порода</th>
         <th>Пол</th>
         <th>Дата рождения</th>
@@ -18,9 +18,33 @@
     </tr>
     </thead>
     <tbody>
-        <? foreach ($items as $item): ?>
+        <? foreach ($items as $item):?>
     <tr>
-
+        <td class="photo-col"><img width="80" src="<?=Config::get('item_images_dir').$item->image?>"</td>
+        <td class="kind-col"><?=$item->kind->name?>
+        <td class="sex-col"><?=$item->sex == 'man' ? 'муж.' : 'жен.'?></td>
+        <td class="birthday-col"><?=$item->birthday->format('d.m.Y');?></td>
+        <td class="price-col"><?=$item->site_price?></td>
+        <td class="weight-col">
+            <?=$item->kind->is_weight ? $item->weight.' кг.' : ''?>
+            <?=$item->kind->is_height && $item->kind->is_weight ? ' / ' : ''?>
+            <?=$item->kind->is_height ? $item->height.' см.' : ''?>
+        </td>
+        <td class="documents-col">
+            <? foreach(ItemDocument::get($item->id) as $document): ?>
+                <?=$document?><br/>
+            <? endforeach; ?>
+        </td>
+        <td class="status-col">
+            Опубликовано до 14.02.12</br>
+            <?=$item->plain_paidtype?>
+        </td>
+        <td class="actions-col">
+            <a href="edit/<?=$item->id?>">Редактировать</a>
+            <a href="view/<?=$item->id?>">Посмотреть</a>
+            <a href="#">Снять с продажи</a>
+            <a href="#">Опубликовать</a>
+        </td>
     </tr>
         <? endforeach; ?>
     </tbody>

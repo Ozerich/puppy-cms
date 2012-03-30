@@ -268,10 +268,17 @@ label{
     text-align: center;
     margin-right: 15px;
 }
-#new-item .top-info .param.birthday-param{width: 194px; margin-right: 0;}
+#new-item .top-info .param.birthday-param{width: 134px; margin-right: 0;}
 #new-item .top-info .param.plant-param{width: 358px;}
 
 #new-item .top-info .param label{display: block;}
+
+#new-item .current-photo{
+    text-align: center;
+    margin: 5px 0;
+}
+
+#new-item .current-photo img{border: 1px solid black;padding: 3px;}
 
 #new-item .organization-block{
     .border-radius(4px, 4px, 4px, 4px);
@@ -390,7 +397,7 @@ label{
 #new-item .agreement .agreement-checkbox label{font-size: 11px;}
 #new-item .agreement .agreement-checkbox input{margin-right: 2px;}
 
-#new_item_submit{
+.item-submit{
     margin: 20px auto;
     display: block;
     width: 535px;
@@ -454,4 +461,35 @@ label{
     color: #F75C00;
     font-weight: bold;
     font-size: 18px;
+}
+
+
+
+#profile_list{
+    margin: 10px auto;
+    font-size: 12px;
+    font-family: Tahoma;
+}
+
+#profile_list td, #profile_list th{
+    padding: 2px 5px;
+}
+
+#profile_list th{
+    padding-bottom: 10px;
+}
+
+#profile_list td{
+    border-top: 1px solid #aaa;
+    padding: 12px 0;
+}
+
+#profile_list .actions-col{width: 110px;}
+
+#profile_list .actions-col a{
+    display: block;
+    color: #000;
+    text-decoration: underline;
+
+    &:hover{text-decoration: none;}
 }

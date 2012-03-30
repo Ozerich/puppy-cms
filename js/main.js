@@ -14,14 +14,55 @@ function validateDate(date) {
     return reg.test(date);
 }
 
+function CheckItemErrors(is_edit) {
+    var error_block = $('.error-block ul').empty();
 
-function FinishUploadFiles(errors) {
+    if ($('#plant_name').val().length == 0)
+        $(error_block).append('<li>Название питомника не заполнено</li>');
+    else if ($('#plant_name').val().length <= 5)
+        $(error_block).append('<li>Название питомника заполнено не корректно</li>');
+
+    if ($('#birthday').val().length == 0)
+        $(error_block).append('<li>Дата рождения не выбрана</li>');
+    else if (!validateDate($('#birthday').val()))
+        $(error_block).append('<li>Дата рождения не корректна</li>');
+
+    $('.main-params:visible input[type=text]').each(function () {
+        if ($(this).val() == '')
+            $(error_block).append('<li>Поле "' + $(this).prev().html() + '" не заполнено</li>');
+    });
+
+    if ($('#main_image').val() == '' && !is_edit)
+        $(error_block).append('<li>Основная фотография не выбрана</li>');
+
+    if ($('#price').val() == '')
+        $(error_block).append('<li>Не указана цена</li>');
+    else if ($('#price').val() == '0')
+        $(error_block).append('<li>Цена должна быть больше нуля</li>');
+    else if (isNaN(parseInt($('#item_price').val())))
+        $(error_block).append('<li>Цена должна быть целым числом</li>');
+
+    if ($('.error-block ul li').size() == 0)
+        if ($('.agreement-checkbox:visible input:checked').size() != 2)
+            $(error_block).append('<li>Вы не приняли условия соглашени</li>');
+
+    if ($('.error-block ul li').size() > 0) {
+        $('.error-block').show();
+        return false;
+    }
+
+    $('.error-block').hide();
+    return true;
+}
+
+
+function FinishUploadFiles(errors, is_edit) {
 
     $('#file_loader').hide();
 
     if (errors == true) {
         var error_block = $('.error-block').show().find('ul').empty().append('<li>Ошибка загрузки файлов</li>');
-        $('#new_item_submit').show();
+        $('.item_submit').show();
         return false;
     }
 
@@ -42,10 +83,8 @@ function FinishUploadFiles(errors) {
         doc_count++;
     });
 
-    data += '&sex=' + $('#sex').val();
-
     $.ajax({
-        url:'profile/add_item',
+        url: is_edit ? 'edit/' + $('#item_id').val() : 'profile/add_item',
         data:data,
         type:'post',
         success:function (data) {
@@ -129,10 +168,11 @@ $(document).ready(function () {
         return false;
     });
 
+    var val = $('.birthday-param input').val();
     $('.birthday-param input').datepicker({
         changeMonth:true,
         changeYear:true
-    }).datepicker("option", "showAnim", "blind").datepicker("option", "dateFormat", 'dd.mm.yy');
+    }).datepicker("option", "showAnim", "blind").datepicker("option", "dateFormat", 'dd.mm.yy').val(val);
 
     $('#new-item #kind').change(
         function () {
@@ -179,46 +219,11 @@ $(document).ready(function () {
             });
         }).keyup();
 
-    $('#new_item_submit').click(function () {
+    $('#new_item_submit, #edit_item_submit').click(function () {
 
-        var error_block = $('.error-block ul').empty();
-
-        if ($('#plant_name').val().length == 0)
-            $(error_block).append('<li>Название питомника не заполнено</li>');
-        else if ($('#plant_name').val().length <= 5)
-            $(error_block).append('<li>Название питомника заполнено не корректно</li>');
-
-        if ($('#birthday').val().length == 0)
-            $(error_block).append('<li>Дата рождения не выбрана</li>');
-        else if (!validateDate($('#birthday').val()))
-            $(error_block).append('<li>Дата рождения не корректна</li>');
-
-        $('.main-params:visible input[type=text]').each(function () {
-            if ($(this).val() == '')
-                $(error_block).append('<li>Поле "' + $(this).prev().html() + '" не заполнено</li>');
-        });
-
-        if ($('#main_image').val() == '')
-            $(error_block).append('<li>Основная фотография не выбрана</li>');
-
-        if ($('#price').val() == '')
-            $(error_block).append('<li>Не указана цена</li>');
-        else if ($('#price').val() == '0')
-            $(error_block).append('<li>Цена должна быть больше нуля</li>');
-        else if (isNaN(parseInt($('#item_price').val())))
-            $(error_block).append('<li>Цена должна быть целым числом</li>');
-
-        if ($('.error-block ul li').size() == 0)
-            if ($('.agreement-checkbox:visible input:checked').size() != 2)
-                $(error_block).append('<li>Вы не приняли условия соглашени</li>');
-
-        if ($('.error-block ul li').size() > 0) {
-            $('.error-block').show();
-            return false;
-        }
-
-        $('.error-block').hide();
-
+        var is_edit = $(this).attr('id') == 'edit_item_submit';
+        if(!CheckItemErrors(is_edit))
+        return false;
         $(this).hide();
 
         $('#file_loader').show();
@@ -238,7 +243,7 @@ $(document).ready(function () {
                 good_count++;
 
         if (good_count == 0)
-            FinishUploadFiles();
+            FinishUploadFiles(0, is_edit);
 
         var loaded_count = 0;
         var errors = false;
@@ -269,7 +274,7 @@ $(document).ready(function () {
 
                         loaded_count++;
                         if (loaded_count == good_count)
-                            FinishUploadFiles(errors);
+                            FinishUploadFiles(errors, is_edit);
                     }
                 });
         }

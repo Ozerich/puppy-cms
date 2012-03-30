@@ -25,13 +25,12 @@ class Profile_Controller extends MY_Controller
 
     public function index()
     {
-        $this->view_data['item_list'] = $this->load->view('profile/item_list.php', array('items' => array()), true);
+        $this->view_data['item_list'] = $this->load->view('profile/item_list.php', array('items' => $this->user->items), true);
         $this->set_page_title('Личный кабинет');
     }
 
-    public function new_item()
+    private function fill_item_data()
     {
-
         $this->view_data['settings'] = $this->view_data['organizations'] = array();
         foreach (Kind::all() as $kind)
             $this->view_data['settings'][$kind->id] = KindSetting::get($kind->id, $this->user->city->id);
@@ -42,6 +41,11 @@ class Profile_Controller extends MY_Controller
                 if (CityOrganization::check($this->user->city->id, $org->id))
                     $this->view_data['organizations'][$animal->id][] = $org;
         }
+    }
+
+    public function new_item()
+    {
+        $this->fill_item_data();
         $this->set_page_title('Новое объявление');
     }
 
@@ -107,6 +111,84 @@ class Profile_Controller extends MY_Controller
         exit();
     }
 
+    public function edit_item($item_id = 0)
+    {
+        $item = Item::find_by_id($item_id);
+
+        if (!$item)
+            show_404();
+
+        if ($_POST) {
+            $kind = Kind::find_by_id($this->input->post('kind'));
+            $animal_id = $kind->animal_id;
+
+            $price = $this->input->post('price');
+
+            if (!is_numeric($price))
+                show_404();
+
+
+            $site_price = Commission::get_commission($this->user->city_id, $price) + $price;
+            $plant_name =  $this->input->post('plant_name');
+            $item->kind_id = $kind->id;
+            $item->plant_count = $this->input->post('plant_count');
+            $item->plant_name = $plant_name;
+            $item->birthday = inputdate_to_mysqldate($this->input->post('birthday'));
+            $item->organization_id = $this->input->post('organization');
+            $item->mother_name = $this->input->post('mother_name');
+            $item->mother_age = $this->input->post('mother_age');
+            $item->mother_weight = $this->input->post('mother_weight');
+            $item->mother_height = $this->input->post('mother_height');
+            $item->mother_prizes = $this->input->post('mother_prizes');
+            $item->father_name = $this->input->post('father_name');
+            $item->father_age = $this->input->post('father_age');
+            $item->father_weight = $this->input->post('father_weight');
+            $item->father_height = $this->input->post('father_height');
+            $item->father_prizes = $this->input->post('father_prizes');
+            $item->sex = $this->input->post('sex');
+            $item->video = $this->input->post('video');
+            $item->description = $this->input->post('description');
+            $item->another = $this->input->post('another');
+            $item->price = $price;
+            $item->site_price = $site_price;
+            $item->type = $this->input->post('pay_type');
+
+            if ($this->input->post('main_image_filename'))
+                $item->image = $this->proc_image('main', $this->input->post('main_image_filename'));
+
+            if ($this->input->post('mother_image_filename'))
+                $item->mother_image = $this->proc_image($item->id, 'mother', $this->input->post('mother_image_filename'));
+
+            if ($this->input->post('father_image_filename'))
+                $item->father_image = $this->proc_image($item->id, 'father', $this->input->post('father_image_filename'));
+
+            $item->save();
+
+            ItemDocument::reset($item->id);
+            ItemImage::reset($item->id);
+            ItemField::reset($item->id);
+
+            $documents = explode(',', $this->input->post('documents'));
+
+            foreach ($documents as $doc)
+                if ($doc)
+                    ItemDocument::create(array('item_id' => $item->id, 'document_id' => $doc));
+
+            for ($i = 1; $i <= Config::get('item_images_count'); $i++)
+                if ($this->input->post('image' . $i . '_filename'))
+                    ItemImage::create(array('item_id' => $item->id, 'pos' => $i, 'image' => $this->proc_image($item->id, 'photo_' . $i,
+                        $this->input->post('image' . $i . '_filename'))));
+
+            foreach ($kind->fields as $field)
+                ItemField::create(array('item_id' => $item->id, 'field_id' => $field->id, 'value' => $this->input->post('param_' . $field->id)));
+
+            exit();
+        }
+
+        $this->fill_item_data();
+        $this->view_data['item'] = $item;
+    }
+
     public function add_item()
     {
         $kind = Kind::find_by_id($this->input->post('kind'));
@@ -160,7 +242,8 @@ class Profile_Controller extends MY_Controller
         $documents = explode(',', $this->input->post('documents'));
 
         foreach ($documents as $doc)
-            ItemDocument::create(array('item_id' => $item->id, 'document_id' => $doc));
+            if ($doc)
+                ItemDocument::create(array('item_id' => $item->id, 'document_id' => $doc));
 
         for ($i = 1; $i <= Config::get('item_images_count'); $i++)
             ItemImage::create(array('item_id' => $item->id, 'pos' => $i, 'image' => $this->proc_image($item->id, 'photo_' . $i,
