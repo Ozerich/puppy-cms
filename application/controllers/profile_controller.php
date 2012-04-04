@@ -111,6 +111,16 @@ class Profile_Controller extends MY_Controller
         exit();
     }
 
+    public function view_item($item_id = 0)
+    {
+        $item = Item::find_by_id($item_id);
+        if(!$item)
+            show_404();
+
+        $this->view_data['item'] = $item;
+        $this->content_view = 'item/view';
+    }
+
     public function edit_item($item_id = 0)
     {
         $item = Item::find_by_id($item_id);
@@ -129,10 +139,10 @@ class Profile_Controller extends MY_Controller
 
 
             $site_price = Commission::get_commission($this->user->city_id, $price) + $price;
-            $plant_name =  $this->input->post('plant_name');
+
             $item->kind_id = $kind->id;
             $item->plant_count = $this->input->post('plant_count');
-            $item->plant_name = $plant_name;
+            $item->plant_name = $this->input->post('plant_name');
             $item->birthday = inputdate_to_mysqldate($this->input->post('birthday'));
             $item->organization_id = $this->input->post('organization');
             $item->mother_name = $this->input->post('mother_name');
@@ -152,6 +162,7 @@ class Profile_Controller extends MY_Controller
             $item->price = $price;
             $item->site_price = $site_price;
             $item->type = $this->input->post('pay_type');
+            $item->status = 'edited';
 
             if ($this->input->post('main_image_filename'))
                 $item->image = $this->proc_image('main', $this->input->post('main_image_filename'));
@@ -228,6 +239,7 @@ class Profile_Controller extends MY_Controller
             'site_price' => $site_price,
             'type' => $this->input->post('pay_type'),
             'image' => $this->proc_image('main', $this->input->post('main_image_filename')),
+            'status' => 'created',
         ));
 
         $item->mother_image = $this->proc_image($item->id, 'mother', $this->input->post('mother_image_filename'));
