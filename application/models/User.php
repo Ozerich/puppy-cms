@@ -98,8 +98,7 @@ class User extends ActiveRecord\Model
         return City::find_by_id($this->city_id);
     }
 
-    public function get_items()
-    {
+    public function get_items(){
         return Item::find_all_by_user_id($this->id);
     }
 }
