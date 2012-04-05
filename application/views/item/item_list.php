@@ -30,5 +30,8 @@
             </div>
         </div>
     </div>
+    <div class="item-admin">
+        
+    </div>
     <? endforeach; ?>
 </div>
