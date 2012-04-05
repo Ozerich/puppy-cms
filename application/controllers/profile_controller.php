@@ -25,7 +25,7 @@ class Profile_Controller extends MY_Controller
 
     public function index()
     {
-        $this->view_data['item_list'] = $this->load->view('profile/item_list.php', array('items' => array()), true);
+        $this->view_data['item_list'] = $this->load->view('profile/item_list.php', array('items' => $this->user->items, 'image_dir' =>  Config::get('item_images_dir')), true);
         $this->set_page_title('Личный кабинет');
     }
 
