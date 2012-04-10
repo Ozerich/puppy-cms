@@ -21,30 +21,25 @@
     <table class="user-data">
         <tbody>
         <tr>
-            <td class="param-name"><label for="login">Логин:</label>
-            <td class="param-input"><input type="text" name="login" id="login" maxlength="255"/></td>
             <td class="param-name"><label for="email">E-mail:</label></td>
             <td class="param-input"><input type="text" name="email" id="email"/></td>
+            <td class="param-name"><label for="type">Тип пользователя:</label></td>
+                        <td class="param-input">
+                            <select id="type" <?= $type ? 'disabled' : 'name="type"' ?>>
+                                <option value="admin" <?= $type == 'admin' ? 'selected' : '' ?>>Администратор</option>
+                                <option value="manager" <?= $type == 'manager' ? 'selected' : '' ?>>Менеджер</option>
+                                <option value="user" <?= $type == 'user' || !$type ? 'selected' : '' ?>>Пользователь</option>
+                            </select>
+                            <? if ($type): ?>
+                            <input type="hidden" name="type" value="<?=$type?>"/>
+                            <? endif; ?>
+                        </td>
         </tr>
         <tr>
             <td class="param-name"><label for="password">Пароль:</label></td>
             <td class="param-input"><input type="password" name="password" id="password"/></td>
             <td class="param-name"><label for="password2">Повторите пароль:</label></td>
             <td class="param-input"><input type="password" id="password2"/></td>
-        </tr>
-        <tr>
-            <td class="param-name"><label for="type">Тип пользователя:</label></td>
-            <td class="param-input">
-                <select id="type" <?= $type ? 'disabled' : 'name="type"' ?>>
-                    <option value="admin" <?= $type == 'admin' ? 'selected' : '' ?>>Администратор</option>
-                    <option value="manager" <?= $type == 'manager' ? 'selected' : '' ?>>Менеджер</option>
-                    <option value="user" <?= $type == 'user' || !$type ? 'selected' : '' ?>>Пользователь</option>
-                </select>
-                <? if ($type): ?>
-                <input type="hidden" name="type" value="<?=$type?>"/>
-                <? endif; ?>
-            </td>
-            <td colspan="2">&nbsp;</td>
         </tr>
         <tr class="empty">
             <td colspan="4">&nbsp;</td>
@@ -56,18 +51,14 @@
             <td class="param-input"><input type="text" name="surname" id="surname"/></td>
         </tr>
         <tr>
-            <td class="param-name"><label for="country">Страна:</label></td>
-            <td class="param-input"><input type="text" name="country" id="country"/></td>
             <td class="param-name"><label for="city">Город:</label></td>
             <td class="param-input"><input type="text" name="city" id="city"/></td>
-        </tr>
-        <tr>
             <td class="param-name"><label for="address">Адрес:</label></td>
             <td class="param-input"><textarea name="address" id="address"></textarea></td>
-            <td class="param-name"><label for="metro">Метро:</label></td>
-            <td class="param-input"><input type="text" name="metro" id="metro"/></td>
         </tr>
         <tr>
+            <td class="param-name"><label for="metro">Метро:</label></td>
+            <td class="param-input"><input type="text" name="metro" id="metro"/></td>
             <td class="param-name"><label for="phone">Телефон:</label></td>
             <td class="param-input"><input type="text" name="phone" id="phone"/></td>
         </tr>

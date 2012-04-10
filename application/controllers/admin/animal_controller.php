@@ -76,7 +76,8 @@ class Animal_Controller extends MY_Controller
         Organization::create(array(
             'animal_id' => $animal_id,
             'name' => $this->input->post('org_name'),
-            'description' => $this->input->post('org_description')
+            'description' => $this->input->post('org_description'),
+            'site_text' => $this->input->post('org_text')
         ));
 
         echo $this->load->view('admin/animal/organization_list.php',

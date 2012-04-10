@@ -12,13 +12,11 @@ class Profile_Controller extends MY_Controller
 
     private function proc_image($item_id = 0, $type = 'main', $image = '')
     {
-
         $file_ext = substr($image, strrpos($image, '.') + 1);
         if ($file_ext === false)
             return '';
 
         $file_name = $item_id . '-' . $type . '.' . $file_ext;
-
         @rename('img/tmp/' . $image, Config::get('item_images_dir') . $file_name);
         return $file_name;
     }
@@ -33,12 +31,12 @@ class Profile_Controller extends MY_Controller
     {
         $this->view_data['settings'] = $this->view_data['organizations'] = array();
         foreach (Kind::all() as $kind)
-            $this->view_data['settings'][$kind->id] = KindSetting::get($kind->id, $this->user->city->id);
+            $this->view_data['settings'][$kind->id] = $this->user->city ? KindSetting::get($kind->id, $this->user->city->id) : null;
 
         foreach (Animal::all() as $animal) {
             $this->view_data['organizations'][$animal->id] = array();
             foreach ($animal->organizations as $org)
-                if (CityOrganization::check($this->user->city->id, $org->id))
+                if ($this->user->city->id && CityOrganization::check($this->user->city->id, $org->id))
                     $this->view_data['organizations'][$animal->id][] = $org;
         }
     }
@@ -111,16 +109,6 @@ class Profile_Controller extends MY_Controller
         exit();
     }
 
-    public function view_item($item_id = 0)
-    {
-        $item = Item::find_by_id($item_id);
-        if(!$item)
-            show_404();
-
-        $this->view_data['item'] = $item;
-        $this->content_view = 'item/view';
-    }
-
     public function edit_item($item_id = 0)
     {
         $item = Item::find_by_id($item_id);
@@ -137,8 +125,8 @@ class Profile_Controller extends MY_Controller
             if (!is_numeric($price))
                 show_404();
 
-
-            $site_price = Commission::get_commission($this->user->city_id, $price) + $price;
+            $type = $this->input->post('pay_type');
+            $site_price = ($type == "free" ? Commission::get_commission($this->user->city_id, $price) : 0) + $price;
 
             $item->kind_id = $kind->id;
             $item->plant_count = $this->input->post('plant_count');
@@ -161,19 +149,20 @@ class Profile_Controller extends MY_Controller
             $item->another = $this->input->post('another');
             $item->price = $price;
             $item->site_price = $site_price;
-            $item->type = $this->input->post('pay_type');
+            $item->type = $type;
             $item->status = 'edited';
+            $item->changed_by = $this->user->id;
+            $item->changed_time = time_to_mysqldatetime(time());
+
 
             if ($this->input->post('main_image_filename'))
-                $item->image = $this->proc_image('main', $this->input->post('main_image_filename'));
+                $item->image = $this->proc_image($item->id, 'main', $this->input->post('main_image_filename'));
 
             if ($this->input->post('mother_image_filename'))
                 $item->mother_image = $this->proc_image($item->id, 'mother', $this->input->post('mother_image_filename'));
 
             if ($this->input->post('father_image_filename'))
                 $item->father_image = $this->proc_image($item->id, 'father', $this->input->post('father_image_filename'));
-
-            $item->save();
 
             ItemDocument::reset($item->id);
             ItemImage::reset($item->id);
@@ -193,6 +182,10 @@ class Profile_Controller extends MY_Controller
             foreach ($kind->fields as $field)
                 ItemField::create(array('item_id' => $item->id, 'field_id' => $field->id, 'value' => $this->input->post('param_' . $field->id)));
 
+            $item->weight = $item->field_weight;
+            $item->height = $item->field_height;
+            $item->save();
+
             exit();
         }
 
@@ -210,7 +203,8 @@ class Profile_Controller extends MY_Controller
         if (!is_numeric($price))
             show_404();
 
-        $site_price = Commission::get_commission($this->user->city_id, $price) + $price;
+        $type = $this->input->post('pay_type');
+        $site_price = ($type == "free" ? Commission::get_commission($this->user->city_id, $price) : 0) + $price;
 
         $item = Item::create(array(
             'user_id' => $this->user->id,
@@ -237,15 +231,17 @@ class Profile_Controller extends MY_Controller
             'another' => $this->input->post('another'),
             'price' => $price,
             'site_price' => $site_price,
-            'type' => $this->input->post('pay_type'),
+            'type' => $type,
             'image' => $this->proc_image('main', $this->input->post('main_image_filename')),
             'status' => 'created',
+            'created_by' => $this->user->id,
+            'created_time' => time_to_mysqldatetime(time())
         ));
 
         $item->mother_image = $this->proc_image($item->id, 'mother', $this->input->post('mother_image_filename'));
         $item->father_image = $this->proc_image($item->id, 'father', $this->input->post('father_image_filename'));
         $item->image = $this->proc_image($item->id, 'mainphoto', $this->input->post('main_image_filename'));
-        $item->save();
+
 
         ItemDocument::reset($item->id);
         ItemImage::reset($item->id);
@@ -264,7 +260,19 @@ class Profile_Controller extends MY_Controller
         foreach ($kind->fields as $field)
             ItemField::create(array('item_id' => $item->id, 'field_id' => $field->id, 'value' => $this->input->post('param_' . $field->id)));
 
+        $item->weight = $item->field_weight;
+        $item->height = $item->field_height;
+        $item->save();
+
         exit();
+    }
+
+    public function admin_item($item_id = 0)
+    {
+        $item = Item::find_by_id($item_id);
+        if (!$item)
+            show_404();
+
     }
 }
 

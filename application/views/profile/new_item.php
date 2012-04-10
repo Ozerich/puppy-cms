@@ -99,7 +99,7 @@
 
 
         <div class="param">
-            <label for="mother_prizes">Титулы</label>
+            <label for="mother_prizes">Титулы или оценка</label>
             <input type="text" id="mother_prizes" name="mother_prizes"/>
         </div>
 
@@ -139,7 +139,7 @@
         </div>
 
         <div class="param">
-            <label for="father_prizes">Титулы</label>
+            <label for="father_prizes">Титулы или оценка</label>
             <input type="text" id="father_prizes" name="father_prizes"/>
         </div>
 
@@ -255,6 +255,8 @@
         </div>
     </div>
     <div class="agreement" style="display:<?=$ind ? 'none' : 'block'?>" id="agreement2_<?=$kind->id?>">
+        <div class="agreement-content" style="display:block"
+                     id="agreement2_text"><?=Config::get('agreement2_text')?></div>
         <div class="agreement-checkbox">
             <label for="agreement_2"><input type="checkbox" id="agreement_2"/>Поставьте галочку, если согласны с
                 условиями</label>

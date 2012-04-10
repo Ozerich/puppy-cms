@@ -53,8 +53,10 @@ class Kind_Controller extends MY_Controller
             $kind->animal_id = $this->input->post('animal');
             $kind->name = $this->input->post('name');
             $kind->alias = $this->input->post('alias');
-            $kind->preview_template = $this->input->post('preview_template');
-            $kind->header_template = $this->input->post('header_template');
+            $kind->preview_template = str_replace("\r\n", '<br/>', $this->input->post('preview_template'));
+            $kind->header_template = str_replace("\r\n", '<br/>', $this->input->post('header_template'));
+            $kind->text_template = str_replace("\r\n", '<br/>', $this->input->post('text_template'));
+
             $kind->save();
 
             KindField::table()->delete(array('kind_id' => $kind_id));
@@ -76,6 +78,7 @@ class Kind_Controller extends MY_Controller
                     'free_agreement' => $_POST['free_agreement'][$city_id],
                     'paid1_agreement' => $_POST['paid1_agreement'][$city_id],
                     'paid2_agreement' => $_POST['paid2_agreement'][$city_id],
+                    'manager_contact' => $_POST['manager_contact'][$city_id],
                 ));
             }
 

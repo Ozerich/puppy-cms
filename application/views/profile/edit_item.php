@@ -112,7 +112,7 @@
 
 
         <div class="param">
-            <label for="mother_prizes">Титулы</label>
+            <label for="mother_prizes">Титулы или оценка</label>
             <input type="text" id="mother_prizes" value="<?=$item->mother_prizes?>" name="mother_prizes"/>
         </div>
 
@@ -159,7 +159,7 @@
         </div>
 
         <div class="param">
-            <label for="father_prizes">Титулы</label>
+            <label for="father_prizes">Титулы или оценка</label>
             <input type="text" value="<?=$item->father_prizes?>" id="father_prizes" name="father_prizes"/>
         </div>
 

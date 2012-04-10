@@ -4,9 +4,16 @@ class Item extends ActiveRecord\Model
 {
     static $table_name = "items";
 
+    static $STATUSES = array('created', 'edited', 'public', 'saled', 'finished', 'canceled');
+
     public function get_city()
     {
         return City::find_by_id($this->city_id);
+    }
+
+    public function get_user()
+    {
+        return User::find_by_id($this->user_id);
     }
 
     public function get_images()
@@ -35,18 +42,13 @@ class Item extends ActiveRecord\Model
         return ItemDocument::find(array('conditions' => array('document_id = ? AND item_id = ?', $document_id, $this->id))) ? 1 : 0;
     }
 
-    public function get_kind()
-    {
-        return Kind::find_by_id($this->kind_id);
-    }
-
-    public function get_weight()
+    public function get_field_weight()
     {
         $field = Field::weight_field();
         return ItemField::get($this->id, $field->id);
     }
 
-    public function get_height()
+    public function get_field_height()
     {
         $field = Field::height_field();
         return ItemField::get($this->id, $field->id);
@@ -79,11 +81,11 @@ class Item extends ActiveRecord\Model
             case 'edited':
                 return "Отредактировано. Ждет модерации";
             case 'public':
-                return "Опубликовано до " . $this->finish_date->format('d.m.y');
+                return "Опубликовано до " . $this->finish_time->format('d.m.y');
             case 'saled':
                 return "Щенок продан. Редактирование не возможно";
             case 'finished':
-                return "Снято " . $this->finish_date->format('d.m.y') . ". Окончен срок публикации";
+                return "Снято " . $this->finish_time->format('d.m.y') . ". Окончен срок публикации";
             case 'canceled':
                 return "Временно снято";
             default:
@@ -91,21 +93,78 @@ class Item extends ActiveRecord\Model
         }
     }
 
-    public function get_preview_header(){
-        return "273. Девочка, будет весить 1,2 кг.";
+    public function get_organization()
+    {
+        return Organization::find_by_id($this->organization_id);
     }
 
-    public function get_preview_text(){
-        return "Документы: ветпаспорт, щенячья карточка (позже Клуб обменивает ее на родословную), отмечено клеймо/вживлен микрочип
-        Щенки йоркширского терьера этого помета рождены: 24.03.2011. Питомник (заводчик) ждет Вас в г.Москва,        Васильковская
+    public function get_animal()
+    {
+        return Animal::find_by_id($this->animal_id);
+    }
 
-        В меру игривая, ласковая, обаятельная. Девочка отлично социализирована, растёт в контакте с детьми. Очень забавная, умилительная крошка!";
+    public function get_preview_header()
+    {
+        $template = $this->kind->header_template;
+
+        $template = str_replace('{{id}}', $this->id, $template);
+        $template = str_replace('{{sex}}', $this->sex == 'man' ? 'мальчик' : 'девочка', $template);
+        $template = str_replace('{{weight}}', $this->weight . ' кг.', $template);
+        $template = str_replace('{{city}}', $this->city->name, $template);
+
+        $wool_length = ItemField::get($this->id, Field::wool_field_id());
+        $template = str_replace('{{dlina_sher}}', $wool_length, $template);
+
+        return $template;
+    }
+
+    public function get_preview_text()
+    {
+        $template = $this->kind->preview_template;
+
+        $template = str_replace('{{date_birth}}', $this->birthday->format('d.m.Y;'), $template);
+        $organization = $this->organization;
+        $organization_text = $organization ? $organization->site_text : $this->animal->no_organization;
+        $template = str_replace('{{pitomnik}}', $organization_text, $template);
+        $template = str_replace('{{metro}}', $this->plant_name, $template);
+        $template = str_replace('{{opis}}', $this->description, $template);
+        $template = str_replace('{{weight}}', $this->weight . ' кг.', $template);
+        $template = str_replace('{{opis_drugich}}', $this->another, $template);
+
+        $wool_length = ItemField::get($this->id, Field::wool_field_id());
+        $template = str_replace('{{dlina_sher}}', $wool_length, $template);
+
+        return $template;
+    }
+
+    public function get_full_text()
+    {
+        $template = $this->kind->text_template;
+
+        $template = str_replace('{{ears}}', ItemField::get($this->id, Field::ears_field_id()), $template);
+        $template = str_replace('{{tail}}', ItemField::get($this->id, Field::tail_field_id()), $template);
+        $template = str_replace('{{wool_length}}', ItemField::get($this->id, Field::wool_field_id()), $template);
+        $template = str_replace('{{bite}}', ItemField::get($this->id, Field::bite_field_id()), $template);
+        $template = str_replace('{{okras}}', ItemField::get($this->id, Field::okras_field_id()), $template);
+
+        $template = str_replace(array('{{mother_tituls}}', '{{mother_weight}}', '{{mother_height}}', '{{mother_age}}'),
+        array($this->mother_prizes, $this->mother_weight, $this->mother_height, $this->mother_age), $template);
+
+        $template = str_replace(array('{{father_tituls}}', '{{father_weight}}', '{{father_height}}', '{{father_age}}'),
+        array($this->father_prizes, $this->father_weight, $this->father_height, $this->father_age), $template);
+
+        $template = str_replace('{{description}}', $this->description, $template);
+        $template = str_replace('{{another}}', $this->another, $template);
+
+        return $template;
     }
 
 
-    public function get_preview_image(){
-        return Config::get('item_images_dir').$this->image;
+    public function get_preview_image()
+    {
+        return Config::get('item_images_dir') . $this->image;
     }
+
 }
 
 ?>

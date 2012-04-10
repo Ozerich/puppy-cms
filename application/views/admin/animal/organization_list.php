@@ -4,6 +4,7 @@
         <th class="id">№</th>
         <th class="organization-name">Название</th>
         <th class="organization-description">Описание</th>
+        <th class="organization-description">Текст на сайте</th>
         <th class="actions">Действия</th>
     </tr>
     </thead>
@@ -16,6 +17,7 @@
                 <td class="id"><?=($ind + 1)?></td>
                 <td class="organization-name"><?=$org->name?></td>
                 <td class="organization-description"><?=$org->description?></td>
+                <td class="organization-description"><?=$org->site_text?></td>
                 <td class="actions">
                     <a href="#" class="delete delete-organization"></a>
                 </td>

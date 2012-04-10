@@ -1,9 +1,22 @@
+jQuery.fn.setdatepicker = function () {
+    var val = $(this).val();
+    $(this).datepicker({
+        changeMonth:true,
+        changeYear:true
+    }).datepicker("option", "showAnim", "blind").datepicker("option", "dateFormat", 'dd.mm.yy').val(val);
+    return $(this);
+}
+
 function validateEmail(email) {
 
     if (email.length < 5)
         return false;
     var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
     return reg.test(email);
+}
+
+function isNumber(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 function validateDate(date) {
@@ -14,13 +27,52 @@ function validateDate(date) {
     return reg.test(date);
 }
 
+function update_list_events() {
+    $('#item_list .edit-open').click(function () {
+        $(this).parents('.item-block').next('.item-admin').toggle().find('.submit-area span').hide();
+        return false;
+    });
+
+    $('.publish-till').setdatepicker();
+
+    $('#item_list .item-admin .item-status').change(function () {
+        var block = $(this).parents('.item-admin');
+        $(block).find('.status-params').hide();
+        $('#' + $(this).attr('id') + '_' + $(this).val()).show();
+    });
+
+    $('.status-filter a').click(function () {
+        $('#filter_type').val($(this).attr('filter'));
+        $('#admin_filter_form').submit();
+        return false;
+    });
+}
+
+
+function update_item(event, item_id) {
+    var block = $(event.target).parents('.item-admin');
+    var error = $(block).find('.error, .success').hide();
+
+    if ($(block).find('.publish-till').is(':visible') && $(block).find('.publish-till').val().length != 10)
+        $(error).css('display', 'inline-block');
+
+    if ($(error).is(':visible'))
+        return false;
+
+    $(block).find('.loading').show();
+    $(event.target).hide();
+
+    $.post('admin_item/' + item_id, $(block).find('form').serialize(), function (data) {
+        $(block).find('.loading').hide();
+        $(block).find('.success').css('display', 'inline-block');
+        $(event.target).show();
+    });
+
+    return false;
+}
+
 function CheckItemErrors(is_edit) {
     var error_block = $('.error-block ul').empty();
-
-    if ($('#plant_name').val().length == 0)
-        $(error_block).append('<li>Название питомника не заполнено</li>');
-    else if ($('#plant_name').val().length <= 5)
-        $(error_block).append('<li>Название питомника заполнено не корректно</li>');
 
     if ($('#birthday').val().length == 0)
         $(error_block).append('<li>Дата рождения не выбрана</li>');
@@ -41,6 +93,11 @@ function CheckItemErrors(is_edit) {
         $(error_block).append('<li>Цена должна быть больше нуля</li>');
     else if (isNaN(parseInt($('#item_price').val())))
         $(error_block).append('<li>Цена должна быть целым числом</li>');
+
+    if ($(".main-params .param.weight:visible").length && !isNumber($('.main-params .param.weight:visible input').val()))
+        $(error_block).append('<li>Вес должен быть числом</li>');
+    if ($(".main-params .param.height:visible").length && !isNumber($('.main-params .param.height:visible input').val()))
+        $(error_block).append('<li>Рост должен быть числом</li>');
 
     if ($('.error-block ul li').size() == 0)
         if ($('.agreement-checkbox:visible input:checked').size() != 2)
@@ -84,7 +141,7 @@ function FinishUploadFiles(errors, is_edit) {
     });
 
     $.ajax({
-        url: is_edit ? 'edit/' + $('#item_id').val() : 'profile/add_item',
+        url:is_edit ? 'edit/' + $('#item_id').val() : 'profile/add_item',
         data:data,
         type:'post',
         success:function (data) {
@@ -97,7 +154,40 @@ function FinishUploadFiles(errors, is_edit) {
             $('#data_loader').hide();
         }
     });
+}
 
+function update_user_items_events() {
+    $('#admin_user .user-items tr.item-line').click(function () {
+        if ($(this).hasClass('active')) {
+            $('#admin_user .user-items tr.item-line').removeClass('active');
+            $('#admin_user .user-items tr.item-admin').hide();
+        }
+        else {
+            $('#admin_user .user-items tr.item-line').removeClass('active');
+            $('#admin_user .user-items tr.item-admin').hide();
+            $(this).next().toggle();
+            $(this).toggleClass('active');
+        }
+    });
+
+    $('#admin_user .user-items .item-status').change(function () {
+        var block = $(this).parents('.item-admin');
+        $(block).find('.status-params').hide();
+        $('#' + $(this).attr('id') + '_' + $(this).val()).show();
+    });
+
+    $('#admin_user .user-items .save-item').click(function () {
+        var block = $(this).parents('.item-admin');
+        $(block).find('.loading').show();
+        $(this).hide();
+        $.post('user/update_item/' + $(block).find('.item_id').val(), $(block).find('*').serialize(), function (data) {
+            $(block).find('.loading').hide();
+            $(block).find('.save-item').show();
+            $('#admin_user .user-items').html(data);
+            update_user_items_events();
+        });
+        return false;
+    });
 }
 
 $(document).ready(function () {
@@ -169,10 +259,7 @@ $(document).ready(function () {
     });
 
     var val = $('.birthday-param input').val();
-    $('.birthday-param input').datepicker({
-        changeMonth:true,
-        changeYear:true
-    }).datepicker("option", "showAnim", "blind").datepicker("option", "dateFormat", 'dd.mm.yy').val(val);
+    $('.birthday-param input').setdatepicker().val(val);
 
     $('#new-item #kind').change(
         function () {
@@ -206,24 +293,29 @@ $(document).ready(function () {
             $(block).find('.agreement-content').hide();
             $(block).find('#agreement_' + $(this).val()).show();
             $('.agreement-checkbox input[type=checkbox]').removeAttr('checked');
+            $('#new-item #item_price').keyup();
         }).change();
 
     $('#new-item #item_price').keyup(
         function () {
-            $('#price-loader').css('display', 'inline-block');
-            $('.price-commission .value').hide();
-            $.post('profile/calc_price', 'price=' + $(this).val(), function (price) {
-                $('#addprice_value').html(price);
-                $('#price-loader').hide();
-                $('.price-commission .value').show();
-            });
-        }).keyup();
+            if ($('#new-item #agreement_type:visible').find('option:selected').val() == 'free') {
+                $('#price-loader').css('display', 'inline-block');
+                $('.price-commission .value').hide();
+                $.post('profile/calc_price', 'price=' + $(this).val(), function (price) {
+                    $('#addprice_value').html(price);
+                    $('#price-loader').hide();
+                    $('.price-commission .value').show();
+                });
+            }
+            else
+                $('#addprice_value').html($('#new-item #item_price').val());
+        });
 
     $('#new_item_submit, #edit_item_submit').click(function () {
 
         var is_edit = $(this).attr('id') == 'edit_item_submit';
-        if(!CheckItemErrors(is_edit))
-        return false;
+        if (!CheckItemErrors(is_edit))
+            return false;
         $(this).hide();
 
         $('#file_loader').show();
@@ -281,4 +373,10 @@ $(document).ready(function () {
 
         return false;
     });
+
+    update_list_events();
+
+    $('#item_view .left-wrapper a[rel=photo]').colorbox({maxWidth:750, maxHeight:750});
+
+    update_user_items_events();
 });

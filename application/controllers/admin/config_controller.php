@@ -31,11 +31,11 @@ class Config_Controller extends MY_Controller
     public function content()
     {
         if ($_POST) {
-            $mask = array('site_title', 'copyright', 'meta_keywords', 'meta_description', 'html_left', 'html_bottom_1', 'html_bottom_2');
+            $mask = array('site_title', 'copyright', 'meta_keywords', 'meta_description', 'html_left', 'html_bottom_1', 'html_bottom_2', 'agreement2_text');
             foreach ($mask as $ind)
                 Config::set($ind, $this->input->post($ind));
 
-            redirect('admin/content');
+            redirect('admin/config/content');
         }
         $this->set_page_title('Управление контентом');
     }

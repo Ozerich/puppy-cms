@@ -25,6 +25,12 @@
     </div>
 
     <div class="param text">
+        <label for="agreement2_text">Соглашение 2:</label>
+        <textarea id="agreement2_text" name="agreement2_text"><?=Config::get('agreement2_text')?></textarea>
+    </div>
+
+
+    <div class="param text">
         <label for="html_left">HTML в левом блоке:</label>
         <textarea id="html_left" name="html_left"><?=Config::find_by_param('html_left')->value?></textarea>
     </div>

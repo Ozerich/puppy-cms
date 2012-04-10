@@ -41,14 +41,6 @@
 $route['default_controller'] = "main_controller";
 $route['404_override'] = '';
 
-$route['login'] = 'auth_controller/user';
-$route['register'] = 'auth_controller/register';
-
-$route['profile'] = 'profile_controller';
-$route['profile/(:any)'] = 'profile_controller/$1';
-$route['create'] = 'profile_controller/new_item';
-$route['edit/(:num)'] = 'profile_controller/edit_item/$1';
-$route['view/(:num)'] = 'profile_controller/view_item/$1';
 
 $route['admin/auth'] = 'auth_controller/admin';
 $route['admin/logout'] = 'auth_controller/logout';
@@ -76,6 +68,29 @@ $route['admin/articles/(:any)'] = 'admin/article_controller/$1';
 $route['admin/config'] = 'admin/config_controller';
 $route['admin/config/medal/(:num)'] = 'admin/config_controller/view_medal/$1';
 $route['admin/config/(:any)'] = 'admin/config_controller/$1';
+
+$route['login'] = 'auth_controller/user';
+$route['logout'] = 'auth_controller/logout';
+$route['register'] = 'auth_controller/register';
+
+$route['profile'] = 'profile_controller';
+$route['profile/(:any)'] = 'profile_controller/$1';
+$route['create'] = 'profile_controller/new_item';
+$route['edit/(:num)'] = 'profile_controller/edit_item/$1';
+$route['view/(:num)'] = 'main_controller/view_item/$1';
+$route['admin_item/(:num)'] = 'main_controller/admin_item/$1';
+$route['list'] = 'main_controller/item_list';
+$route['filter'] = 'main_controller/filter';
+
+$route['statji/(:any)/(:any)'] = 'article_controller/index/$1/$2';
+$route['statji/(:any)'] = 'article_controller/index/$1';
+$route['statji'] = 'article_controller';
+
+$route['user/(:num)'] = 'user_controller/index/$1';
+$route['user/(:any)'] = 'user_controller/$1';
+
+$route['(:any)'] = 'main_controller/show_list/$1';
+$route['(:any)/(:any)'] = 'main_controller/show_list/$1/$2';
 
 
 

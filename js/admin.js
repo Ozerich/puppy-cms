@@ -205,8 +205,8 @@ $(document).ready(function () {
         return false;
     });
 
-    $("#article-view #preview").cleditor({width:'100%', height:200});
-    $("#article-view #text").cleditor({width:'100%', height:500});
-    $("#content-view textarea").cleditor({width:'100%', height:250});
-    $("#kind-data .kind-settings .text-item textarea").cleditor({width:'100%', height:180});
+    $("#article-view #preview").not('.nohtml').cleditor({width:'100%', height:200});
+    $("#article-view #text").not('.nohtml').cleditor({width:'100%', height:500});
+    $("#content-view textarea").not('.nohtml').cleditor({width:'100%', height:250});
+    $("#kind-data .kind-settings .text-item textarea").not('.nohtml').cleditor({width:'100%', height:180});
 });

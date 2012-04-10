@@ -76,7 +76,7 @@ class User extends ActiveRecord\Model
 
     public function get_plain_address()
     {
-        return $this->country . ', ' . $this->city . ', ' . $this->address;
+        return ($this->city ? $this->city->name : 'Нет города') . ', ' . $this->address;
     }
 
     public function get_plain_type()
@@ -98,8 +98,32 @@ class User extends ActiveRecord\Model
         return City::find_by_id($this->city_id);
     }
 
-    public function get_items(){
+    public function get_items()
+    {
         return Item::find_all_by_user_id($this->id);
+    }
+
+
+    public function get_access_edit()
+    {
+        return $this->type == 'admin' || $this->type == 'manager';
+    }
+
+
+    public function get_plain_contact()
+    {
+        return '<b>' . $this->name . ' ' . $this->surname . '</b> (<a href="mailto:' . $this->email . '">' . $this->email . '</a>). ' . ($this->city ? $this->city->name : 'Нет города') . ', ' . $this->address . ', м.' . $this->metro . '. ' . $this->phone;
+    }
+
+
+    public function get_public_count()
+    {
+        return count(Item::all(array('conditions' => array('user_id = ? AND status = ?', $this->id, 'public'))));
+    }
+
+    public function get_closed_count()
+    {
+        return count(Item::all(array('conditions' => array('user_id = ? AND status = ?', $this->id, 'closed'))));
     }
 }
 

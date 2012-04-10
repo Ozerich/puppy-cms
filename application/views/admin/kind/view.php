@@ -29,11 +29,15 @@ form_open("admin/kinds/" . $kind->id)
         </div>
         <div class="param text">
             <label for="header_template">Шаблон для заголовка объявления</label>
-            <textarea name="header_template" id="header_template"><?=$kind->header_template?></textarea>
+            <textarea name="header_template" id="header_template"><?=str_replace('<br/>', "\r\n", $kind->header_template)?></textarea>
         </div>
         <div class="param text">
             <label for="preview_template">Шаблон для текста короткого объявления</label>
-            <textarea name="preview_template" id="preview_template"><?=$kind->preview_template?></textarea>
+            <textarea name="preview_template" id="preview_template"><?=str_replace('<br/>', "\r\n", $kind->preview_template)?></textarea>
+        </div>
+        <div class="param text">
+            <label for="text_template">Шаблон для текста полного объявления</label>
+            <textarea name="text_template" id="text_template"><?=str_replace('<br/>', "\r\n", $kind->text_template)?></textarea>
         </div>
     </div>
 
@@ -89,6 +93,11 @@ form_open("admin/kinds/" . $kind->id)
                     <label for="phone_<?=$city->id?>">Телефон:</label>
                     <input type="text" name="phone[<?=$city->id?>]" id="phone_<?=$city->id?>"
                            value="<?=$kind_settings[$city->id] ? $kind_settings[$city->id]->phone : ''?>"/>
+                </div>
+                <div class="text-item">
+                    <label for="manager_contact_<?=$city->id?>">Контакты менеджера:</label>
+                    <textarea class="nohtml" id="manager_contact_<?=$city->id?>"
+                              name="manager_contact[<?=$city->id?>]"><?=$kind_settings[$city->id] ? $kind_settings[$city->id]->manager_contact : ''?></textarea>
                 </div>
                 <div class="text-item">
                     <label for="before_<?=$city->id?>">До таблицы:</label>

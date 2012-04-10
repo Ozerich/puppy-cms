@@ -1,7 +1,7 @@
 <div class="block">
     <div class="block-header">
         <div class="header-left">Личный кабинет <span id="header_email"><?=$this->user->email?></span></div>
-        <div class="header-right">Для оплат <?=$this->user->city->bank?></div>
+        <div class="header-right">Для оплат <?=$this->user->city ? $this->user->city->bank : 'Не установлен город'?></div>
         <br/>
     </div>
     <div class="block-content">
@@ -27,7 +27,7 @@
 
             <div class="profile-param">
                 <label for="person_city">Город</label>
-                <span><?=$this->user->city->name?></span>
+                <span><?=$this->user->city ? $this->user->city->name : 'Не установлен'?></span>
                 <select id="person_city" name="city">
                     <? foreach (City::all() as $city): ?>
                     <option <?=$city->id == $this->user->city_id ? 'selected' : ''?>

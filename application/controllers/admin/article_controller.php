@@ -5,6 +5,10 @@ class Article_Controller extends MY_Controller
     public function __construct()
     {
         parent::__construct(true);
+
+        $images_dir = Config::get('article_images_dir');
+        if (!file_exists($images_dir))
+            mkdir($images_dir);
     }
 
     public function index()
@@ -68,9 +72,26 @@ class Article_Controller extends MY_Controller
                     'changed_time' => time_to_mysqldatetime(time()), 'changed_by' => $this->user->id,
                 ));
 
-                redirect('admin/articles/edit/article/' . $article->id);
+
+                $this->load->library('upload');
+
+                $this->upload->initialize(array(
+                    'upload_path' => Config::get('article_images_dir'),
+                    'allowed_types' => 'gif|jpg|png',
+                    'file_name' => 'article-' . $article->id,
+                    'overwrite' => TRUE
+                ));
+
+                if ($this->upload->do_upload(key($_FILES))) {
+                    $data = $this->upload->data();
+                    $article->image = $data['file_name'];
+                    $article->save();
+                }
             }
+
+            redirect('admin/articles/edit/article/' . $article->id);
         }
+
         else
             show_404();
     }
@@ -121,9 +142,27 @@ class Article_Controller extends MY_Controller
                 $item->meta_description = $this->input->post('meta_description');
                 $item->preview = $this->input->post('preview');
                 $item->text = $this->input->post('text');
+
+                if ($_FILES['image']) {
+                    $this->load->library('upload');
+
+                    $this->upload->initialize(array(
+                        'upload_path' => Config::get('article_images_dir'),
+                        'allowed_types' => 'gif|jpg|png',
+                        'file_name' => 'article-' . $item->id,
+                        'overwrite' => TRUE
+                    ));
+
+                    if ($this->upload->do_upload('image')) {
+                        $data = $this->upload->data();
+                        $item->image = $data['file_name'];
+                    }
+                }
+
                 $item->save();
 
-                redirect('admin/articles'.($item->category_id != 0 ? '/edit/category/'.$item->category_id : ''));
+
+                redirect('admin/articles' . ($item->category_id != 0 ? '/edit/category/' . $item->category_id : ''));
             }
         }
 

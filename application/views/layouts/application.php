@@ -8,12 +8,15 @@
     <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" title="no title"/>
     <link rel="stylesheet/less" href="css/main.less" type="text/css"/>
     <link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.18.custom.css" type="text/css"/>
+    <link rel="stylesheet" href="css/colorbox.css" type="text/css"/>
 
     <script src="js/jquery-1.7.1.min.js"></script>
     <script src="js/jquery-ui-1.8.18.custom.min.js"></script>
     <script src="js/ajaxfileupload.js"></script>
     <script src="js/less-1.1.5.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/filter.js"></script>
+    <script src="js/jquery.colorbox.js"></script>
 
     <? if (isset($JS_files))
     foreach ($JS_files as $js): ?>
@@ -25,8 +28,8 @@
 
 <div id="main-wrapper">
     <div id="left-wrapper">
-
-        <div id="filter">
+        <div id="filter">        <?=form_open('filter');?>
+            <h2 id="filter_phone" class="phone"><?=isset($filter_phone) ? $filter_phone : ''?></h2>
             <h3>щенки и котята<br/>от проверенных временем<br/>питомников</h3>
 
             <div id="filter-form">
@@ -42,18 +45,13 @@
                     <label for="kind">Порода:</label>
                     <select id="kind" name="kind">
                         <? foreach (Kind::all() as $kind): ?>
-                        <option value="<?=$kind->id?>"><?=$kind->name?></option>
+                        <option has_height="<?=$kind->is_height?>" has_weight="<?=$kind->is_weight?>"
+                                animal="<?=$kind->animal_id?>" value="<?=$kind->id?>"><?=$kind->name?></option>
                         <? endforeach; ?>
                     </select>
                 </div>
-                <div class="filter-param">
-                    <label for="price">Цена:</label>
-                    <select id="price" name="price">
 
-                    </select>
-                </div>
-
-                <div class="filter-param">
+                <div class="filter-param" id="sex-filter">
                     <label for="sex">Пол:</label>
                     <select id="sex" name="sex">
                         <option value="0">любой</option>
@@ -62,23 +60,32 @@
                     </select>
                 </div>
 
-                <div class="filter-param">
-                    <label for="weight">Вес:</label>
-                    <select id="weight" name="weight">
+                <div class="filter-param" id="price-filter">
+                    <label for="price">Цена:</label>
+                    <select disabled id="price" name="price">
 
                     </select>
                 </div>
 
-                <div class="filter-param">
+                <div class="filter-param" id="weight-filter">
+                    <label for="weight">Вес:</label>
+                    <select disabled id="weight" name="weight">
+
+                    </select>
+                </div>
+
+                <div class="filter-param" id="height-filter">
                     <label for="height">Рост:</label>
-                    <select id="height" name="height">
+                    <select disabled id="height" name="height">
 
                     </select>
                 </div>
             </div>
 
-            <button id="submit-filter">Показать</button>
-        </div>
+            <img id="filter_loading" src="img/item-loader.gif"/>
+            <input type="submit" value="Показать" id="filter_submit"/>
+            </form></div>
+
 
         <a href="create" id="new-item">Дать объявление</a>
 
@@ -89,15 +96,25 @@
     <div id="right-wrapper">
         <div id="header">
 
-            <div id="header-content">
-                <h2>
-                    От Святого Валентина<br/>
-                    щенки и котята для любимых!
-                </h2>
-            </div>
-            <div id="header-left"></div>
-            <div id="header-right"></div>
+            <a href="/">
+                <div id="header-content">
+                    <h2>
+                        От Святого Валентина<br/>
+                        щенки и котята для любимых!
+                    </h2>
+                </div>
+                <div id="header-left"></div>
+                <div id="header-right"></div>
+            </a>
         </div>
+
+        <? if ($this->user): ?>
+        <div id="top_menu">
+            <a href="profile">Личный кабинет (объявления)</a>
+            <a href="logout">Выйти</a>
+            <a href="statji">Новости сайта</a>
+        </div>
+        <? endif; ?>
 
         <div id="content">
             <?=$page_content?>

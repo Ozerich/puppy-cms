@@ -34,6 +34,8 @@ form_open("admin/animals/" . $animal->id)
                 <p class="block-header">Новая организация:</p>
                 <label for="org_name">Имя организации:</label>
                 <input type="text" id="org_name" name="org_name"/><br/>
+                <label for="org_text">Текст на сайте:</label>
+                <input type="text" id="org_text" name="org_text"/><br/>
                 <label for="org_descr">Описание</label>
                 <textarea name="org_description" id="org_descr"></textarea>
                 <button id="neworganization-submit" class="noimg">Добавить</button>

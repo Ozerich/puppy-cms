@@ -7,7 +7,7 @@
 </ul>
 
 <div id="article-view">
-    <?=form_open('admin/articles/edit/article/' . $item->id);?>
+    <?=form_open_multipart('admin/articles/edit/article/' . $item->id);?>
 
     <div class="param">
         <label for="title">Название:</label>
@@ -35,6 +35,13 @@
         <label for="meta_description">META Description:</label>
         <input type="text" name="meta_description" value="<?=$item->meta_keywords?>" id="meta_description"
                maxlength="2000"/>
+    </div>
+
+    <div class="param">
+        <label for="image">Картинка:</label>
+        <div class="image"><img src="<?=Config::get('article_images_dir').$item->image?>"/></div>
+        <label for="new_image">Новая картинка:</label>
+        <input type="file" name="image" id="new_image"/>
     </div>
 
     <div class="param text">

@@ -3,7 +3,7 @@
     <div class="block-content item-block">
         <div class="left-wrapper">
             <div class="item-image">
-                <img src="<?=$item->preview_image?>"/>
+                <a href="<?=$item->preview_image?>"><img src="<?=$item->preview_image?>"/></a>
             </div>
             <div class="item-gallery">
                 <p class="gallery-header">
@@ -13,6 +13,18 @@
 
                 <div class="gallery-images">
 
+                    <? $img_count = 1; foreach ($item->images as $image): ?>
+                    <a <?=$img_count++ % 2 == 0 ? 'class="odd"' : ''?> href="<?=Config::get('item_images_dir') . $image->image?>"  rel="photo"><img title=""
+                            src="<?=Config::get('item_images_dir') . $image->image?>"/></a>
+                    <? endforeach; ?>
+                    <? if ($item->mother_image): ?>
+                    <a <?=$img_count++ % 2 == 0 ? 'class="odd"' : ''?> href="<?=Config::get('item_images_dir') . $item->mother_image?>" rel="photo"><img title="Папа"
+                            src="<?=Config::get('item_images_dir') . $item->mother_image?>"/></a>
+                    <? endif; ?>
+                    <? if ($item->father_image): ?>
+                    <a <?=$img_count++ % 2 == 0 ? 'class="odd"' : ''?> href="<?=Config::get('item_images_dir') . $item->father_image?>" rel="photo"><img title="Мама"
+                            src="<?=Config::get('item_images_dir') . $item->father_image?>"/></a>
+                    <? endif; ?>
                 </div>
             </div>
         </div>
@@ -30,27 +42,8 @@
                 <p><?=$item->preview_text?></p>
             </div>
             <div class="main-content">
-                У щенка:
-                Ушки стоят
-                Купирован
-                Ножницеобразный прикус
-                Окрас шерсти: темная сталь с золотом
-                Папа: Титулы, вес, возраст
-                Мама: Титулы, вес, возраст
 
-                <Произвольное описание щенка введенное заводчиком
-                , без ограничения по символам - из анкеты при создании объявления>
-
-                <Информация о наличии остальных щенков
-                - берется из анкеты при создании объявления>
-
-                8 499 608-08-91 звоните и вам ответит консультант сайта
-                - если нужно он расскажет подробне о щенке, о владельце питомника и отзывах о нем
-                - или просто даст вам номер владельца щенка, чтобы вы могли договориться о времени просмотра щенка у
-                заводчика и покупке.
-
-                Вы можете скачать и распечатать перед поездкой к заводчику Договор купли-продажи щенка, а также образец
-                расписки заводчика о взятии залога - это удобно и упростит процесс покупки.
+                <?=$item->full_text?>
 
                 <p class="author-word">
                     P.S. Пара слов от создателя сайта, Ольги Куракиной: <br/>

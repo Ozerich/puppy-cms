@@ -70,7 +70,7 @@
 </div>
 
 <div class="newitem-block" id="new-article-block">
-    <?=form_open('admin/articles/create/article') ?>
+    <?=form_open_multipart('admin/articles/create/article') ?>
     <p class="block-header">Новая статья</p>
 
     <div class="param">
@@ -89,6 +89,10 @@
     <div class="param">
         <label for="article_alias">URL-алиас:</label>
         <input type="text" id="article_alias" name="alias"/>
+    </div>
+    <div class="param">
+        <label for="article_image">Превью-картинка</label>
+        <input type="file" id="article_image" name="image"/>
     </div>
     <input type="submit" class="noimg" value="Добавить"/>
     </form>
