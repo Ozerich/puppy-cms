@@ -68,10 +68,10 @@
                 <div class="medals">
                     <? $item_medals = ItemMedal::get_medals($item->id);
                     foreach (Medal::all() as $ind => $medal): ?>
-                        <label><?=$medal->name?>
+                        <label>
                             <input <?=$item_medals[$medal->id] ? 'checked="checked"' : '' ?>
                                     type="checkbox" name="medals[<?=$ind?>]"
-                                    value="<?=$medal->id?>"/></label>
+                                    value="<?=$medal->id?>"/><?=$medal->name?></label>
                         <? endforeach; ?>
                 </div>
                 <div class="options">

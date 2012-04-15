@@ -34,6 +34,46 @@ class User_Controller extends MY_Controller
         $this->view_data['user'] = $user;
     }
 
+    private function send_email($item_id = 0)
+    {
+        $item = Item::find_by_id($item_id);
+        if (!$item) return FALSE;
+
+        $email_template = '';
+        if ($item->status == 'public')
+            $email_template = Config::get('publish_mail');
+        else if ($item->status == 'finished')
+            $email_template = Config::get('endtime_mail');
+        else if ($item->status == 'canceled')
+            $email_template = Config::get('stoped_mail');
+
+        if (!$email_template)
+            return FALSE;
+
+        $email_template = str_replace("\n", "<br/>", $email_template);
+
+        $email_template = str_replace('{{$user}}', $item->user->fullname, $email_template);
+        $email_template = str_replace('{{$site_name}}', Config::get('site_name'), $email_template);
+        $email_template = str_replace('{{$item_link}}', '<a href="site.com/view/' . $item->id . '">перейти</a>', $email_template);
+        $email_template = str_replace('{{$item_finish_date}}', $item->finish_time ? $item->finish_time->format('d.m.Y H:i') : '', $email_template);
+        $email_template = str_replace('{{$item_animal}}', $item->animal_id == 1 ? 'щенка' : 'котёнка', $email_template);
+        $email_template = str_replace('{{$item_animal}}', $item->animal_id == 1 ? 'щенка' : 'котёнка', $email_template);
+        $email_template = str_replace('{{$item_editlink}}', '<a href="site.com/edit/' . $item->id . '">перейти</a>', $email_template);
+
+        $site_email = Config::get('site_email');
+
+        $this->email->initialize(array('mailtype' => 'html'));
+
+        $this->email->from($site_email, 'Имя сайта');
+        $this->email->to($item->user->email);
+
+        $this->email->subject('Информация об объявлении');
+        $this->email->message($email_template);
+
+        $this->email->send();
+    }
+
+
     public function update_item($item_id = 0)
     {
         if (!$this->user || !$this->user->access_edit)
@@ -53,56 +93,17 @@ class User_Controller extends MY_Controller
         foreach ($medals as $medal)
             ItemMedal::create(array('item_id' => $item_id, 'medal_id' => $medal));
 
-        $item->status = $status;
+        $params = array();
+        if ($status == 'public')
+            $params['publish_till'] = $this->input->post('publish_till');
+        else if ($status == 'saled')
+            $params['saled_by'] = $this->input->post('saled_by');
 
-        if($status == 'created')
-        {
-            $item->closed_time = $item->changed_time = $item->publish_time = $item->finish_time = null;
-            $item->closed_by = $item->publish_by = $item->changed_by = 0;
-        }
-        else if($status == 'edited')
-        {
-            $item->closed_time = $item->publish_time = $item->finish_time = null;
-            $item->closed_by = $item->publish_by = 0;
-        }
-        else if ($status == 'public') {
-            $now = time_to_mysqldatetime(time());
-            $item->publish_time = $now;
-            $item->publish_by = $this->user->id;
-            $item->finish_time = inputdate_to_mysqldate($this->input->post('publish_till')) . substr($now, 10);
-            $item->closed_time = null;
-            $item->closed_by = 0;
-        }
-        else if ($status == 'saled') {
-            $saled_by = $this->input->post('saled_by');
-            if ($saled_by && $saled_by != 'site' && $saled_by != 'plant') die;
-            $old_saled = $item->saled_by;
-            $item->saled_by = $saled_by ? $saled_by : NULL;
-
-            $user = $item->user;
-
-            if ($old_saled == "site")
-                $user->sell_site--;
-            else if ($old_saled == 'plant')
-                $user->sell_plant--;
-
-            if ($saled_by == "site")
-                $user->sell_site++;
-            else if ($saled_by == "plant")
-                $user->sell_plant++;
-
-            $user->save();
-
-        }
-
-        if ($status == 'finished' || $status == 'canceled' || $status == 'saled') {
-            $item->closed_time = time_to_mysqldatetime(time());
-            $item->closed_by = $this->user->id;
-        }
+        $item->change_status($status, $params);
+        $this->send_email($item->id);
 
         $item->display_mainpage = $this->input->post('mainpage_show');
         $item->save();
-
 
         echo $this->load->view('user/user_items.php', array('items' => $item->user->items), true);
         die;

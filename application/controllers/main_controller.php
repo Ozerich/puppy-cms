@@ -23,13 +23,30 @@ class Main_Controller extends MY_Controller
         $this->view_data['text_before'] = '';
         $this->view_data['text_after'] = '';
 
+        $filter_data = array('filter_type' => '', 'cities' => array($city->id));
+
         $data = array('items' => $items, 'cities' => array($city->id));
         if ($kind)
-            $data['kinds'] = array($kind->id);
+            $filter_data['kinds'] = array($kind->id);
 
-        $admin_filter = $this->load->view('item/admin_filter.php', array('filter_type' => '', 'cities' => array($city), 'kinds' => array($kind)), true);
 
+        $admin_filter = $this->load->view('item/admin_filter.php', $filter_data, true);
+
+        $data['admin_filter'] = $admin_filter;
         $this->view_data['item_list'] = $this->load->view('item/item_list.php', $data, true);
+
+        if($kind && $city)
+        {
+            $this->view_data['meta_keywords'] = KindSetting::get($kind->id, $city->id)->meta_keywords;
+            $this->view_data['meta_description'] = KindSetting::get($kind->id, $city->id)->meta_description;
+            $this->view_data['page_title'] = KindSetting::get($kind->id, $city->id)->title;
+        }
+        else if($city)
+        {
+            $this->view_data['meta_keywords'] = $city->meta_keywords;
+            $this->view_data['meta_description'] = $city->meta_description;
+            $this->view_data['page_title'] = $city->title;
+        }
 
         $this->content_view = 'main/index';
     }
@@ -79,14 +96,10 @@ class Main_Controller extends MY_Controller
     {
         $filter_type = $this->input->post('filter_type');
 
-
         $this->view_data['text_before'] = '';
         $this->view_data['text_after'] = '';
 
         if ($filter_type != 'users') {
-
-            $admin_filter = $this->load->view('item/admin_filter.php', array('filter_type' => $filter_type), true);
-
             if ($filter_type == 'new_and_edit')
                 $type_q = 'status = "edited" OR status = "created"';
             elseif ($filter_type == 'closed')
@@ -125,6 +138,7 @@ class Main_Controller extends MY_Controller
 
             $items = Item::all(array('conditions' => array($city_q . ' AND ' . $kind_q . ' AND ' . $type_q)));
 
+            $admin_filter = $this->load->view('item/admin_filter.php', array('filter_type' => $filter_type, 'cities' => $cities, 'kinds' => $kinds), true);
             $this->view_data['item_list'] = $this->load->view('item/item_list.php', array('admin_filter' => $admin_filter, 'items' => $items, 'filter_type' => $filter_type, 'cities' => $cities, 'kinds' => $kinds), true);
         }
         else {
@@ -187,6 +201,45 @@ class Main_Controller extends MY_Controller
         $this->content_view = 'item/view';
     }
 
+    private function send_email($item_id = 0)
+    {
+        $item = Item::find_by_id($item_id);
+        if (!$item) return FALSE;
+
+        $email_template = '';
+        if ($item->status == 'public')
+            $email_template = Config::get('publish_mail');
+        else if ($item->status == 'finished')
+            $email_template = Config::get('endtime_mail');
+        else if ($item->status == 'canceled')
+            $email_template = Config::get('stoped_mail');
+
+        if (!$email_template)
+            return FALSE;
+
+        $email_template = str_replace("\n", "<br/>", $email_template);
+
+        $email_template = str_replace('{{$user}}', $item->user->fullname, $email_template);
+        $email_template = str_replace('{{$site_name}}', Config::get('site_name'), $email_template);
+        $email_template = str_replace('{{$item_link}}', '<a href="site.com/view/'.$item->id.'">перейти</a>', $email_template);
+        $email_template = str_replace('{{$item_finish_date}}', $item->finish_time->format('d.m.Y H:i'), $email_template);
+        $email_template = str_replace('{{$item_animal}}', $item->animal_id == 1 ? 'щенка' : 'котёнка', $email_template);
+        $email_template = str_replace('{{$item_animal}}', $item->animal_id == 1 ? 'щенка' : 'котёнка', $email_template);
+        $email_template = str_replace('{{$item_editlink}}', '<a href="site.com/edit/'.$item->id.'">перейти</a>', $email_template);
+
+        $site_email = Config::get('site_email');
+
+        $this->email->initialize(array('mailtype' => 'html'));
+
+        $this->email->from($site_email, 'Имя сайта');
+        $this->email->to($item->user->email);
+
+        $this->email->subject('Информация об объявлении');
+        $this->email->message($email_template);
+
+        $this->email->send();
+    }
+
     public function admin_item($item_id = 0)
     {
         $item = Item::find_by_id($item_id);
@@ -204,53 +257,19 @@ class Main_Controller extends MY_Controller
         foreach ($medals as $medal)
             ItemMedal::create(array('item_id' => $item_id, 'medal_id' => $medal));
 
-        $item->status = $status;
+        $params = array();
 
-        if($status == 'created')
-        {
-            $item->closed_time = $item->changed_time = $item->publish_time = $item->finish_time = null;
-            $item->closed_by = $item->publish_by = $item->changed_by = 0;
-        }
-        else if($status == 'edited')
-        {
-            $item->closed_time = $item->publish_time = $item->finish_time = null;
-            $item->closed_by = $item->publish_by = 0;
-        }
-        else if ($status == 'public') {
-            $now = time_to_mysqldatetime(time());
-            $item->publish_time = $now;
-            $item->publish_by = $this->user->id;
-            $item->finish_time = inputdate_to_mysqldate($this->input->post('publish_till')) . substr($now, 10);
-        }
-        else if ($status == 'saled') {
-            $saled_by = $this->input->post('saled_by');
-            if ($saled_by && $saled_by != 'site' && $saled_by != 'plant') die;
-            $old_saled = $item->saled_by;
-            $item->saled_by = $saled_by ? $saled_by : NULL;
+        if ($status == 'public')
+            $params['publish_till'] = $this->input->post('publish_till');
+        else if ($status == 'saled')
+            $params['saled_by'] = $this->input->post('saled_by');
 
-            $user = $item->user;
-
-            if ($old_saled == "site")
-                $user->sell_site--;
-            else if ($old_saled == 'plant')
-                $user->sell_plant--;
-
-            if ($saled_by == "site")
-                $user->sell_site++;
-            else if ($saled_by == "plant")
-                $user->sell_plant++;
-
-            $user->save();
-
-        }
-
-        if ($status == 'finished' || $status == 'canceled' || $status == 'saled') {
-            $item->closed_time = time_to_mysqldatetime(time());
-            $item->closed_by = $this->user->id;
-        }
+        $item->change_status($status, $params);
+        $this->send_email($item->id);
 
         $item->display_mainpage = $this->input->post('mainpage_show');
         $item->save();
+
 
         echo 'OK';
         die;

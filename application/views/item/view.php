@@ -29,11 +29,17 @@
             </div>
         </div>
         <div class="right-wrapper">
+		<div class="top-content-wr">
             <div class="item-info">
                 <span class="item-price"><?=$item->site_price?> <?=$item->city->valute?></span>
 
                 <div class="item-medals">
-
+                        <? $item_medals = ItemMedal::get_medals($item->id);
+                        foreach ($item_medals as $ind => $medal): if (!$medal) continue;
+                            $medal = Medal::find_by_id($ind);?>
+                            <img alt="<?=$medal->alt?>" title="<?=$medal->title?>"
+                                 src="<?=Config::get('medals_dir') . $medal->filename?>"/>
+                            <? endforeach; ?>
                 </div>
             </div>
             <div class="top-content">
@@ -41,6 +47,8 @@
 
                 <p><?=$item->preview_text?></p>
             </div>
+			<br clear="all"/>
+		</div>
             <div class="main-content">
 
                 <?=$item->full_text?>

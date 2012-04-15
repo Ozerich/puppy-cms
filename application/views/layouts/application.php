@@ -2,6 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="content-type" content="text-html; charset=utf-8">
+    <meta name="keywords" content="<?=isset($meta_keywords) ? $meta_keywords : Config::get('meta_keywords')?>">
+    <meta name="description" content="<?=isset($meta_description) ? $meta_description : Config::get('meta_description')?>">
+
     <title><?=isset($page_title) ? $page_title : ''?> | Заголовок сайта</title>
     <base href="<?=base_url()?>"/>
 

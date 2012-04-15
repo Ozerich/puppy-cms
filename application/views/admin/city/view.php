@@ -18,6 +18,23 @@ form_open("admin/cities/" . $city->id)
             <label for="alias">URL-alias:</label>
             <input type="text" name="alias" value="<?=$city->alias?>" id="alias" maxlength="20"/>
         </div>
+
+        <div class="param">
+            <label for="title">Заголовок сайта:</label>
+            <input type="text" name="title" value="<?=$city->title?>" id="title"/>
+        </div>
+
+
+        <div class="param">
+            <label for="meta_keywords">META Keywords:</label>
+            <textarea name="meta_keywords" id="meta_keywords"><?=$city->meta_keywords?></textarea>
+        </div>
+
+        <div class="param">
+            <label for="meta_description">META Description:</label>
+            <textarea name="meta_description" id="meta_description"><?=$city->meta_description?></textarea>
+        </div>
+
     </div>
     <div class="finance-block">
         <p class="block-header">Настройки финансов</p>

@@ -9,6 +9,11 @@
         <input type="text" name="site_email" id="site_email" value="<?=Config::get('site_email')?>" maxlength="30"/>
     </div>
 
+    <div class="param">
+        <label for="site_name">Имя сайта</label>
+        <input type="text" name="site_name" id="site_name" value="<?=Config::get('site_name')?>" maxlength="30"/>
+    </div>
+
     <div class="param text">
         <label for="publish_mail">Шаблон e-mail письма, отправляемого когда объявление опубликовано</label>
         <textarea name="publish_mail" id="publish_mail"><?=Config::get('publish_mail')?></textarea>

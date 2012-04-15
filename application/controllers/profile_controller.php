@@ -150,10 +150,7 @@ class Profile_Controller extends MY_Controller
             $item->price = $price;
             $item->site_price = $site_price;
             $item->type = $type;
-            $item->status = 'edited';
-            $item->changed_by = $this->user->id;
-            $item->changed_time = time_to_mysqldatetime(time());
-
+            $item->change_status('edited');
 
             if ($this->input->post('main_image_filename'))
                 $item->image = $this->proc_image($item->id, 'main', $this->input->post('main_image_filename'));
@@ -233,10 +230,9 @@ class Profile_Controller extends MY_Controller
             'site_price' => $site_price,
             'type' => $type,
             'image' => $this->proc_image('main', $this->input->post('main_image_filename')),
-            'status' => 'created',
-            'created_by' => $this->user->id,
-            'created_time' => time_to_mysqldatetime(time())
         ));
+
+        $item->change_status('created');
 
         $item->mother_image = $this->proc_image($item->id, 'mother', $this->input->post('mother_image_filename'));
         $item->father_image = $this->proc_image($item->id, 'father', $this->input->post('father_image_filename'));
@@ -272,7 +268,22 @@ class Profile_Controller extends MY_Controller
         $item = Item::find_by_id($item_id);
         if (!$item)
             show_404();
+    }
 
+    public function update_item($item_id = 0)
+    {
+        $status = $this->input->post('status');
+        $item = Item::find_by_id($item_id);
+
+        if(!$item || !$this->user || $item->user_id != $this->user->id)
+            die;
+
+        if($status == 'canceled')
+            $item->change_status('canceled');
+        if($status == 'public')
+            $item->change_status('edited');
+
+        die;
     }
 }
 

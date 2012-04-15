@@ -53,6 +53,9 @@ class City_Controller extends MY_Controller
             $city->alias = $this->input->post('alias');
             $city->valute = $this->input->post('valute');
             $city->bank = $this->input->post('bank');
+            $city->title = $this->input->post('title');
+            $city->meta_keywords = $this->input->post('meta_keywords');
+            $city->meta_description = $this->input->post('meta_description');
 
             $city->save();
 

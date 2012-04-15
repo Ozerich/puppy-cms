@@ -42,6 +42,7 @@
         </td>
         <td class="actions-col">
 
+            <? if ($item->status == 'created' || $item->status == 'edited' || $item->status == 'public' || $item->status == 'canceled'): ?>
             <div class="action">
                 <a href="edit/<?=$item->id?>">Редактировать</a>
 
@@ -49,27 +50,36 @@
                     (проверка может занять от 1 до 16 часов)
                 </div>
             </div>
+            <? endif; ?>
 
             <div class="action">
                 <a href="view/<?=$item->id?>">Посмотреть</a>
             </div>
 
+            <? if ($item->status == 'public'): ?>
             <div class="action">
-                <a href="#">Снять с продажи</a>
+                <a href="#" onclick="return profile_change_status(event, '<?=$item->id?>', 'canceled')">Снять с
+                    продажи</a>
+                <span class="result-status">Снято</span>
 
                 <div class="baloon">
                     Объявление будет снято с главной страницы сайта, но всегда останется доступно Вам.
                 </div>
             </div>
+            <? endif; ?>
+            <? if ($item->status == 'canceled'): ?>
 
             <div class="action">
-                <a href="#">Опубликовать</a>
+                <a href="#" onclick="return profile_change_status(event, '<?=$item->id?>', 'public')">Опубликовать</a>
+                <span class="result-status">На проверке</span>
 
                 <div class="baloon">
                     Нажмите, если нужно опубликовать объявление, срок которого истек.
                     Внимание! Объявление не будет опубликовано, если цена щенка завышена или фотографии устаревшие.
                 </div>
             </div>
+
+            <? endif; ?>
 
         </td>
     </tr>

@@ -51,7 +51,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
-$autoload['libraries'] = array('session', 'upload');
+$autoload['libraries'] = array('session', 'upload', 'email');
 
 
 /*

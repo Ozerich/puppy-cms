@@ -24,9 +24,9 @@ class Item extends ActiveRecord\Model
     public function get_documents()
     {
         $result = array();
-        $item_docs = ItemDocument::find_all_by_item_id($this->id);
+        $this_docs = ItemDocument::find_all_by_item_id($this->id);
 
-        foreach ($item_docs as $doc)
+        foreach ($this_docs as $doc)
             $result[] = Document::find_by_id($doc->document_id);
 
         return $result;
@@ -85,7 +85,7 @@ class Item extends ActiveRecord\Model
             case 'saled':
                 return "Щенок продан. Редактирование не возможно";
             case 'finished':
-                return "Снято " . $this->finish_time->format('d.m.y') . ". Окончен срок публикации";
+                return "Снято " .($this->closed_by == 0 ?  $this->closed_time->format('d.m.y') . ". Окончен срок публикации" : '');
             case 'canceled':
                 return "Временно снято";
             default:
@@ -148,10 +148,10 @@ class Item extends ActiveRecord\Model
         $template = str_replace('{{okras}}', ItemField::get($this->id, Field::okras_field_id()), $template);
 
         $template = str_replace(array('{{mother_tituls}}', '{{mother_weight}}', '{{mother_height}}', '{{mother_age}}'),
-        array($this->mother_prizes, $this->mother_weight, $this->mother_height, $this->mother_age), $template);
+            array($this->mother_prizes, $this->mother_weight, $this->mother_height, $this->mother_age), $template);
 
         $template = str_replace(array('{{father_tituls}}', '{{father_weight}}', '{{father_height}}', '{{father_age}}'),
-        array($this->father_prizes, $this->father_weight, $this->father_height, $this->father_age), $template);
+            array($this->father_prizes, $this->father_weight, $this->father_height, $this->father_age), $template);
 
         $template = str_replace('{{description}}', $this->description, $template);
         $template = str_replace('{{another}}', $this->another, $template);
@@ -163,6 +163,62 @@ class Item extends ActiveRecord\Model
     public function get_preview_image()
     {
         return Config::get('item_images_dir') . $this->image;
+    }
+
+    public function change_status($status, $params = array())
+    {
+
+        $this->status = $status;
+
+        if ($status == 'created') {
+            $this->closed_time = $this->changed_time = $this->publish_time = $this->finish_time = null;
+            $this->closed_by = $this->publish_by = $this->changed_by = 0;
+            $this->created_by = $this->user->id;
+            $this->created_time = time_to_mysqldatetime(time());
+        }
+        else if ($status == 'edited') {
+            $this->closed_time = $this->publish_time = $this->finish_time = null;
+            $this->closed_by = $this->publish_by = 0;
+            $this->changed_by = $this->user->id;
+            $this->changed_time = time_to_mysqldatetime(time());
+        }
+        else if ($status == 'public') {
+            $now = time_to_mysqldatetime(time());
+            $this->publish_time = $now;
+            $this->publish_by = $this->user->id;
+            $this->finish_time = inputdate_to_mysqldate($params['publish_till']) . substr($now, 10);
+            $this->closed_time = null;
+            $this->closed_by = 0;
+        }
+        else if ($status == 'saled') {
+            $saled_by = $params['saled_by'];
+            if ($saled_by && $saled_by != 'site' && $saled_by != 'plant') die;
+            $old_saled = $this->saled_by;
+            $this->saled_by = $saled_by ? $saled_by : NULL;
+
+            $user = $this->user;
+
+            if ($old_saled == "site")
+                $user->sell_site--;
+            else if ($old_saled == 'plant')
+                $user->sell_plant--;
+
+            if ($saled_by == "site")
+                $user->sell_site++;
+            else if ($saled_by == "plant")
+                $user->sell_plant++;
+
+            $user->save();
+
+        }
+
+        if ($status == 'finished' || $status == 'canceled' || $status == 'saled') {
+            $this->closed_time = time_to_mysqldatetime(time());
+            $this->closed_by = $this->user->id;
+            $this->finish_time = null;
+        }
+
+        $this->save();
     }
 
 }

@@ -1,4 +1,4 @@
-<?=$admin_filter?>
+<?= $admin_filter ?>
 
 <div id="item_list">
     <? if (!isset($items) || !$items): ?>
@@ -12,11 +12,17 @@
                 <img src="<?=$item->preview_image?>"/>
             </div>
             <div class="item-content-wr">
-                <div class="item-info">
+                <div class="item-main-content">
+					<div class="item-info">
                     <span class="item-price"><?=$item->site_price?> <?=$item->city->valute?></span>
 
                     <div class="item-medals">
-
+                        <? $item_medals = ItemMedal::get_medals($item->id);
+                        foreach ($item_medals as $ind => $medal): if (!$medal) continue;
+                            $medal = Medal::find_by_id($ind);?>
+                            <img alt="<?=$medal->alt?>" title="<?=$medal->title?>"
+                                 src="<?=Config::get('medals_dir') . $medal->filename?>"/>
+                            <? endforeach; ?>
                     </div>
                 </div>
                 <div class="item-content">
@@ -24,7 +30,10 @@
 
                     <p><?=$item->preview_text?></p>
 
-                    <div class="item-bottom">
+                </div>
+				<br clear="all"/>
+				</div>
+				<div class="item-bottom">
                         <div class="item-actions">
                             <a href="view/<?=$item->id?>">Смотреть</a>
                             <? if ($this->user && $this->user->access_edit): ?>
@@ -34,15 +43,13 @@
                         <div class="item-bottom-text">
                             <?= $item->type == 'free' ? KindSetting::get($item->kind_id, $item->city_id)->manager_contact : $item->user->plain_contact; ?>
                         </div>
-                        <? if ($this->user->access_edit): ?>
+                        <? if ($this->user && $this->user->access_edit): ?>
                         <div class="item-admin-text">
                             <?= $item->type == 'free' ? $item->user->plain_contact : ''?>
                         </div>
                         <? endif; ?>
                         <br clear="all"/>
                     </div>
-                </div>
-
             </div>
         </div>
         <? if ($this->user && $this->user->access_edit): ?>
@@ -112,9 +119,9 @@
                     <div class="medals">
                         <? $item_medals = ItemMedal::get_medals($item->id);
                         foreach (Medal::all() as $ind => $medal): ?>
-                            <label><?=$medal->name?><input <?=$item_medals[$medal->id] ? 'checked="checked"' : '' ?>
+                            <label><input <?=$item_medals[$medal->id] ? 'checked="checked"' : '' ?>
                                     type="checkbox" name="medals[<?=$ind?>]"
-                                    value="<?=$medal->id?>"/></label>
+                                    value="<?=$medal->id?>"/><?=$medal->name?></label>
                             <? endforeach; ?>
                     </div>
                     <div class="options">
@@ -127,7 +134,7 @@
                                    value="0">Нет
                         </div>
                         <div class="option">
-                            <a href="#">Написать автору</a>
+                            <a href="mailto:<?=$item->user->email?>">Написать автору</a>
                         </div>
                     </div>
                     <div class="submit-area">

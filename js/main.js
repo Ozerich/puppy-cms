@@ -170,6 +170,8 @@ function update_user_items_events() {
         }
     });
 
+    $('.publish-till').setdatepicker();
+
     $('#admin_user .user-items .item-status').change(function () {
         var block = $(this).parents('.item-admin');
         $(block).find('.status-params').hide();
@@ -190,7 +192,22 @@ function update_user_items_events() {
     });
 }
 
+function profile_change_status(event, item_id, status)
+{
+    var action_block = $(event.target).parents('.action');
+    $(event.target).hide();
+    $(action_block).find('.result-status').show();
+    $(action_block).find('.baloon').hide();
+
+    $.post('profile/update_item/' + item_id, 'status=' + status, function(data){
+
+    });
+
+    return false;
+}
+
 $(document).ready(function () {
+
 
     $('#open_register').click(function () {
         $(this).hide();

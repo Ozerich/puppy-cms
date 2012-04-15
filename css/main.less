@@ -508,7 +508,14 @@ label{
     padding: 12px 0;
 }
 
-#profile_list .actions-col{width: 110px;}
+#profile_list .actions-col{width: 110px; padding-left: 10px;}
+
+#profile_list .action .result-status
+{
+    color: blue;
+    font-weight: bold;
+    display: none;
+}
 
 #profile_list .actions-col a{
     display: block;
@@ -537,7 +544,7 @@ label{
     &:hover{display:none !important;}
 }
 
-#profile_list .action{position: relative;}
+#profile_list .action{position: relative; margin: 3px 0;}
 #profile_list .action:hover .baloon{display: block;}
 
 
@@ -581,12 +588,19 @@ label{
     font-size: 13px;
 }
 
+#item_view .top-content-wr{overflow: hidden;}
+
 
 #item_list .item-block .item-info, #item_view .item-info{
     width: 170px;
     padding: 15px 10px;
     float: right;
 }
+
+#item_list .item-block .item-info .item-medals img, #item_view .item-info .item-medals img{
+        margin: 3px auto;
+        display: block;
+    }
 
 #item_list .item-block .item-info .item-price, #item_view .item-info .item-price{
     color: #f26521;
@@ -601,7 +615,6 @@ label{
     border-top: 1px solid #dbdbdb;
     padding: 5px 0;
     margin-top: 10px;
-    margin-right: -200px;
 }
 
 #item_list .item-block .item-bottom .item-bottom-text{
@@ -673,7 +686,6 @@ label{
 }
 
 #item_view .main-content{
-    margin-top: 15px;
     border-top: 1px solid #acacac;
     padding-top: 15px;
     font-size: 14px;
@@ -729,7 +741,15 @@ label{
 }
 
 #item_list .item-admin .medals label input{
-    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#item_list .item-admin .medals label{
+	width: 200px;
+}
+
+#item_list .item-admin .medals{
+	margin-bottom: 5px;
 }
 
 #item_list .item-admin input[type=radio]{
@@ -977,4 +997,7 @@ label{
 #admin_user .user-items .item-admin .status-params label{line-height: 25px; margin-right: 5px;}
 #admin_user .user-items .item-admin .publish-till{width: 150px;}
 
+#admin_user .user-items .item-admin .medals{margin: 10px 0}
+#admin_user .user-items .item-admin .medals label{width: 200px;}
+#admin_user .user-items .item-admin .medals input{margin-right: 5px;}
 #admin_user .user-items .item-admin .medals{margin-top: 10px;}
