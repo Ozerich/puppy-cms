@@ -25,6 +25,29 @@ class Auth_Controller extends MY_Controller
         }
     }
 
+    public function send_mail($user, $password)
+    {
+        $site_email = Config::get('site_email');
+        $email_template = Config::get('register_email');
+
+        $email_template = str_replace('{{email}}', $user->email, $email_template);
+        $email_template = str_replace('{{password}}', $password, $email_template);
+        $email_template = str_replace('{{$user}}', $item->user->fullname, $email_template);
+        $email_template = str_replace('{{$site_name}}', Config::get('site_name'), $email_template);
+
+        $email_template = str_replace("\n", '<br/>', $email_template);
+
+        $this->email->initialize(array('mailtype' => 'html'));
+
+        $this->email->from($site_email, 'Имя сайта');
+        $this->email->to($user->email);
+
+        $this->email->subject('Регистрация на сайте');
+        $this->email->message($email_template);
+
+        $this->email->send();
+    }
+
     public function register()
     {
         if ($_POST) {
@@ -41,6 +64,7 @@ class Auth_Controller extends MY_Controller
                 'register_time' => time_to_mysqldatetime(time()),
                 'is_ban' => 0,
             ));
+            $this->send_mail($user, $this->input->post('password'));
             User::login($user->id);
             redirect('profile');
         }

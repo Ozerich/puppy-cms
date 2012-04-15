@@ -17,7 +17,13 @@ class Profile_Controller extends MY_Controller
             return '';
 
         $file_name = $item_id . '-' . $type . '.' . $file_ext;
-        @rename('img/tmp/' . $image, Config::get('item_images_dir') . $file_name);
+        $simple_image = new SimpleImage();
+        $simple_image->load('img/tmp/'.$image);
+        $simple_image->resizeToWidth(750);
+        $simple_image->resizeToHeight(600);
+        $simple_image->save(Config::get('item_images_dir') . $file_name, $simple_image->image_type);
+
+        @unlink('img/tmp/'.$image);
         return $file_name;
     }
 

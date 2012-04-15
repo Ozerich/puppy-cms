@@ -18,7 +18,7 @@ class Config_Controller extends MY_Controller
     public function mails()
     {
         if ($_POST) {
-            $mask = array('site_email', 'publish_mail', 'endtime_mail', 'stoped_mail', 'site_name');
+            $mask = array('site_email', 'publish_mail', 'endtime_mail', 'stoped_mail', 'site_name', 'register_email');
             foreach ($mask as $ind)
                 Config::set($ind, $this->input->post($ind));
 

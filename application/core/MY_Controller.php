@@ -1,5 +1,7 @@
 <?php
 
+require_once APPPATH . "libraries/SimpleImage.php";
+
 class MY_Controller extends CI_Controller
 {
     var $user = FALSE;

@@ -85,7 +85,7 @@ class Item extends ActiveRecord\Model
             case 'saled':
                 return "Щенок продан. Редактирование не возможно";
             case 'finished':
-                return "Снято " .($this->closed_by == 0 ?  $this->closed_time->format('d.m.y') . ". Окончен срок публикации" : '');
+                return "Снято " . ($this->closed_by == 0 ? $this->closed_time->format('d.m.y') . ". Окончен срок публикации" : '');
             case 'canceled':
                 return "Временно снято";
             default:
@@ -110,11 +110,14 @@ class Item extends ActiveRecord\Model
         $template = str_replace('{{id}}', $this->id, $template);
         $template = str_replace('{{sex}}', $this->sex == 'man' ? 'мальчик' : 'девочка', $template);
         $template = str_replace('{{weight}}', $this->weight . ' кг.', $template);
+        $template = str_replace('{{rost}}', $this->height . ' см.', $template);
         $template = str_replace('{{city}}', $this->city->name, $template);
 
+        $template = str_replace('{{metro}}', $this->user->metro, $template);
         $wool_length = ItemField::get($this->id, Field::wool_field_id());
         $template = str_replace('{{dlina_sher}}', $wool_length, $template);
 
+        $template = str_replace("\n", "<br/>", $template);
         return $template;
     }
 
@@ -126,14 +129,16 @@ class Item extends ActiveRecord\Model
         $organization = $this->organization;
         $organization_text = $organization ? $organization->site_text : $this->animal->no_organization;
         $template = str_replace('{{pitomnik}}', $organization_text, $template);
-        $template = str_replace('{{metro}}', $this->plant_name, $template);
+        $template = str_replace('{{metro}}', $this->user->metro, $template);
         $template = str_replace('{{opis}}', $this->description, $template);
         $template = str_replace('{{weight}}', $this->weight . ' кг.', $template);
+        $template = str_replace('{{rost}}', $this->height . ' см.', $template);
         $template = str_replace('{{opis_drugich}}', $this->another, $template);
 
         $wool_length = ItemField::get($this->id, Field::wool_field_id());
         $template = str_replace('{{dlina_sher}}', $wool_length, $template);
 
+        $template = str_replace("\n", "<br/>", $template);
         return $template;
     }
 
@@ -141,11 +146,18 @@ class Item extends ActiveRecord\Model
     {
         $template = $this->kind->text_template;
 
+        $kontact = $this->type == 'free' ? $this->user->plain_contact : KindSetting::get($this->kind_id, $this->city_id)->manager_contact
+            . ' Консультант по породе бесплатно поможет вам выбрать щенка, пососветует питомник и даст номер телефона заводчикау которого вы сможете посмотреть и купить щенка';
+
+
         $template = str_replace('{{ears}}', ItemField::get($this->id, Field::ears_field_id()), $template);
         $template = str_replace('{{tail}}', ItemField::get($this->id, Field::tail_field_id()), $template);
         $template = str_replace('{{wool_length}}', ItemField::get($this->id, Field::wool_field_id()), $template);
         $template = str_replace('{{bite}}', ItemField::get($this->id, Field::bite_field_id()), $template);
         $template = str_replace('{{okras}}', ItemField::get($this->id, Field::okras_field_id()), $template);
+        $template = str_replace('{{kontakt}}', '1', $template);
+
+        $template = str_replace('{{metro}}', $this->user->metro, $template);
 
         $template = str_replace(array('{{mother_tituls}}', '{{mother_weight}}', '{{mother_height}}', '{{mother_age}}'),
             array($this->mother_prizes, $this->mother_weight, $this->mother_height, $this->mother_age), $template);
@@ -155,6 +167,8 @@ class Item extends ActiveRecord\Model
 
         $template = str_replace('{{description}}', $this->description, $template);
         $template = str_replace('{{another}}', $this->another, $template);
+
+        $template = str_replace("\n", "<br/>", $template);
 
         return $template;
     }

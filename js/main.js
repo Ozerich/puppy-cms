@@ -145,7 +145,7 @@ function FinishUploadFiles(errors, is_edit) {
         data:data,
         type:'post',
         success:function (data) {
-            document.location = 'profile';
+           // document.location = 'profile';
         },
         error:function () {
             $('#new_item_submit').show();
@@ -154,6 +154,8 @@ function FinishUploadFiles(errors, is_edit) {
             $('#data_loader').hide();
         }
     });
+
+    $('#edit_item_submit').show();
 }
 
 function update_user_items_events() {
@@ -393,7 +395,13 @@ $(document).ready(function () {
 
     update_list_events();
 
-    $('#item_view .left-wrapper a[rel=photo]').colorbox({maxWidth:750, maxHeight:750});
+    $('#item_view .left-wrapper a[rel=photo]').colorbox({maxWidth:750, maxHeight:600});
 
     update_user_items_events();
+
+    $('#item_list .read-more').click(function(){
+        $(this).parents('p').find('.more-text').show();
+        $(this).remove();
+        return false;
+    });
 });

@@ -9,47 +9,55 @@
     <? foreach ($items as $item): ?>
         <div class="item-block">
             <div class="item-image">
-                <img src="<?=$item->preview_image?>"/>
+                <a href="view/<?=$item->id?>"><img src="<?=$item->preview_image?>"/></a>
             </div>
             <div class="item-content-wr">
                 <div class="item-main-content">
-					<div class="item-info">
-                    <span class="item-price"><?=$item->site_price?> <?=$item->city->valute?></span>
+                    <div class="item-info">
+                        <span class="item-price"><?=$item->site_price?> <?=$item->city->valute?></span>
 
-                    <div class="item-medals">
-                        <? $item_medals = ItemMedal::get_medals($item->id);
-                        foreach ($item_medals as $ind => $medal): if (!$medal) continue;
-                            $medal = Medal::find_by_id($ind);?>
-                            <img alt="<?=$medal->alt?>" title="<?=$medal->title?>"
-                                 src="<?=Config::get('medals_dir') . $medal->filename?>"/>
-                            <? endforeach; ?>
+                        <div class="item-medals">
+                            <? $item_medals = ItemMedal::get_medals($item->id);
+                            foreach ($item_medals as $ind => $medal): if (!$medal) continue;
+                                $medal = Medal::find_by_id($ind);?>
+                                <img alt="<?=$medal->alt?>" title="<?=$medal->title?>"
+                                     src="<?=Config::get('medals_dir') . $medal->filename?>"/>
+                                <? endforeach; ?>
+                        </div>
                     </div>
-                </div>
-                <div class="item-content">
-                    <h2><?=$item->preview_header?></h2>
+                    <div class="item-content">
+                        <a class="item-link" href="view/<?=$item->id?>"> <h2> <?=$item->preview_header?></h2></a>
 
-                    <p><?=$item->preview_text?></p>
+                        <? $text = $item->preview_text;
+                        $first = mb_substr($text, 0, 200);
+                        $last = mb_substr($text, 200);
+                        ?>
 
-                </div>
-				<br clear="all"/>
-				</div>
-				<div class="item-bottom">
-                        <div class="item-actions">
-                            <a href="view/<?=$item->id?>">Смотреть</a>
-                            <? if ($this->user && $this->user->access_edit): ?>
-                            <a class="edit-open" href="view/<?=$item->id?>">Управление</a>
+                        <p>
+                            <?=$first?><? if($last):?><a href="#" class="read-more"> далее...</a><span class="more-text" style="display: none"><?=$last?></span>
                             <? endif; ?>
-                        </div>
-                        <div class="item-bottom-text">
-                            <?= $item->type == 'free' ? KindSetting::get($item->kind_id, $item->city_id)->manager_contact : $item->user->plain_contact; ?>
-                        </div>
-                        <? if ($this->user && $this->user->access_edit): ?>
-                        <div class="item-admin-text">
-                            <?= $item->type == 'free' ? $item->user->plain_contact : ''?>
-                        </div>
-                        <? endif; ?>
-                        <br clear="all"/>
+                        </p>
+
                     </div>
+                    <br clear="all"/>
+                </div>
+                <div class="item-bottom">
+                    <div class="item-actions">
+                        <a href="view/<?=$item->id?>">Смотреть</a>
+                        <? if ($this->user && $this->user->access_edit): ?>
+                        <a class="edit-open" href="view/<?=$item->id?>">Управление</a>
+                        <? endif; ?>
+                    </div>
+                    <div class="item-bottom-text">
+                        <?= $item->type == 'free' ? KindSetting::get($item->kind_id, $item->city_id)->manager_contact : $item->user->plain_contact; ?>
+                    </div>
+                    <? if ($this->user && $this->user->access_edit): ?>
+                    <div class="item-admin-text">
+                        <?= $item->type == 'free' ? $item->user->plain_contact : KindSetting::get($item->kind_id, $item->city_id)->manager_contact . ' Консультант по породе бесплатно поможет вам выбрать щенка, пососветует питомник и даст номер телефона заводчикау которого вы сможете посмотреть и купить щенка'?>
+                    </div>
+                    <? endif; ?>
+                    <br clear="all"/>
+                </div>
             </div>
         </div>
         <? if ($this->user && $this->user->access_edit): ?>
@@ -108,27 +116,29 @@
                         <div class="status-params"
                              id="status_<?=$item->id?>_saled" <?=$item->status == 'saled' ? 'style="display:block"' : ''?>>
                             <label>Продан:</label>
-                            <label for="saledby_site_<?=$item->id?>"><input <?=$item->saled_by == 'site' ? 'checked="checked"' : ''?>
-                                    type="radio" id="saledby_site_<?=$item->id?>"
-                                    name="saled_by" value="site"/>Сайтом</label>
-                            <label for="saledby_plant_<?=$item->id?>"><input <?=$item->saled_by == 'plant' ? 'checked="checked"' : ''?>
-                                    type="radio" id="saledby_plant_<?=$item->id?>"
-                                    name="saled_by" value="plant"/>Заводчиком</label>
+                            <label
+                                for="saledby_site_<?=$item->id?>"><input <?=$item->saled_by == 'site' ? 'checked="checked"' : ''?>
+                                type="radio" id="saledby_site_<?=$item->id?>"
+                                name="saled_by" value="site"/>Сайтом</label>
+                            <label
+                                for="saledby_plant_<?=$item->id?>"><input <?=$item->saled_by == 'plant' ? 'checked="checked"' : ''?>
+                                type="radio" id="saledby_plant_<?=$item->id?>"
+                                name="saled_by" value="plant"/>Заводчиком</label>
                         </div>
                     </div>
                     <div class="medals">
                         <? $item_medals = ItemMedal::get_medals($item->id);
                         foreach (Medal::all() as $ind => $medal): ?>
                             <label><input <?=$item_medals[$medal->id] ? 'checked="checked"' : '' ?>
-                                    type="checkbox" name="medals[<?=$ind?>]"
-                                    value="<?=$medal->id?>"/><?=$medal->name?></label>
+                                type="checkbox" name="medals[<?=$ind?>]"
+                                value="<?=$medal->id?>"/><?=$medal->name?></label>
                             <? endforeach; ?>
                     </div>
                     <div class="options">
                         <div class="option">
                             Отображать на главной <input
-                                type="radio" <?=$item->display_mainpage ? 'checked="checked"' : ''?>
-                                name="mainpage_show" value="1"/>Да
+                            type="radio" <?=$item->display_mainpage ? 'checked="checked"' : ''?>
+                            name="mainpage_show" value="1"/>Да
                             <input type="radio"
                                    name="mainpage_show" <?=!$item->display_mainpage ? 'checked="checked"' : ''?>
                                    value="0">Нет
