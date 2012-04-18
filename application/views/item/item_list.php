@@ -26,7 +26,7 @@
                         </div>
                     </div>
                     <div class="item-content">
-                        <a class="item-link" href="view/<?=$item->id?>"> <h2> <?=$item->preview_header?></h2></a>
+                        <a class="item-link" href="view/<?=$item->id?>"><h2> <?=$item->preview_header?></h2></a>
 
                         <? $text = $item->preview_text;
                         $first = mb_substr($text, 0, 200);
@@ -34,7 +34,8 @@
                         ?>
 
                         <p>
-                            <?=$first?><? if($last):?><a href="#" class="read-more"> далее...</a><span class="more-text" style="display: none"><?=$last?></span>
+                            <?=$first?><? if ($last): ?><a href="#" class="read-more"> далее...</a><span
+                            class="more-text" style="display: none"><?=$last?></span>
                             <? endif; ?>
                         </p>
 
@@ -49,13 +50,14 @@
                         <? endif; ?>
                     </div>
                     <div class="item-bottom-text">
-                        <?= $item->type == 'free' ? KindSetting::get($item->kind_id, $item->city_id)->manager_contact : $item->user->plain_contact; ?>
-                    </div>
-                    <? if ($this->user && $this->user->access_edit): ?>
-                    <div class="item-admin-text">
-                        <?= $item->type == 'free' ? $item->user->plain_contact : KindSetting::get($item->kind_id, $item->city_id)->manager_contact . ' Консультант по породе бесплатно поможет вам выбрать щенка, пососветует питомник и даст номер телефона заводчикау которого вы сможете посмотреть и купить щенка'?>
-                    </div>
-                    <? endif; ?>
+                        <? if ($this->user && $this->user->access_edit): ?>
+                        <?= $item->user->plain_contact.' - '.$item->price ?>
+                        <? else: ?>
+                        <?=
+                        $item->type != 'free' ?  $item->user->phone . " " . $item->user->name :
+                            KindSetting::get($item->kind_id, $item->city_id)->phone . ' Консультант по породе бесплатно поможет вам выбрать '.($item->animal_id == 1 ? 'щенка' : 'котёнка').', посоветует питомник и даст номер телефона заводчика у которого вы сможете посмотреть и купить '.($item->animal_id == 1 ? 'щенка' : 'котёнка')?>
+                        <? endif; ?>
+                   </div>
                     <br clear="all"/>
                 </div>
             </div>
@@ -70,19 +72,23 @@
                     </div>
                     <div class="dates">
                         <div class="date">
-                            <label>Создано:</label><span><?=$item->created_time ? $item->created_time->format('d.m.y') : '-'?></span>
+                            <label>Создано:</label><span><?=$item->created_time ? $item->created_time->format('d.m.y h:i') : '-'?></span>
                         </div>
                         <div class="date">
-                            <label>Изменено:</label><span><?=$item->changed_time ? $item->changed_time->format('d.m.y') : '-'?></span>
+                            <label>Изменено:</label><span><?=$item->changed_time ? $item->changed_time->format('d.m.y h:i') : '-'?></span>
                         </div>
                         <div class="date"><label>Опубликовано
-                            с:</label><span><?=$item->publish_time ? $item->publish_time->format('d.m.y') : '-'?></span>
+                            с:</label><span><?=$item->publish_time ? $item->publish_time->format('d.m.y h:i') : '-'?></span>
                         </div>
                         <div class="date"><label>Опубликовано
-                            до:</label><span><?=$item->finish_time ? $item->finish_time->format('d.m.y') : '-'?></span>
+                            до:</label><span><?=$item->finish_time ? $item->finish_time->format('d.m.y h:i') : '-'?></span>
                         </div>
                         <div class="date">
-                            <label>Снято:</label><span><?=$item->closed_time ? $item->closed_time->format('d.m.y') : '-'?></span>
+                            <label>Снято:</label><span><?=$item->closed_time ? $item->closed_time->format('d.m.y h:i') : '-'?></span>
+                        </div>
+                        <div class="date">
+                            <label>Тип объявления:</label>
+                            <span><?=$item->plain_paidtype?></span>
                         </div>
                         <br clear="all"/>
                     </div>

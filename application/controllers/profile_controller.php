@@ -18,12 +18,12 @@ class Profile_Controller extends MY_Controller
 
         $file_name = $item_id . '-' . $type . '.' . $file_ext;
         $simple_image = new SimpleImage();
-        $simple_image->load('img/tmp/'.$image);
+        $simple_image->load('img/tmp/' . $image);
         $simple_image->resizeToWidth(750);
         $simple_image->resizeToHeight(600);
         $simple_image->save(Config::get('item_images_dir') . $file_name, $simple_image->image_type);
 
-        @unlink('img/tmp/'.$image);
+        @unlink('img/tmp/' . $image);
         return $file_name;
     }
 
@@ -36,8 +36,14 @@ class Profile_Controller extends MY_Controller
     private function fill_item_data()
     {
         $this->view_data['settings'] = $this->view_data['organizations'] = array();
-        foreach (Kind::all() as $kind)
+        foreach (Kind::find_all_by_parent_id(0) as $kind) {
             $this->view_data['settings'][$kind->id] = $this->user->city ? KindSetting::get($kind->id, $this->user->city->id) : null;
+            if ($kind->subkinds) {
+                $agreement = $this->user->city ? KindSetting::get($kind->id, $this->user->city->id) : null;
+                foreach ($kind->subkinds as $s_kind)
+                    $this->view_data['settings'][$s_kind->id] = $agreement;
+            }
+        }
 
         foreach (Animal::all() as $animal) {
             $this->view_data['organizations'][$animal->id] = array();
@@ -281,12 +287,12 @@ class Profile_Controller extends MY_Controller
         $status = $this->input->post('status');
         $item = Item::find_by_id($item_id);
 
-        if(!$item || !$this->user || $item->user_id != $this->user->id)
+        if (!$item || !$this->user || $item->user_id != $this->user->id)
             die;
 
-        if($status == 'canceled')
+        if ($status == 'canceled')
             $item->change_status('canceled');
-        if($status == 'public')
+        if ($status == 'public')
             $item->change_status('edited');
 
         die;

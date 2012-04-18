@@ -4,6 +4,8 @@
     <div class="status-filter">
         <a href="#" <?=isset($filter_type) && $filter_type == "new_and_edit" ? 'class="current"' : ''?>
            filter="new_and_edit">Новые и отредакт., ждут модерации</a>
+        <a href="#" <?=isset($filter_type) && $filter_type == "finished" ? 'class="current"' : ''?> filter="finished">
+            Cнятые</a>
         <a href="#" <?=isset($filter_type) && $filter_type == "closed" ? 'class="current"' : ''?> filter="closed">Временно
             снятые</a>
         <a href="#" <?=isset($filter_type) && $filter_type == "near_finish" ? 'class="current"' : ''?>

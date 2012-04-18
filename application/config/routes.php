@@ -41,6 +41,7 @@
 $route['default_controller'] = "main_controller";
 $route['404_override'] = '';
 
+$route['UPDATE_FINISH_TIME'] = 'main_controller/update_finish_time';
 
 $route['admin/auth'] = 'auth_controller/admin';
 $route['admin/logout'] = 'auth_controller/logout';

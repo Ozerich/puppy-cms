@@ -7,6 +7,10 @@ jQuery.fn.setdatepicker = function () {
     return $(this);
 }
 
+function str_replace(search, replace, subject) {
+    return subject.split(search).join(replace);
+}
+
 function validateEmail(email) {
 
     if (email.length < 5)
@@ -16,6 +20,7 @@ function validateEmail(email) {
 }
 
 function isNumber(n) {
+    n = str_replace(',','.',n);
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
@@ -145,7 +150,7 @@ function FinishUploadFiles(errors, is_edit) {
         data:data,
         type:'post',
         success:function (data) {
-           // document.location = 'profile';
+            document.location = 'profile';
         },
         error:function () {
             $('#new_item_submit').show();
@@ -194,14 +199,13 @@ function update_user_items_events() {
     });
 }
 
-function profile_change_status(event, item_id, status)
-{
+function profile_change_status(event, item_id, status) {
     var action_block = $(event.target).parents('.action');
     $(event.target).hide();
     $(action_block).find('.result-status').show();
     $(action_block).find('.baloon').hide();
 
-    $.post('profile/update_item/' + item_id, 'status=' + status, function(data){
+    $.post('profile/update_item/' + item_id, 'status=' + status, function (data) {
 
     });
 
@@ -317,7 +321,7 @@ $(document).ready(function () {
 
     $('#new-item #item_price').keyup(
         function () {
-            if ($('#new-item #agreement_type:visible').find('option:selected').val() == 'free') {
+            if ($('#new-item #agreement_type').filter(':visible').find('option:selected').val() == 'free') {
                 $('#price-loader').css('display', 'inline-block');
                 $('.price-commission .value').hide();
                 $.post('profile/calc_price', 'price=' + $(this).val(), function (price) {
@@ -399,7 +403,7 @@ $(document).ready(function () {
 
     update_user_items_events();
 
-    $('#item_list .read-more').click(function(){
+    $('#item_list .read-more').click(function () {
         $(this).parents('p').find('.more-text').show();
         $(this).remove();
         return false;

@@ -146,16 +146,15 @@ class Item extends ActiveRecord\Model
     {
         $template = $this->kind->text_template;
 
-        $kontact = $this->type == 'free' ? $this->user->plain_contact : KindSetting::get($this->kind_id, $this->city_id)->manager_contact
-            . ' Консультант по породе бесплатно поможет вам выбрать щенка, пососветует питомник и даст номер телефона заводчикау которого вы сможете посмотреть и купить щенка';
-
 
         $template = str_replace('{{ears}}', ItemField::get($this->id, Field::ears_field_id()), $template);
         $template = str_replace('{{tail}}', ItemField::get($this->id, Field::tail_field_id()), $template);
         $template = str_replace('{{wool_length}}', ItemField::get($this->id, Field::wool_field_id()), $template);
         $template = str_replace('{{bite}}', ItemField::get($this->id, Field::bite_field_id()), $template);
         $template = str_replace('{{okras}}', ItemField::get($this->id, Field::okras_field_id()), $template);
-        $template = str_replace('{{kontakt}}', '1', $template);
+        $template = str_replace('{{kontakt}}', $this->type != 'free' ? '<span style="color: #F26521;font-weight: bold;font-size: 16px;">Звоните: '.$this->user->phone." ".$this->user->name.'</span>' :
+                '<span style="color: #F26521;font-weight: bold;font-size: 16px;">'.KindSetting::get($this->kind_id, $this->city_id)->phone . '</span>   Консультант по породе бесплатно поможет вам выбрать '.($this->animal_id == 1 ? 'щенка' : 'котёнка').', посоветует питомник и даст номер телефона заводчика у которого вы сможете посмотреть и купить '.($this->animal_id == 1 ? 'щенка' : 'котёнка')
+        , $template);
 
         $template = str_replace('{{metro}}', $this->user->metro, $template);
 

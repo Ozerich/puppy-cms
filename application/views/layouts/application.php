@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="content-type" content="text-html; charset=utf-8">
     <meta name="keywords" content="<?=isset($meta_keywords) ? $meta_keywords : Config::get('meta_keywords')?>">
     <meta name="description" content="<?=isset($meta_description) ? $meta_description : Config::get('meta_description')?>">
 
-    <title><?=isset($page_title) ? $page_title : ''?> | Заголовок сайта</title>
+    <title><?=isset($page_title) ? $page_title.' - ' : ''?><?=Config::get('site_title');?></title>
     <base href="<?=base_url()?>"/>
 
     <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" title="no title"/>
@@ -102,8 +102,8 @@
             <a href="/">
                 <div id="header-content">
                     <h2>
-                        От Святого Валентина<br/>
-                        щенки и котята для любимых!
+                        Щенки и котята от<br/>
+                        проверенных питомников
                     </h2>
                 </div>
                 <div id="header-left"></div>

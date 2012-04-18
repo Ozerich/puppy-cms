@@ -18,10 +18,11 @@ class Main_Controller extends MY_Controller
                 Item::all(array('conditions' => array('city_id = ? AND kind_id = ? AND status = ?', $city->id, $kind->id, 'public'))) :
                 Item::all(array('conditions' => array('city_id = ? AND status = ?', $city->id, 'public')));
 
-        $this->view_data['filter_phone'] = $kind ? KindSetting::get($kind->id, $city->id)->phone : KindSetting::get(1, $city->id)->phone;
+        $settings = $kind ? KindSetting::get($kind->id, $city->id) : KindSetting::get(1, $city->id);
+        $this->view_data['filter_phone'] = $settings->phone;
 
-        $this->view_data['text_before'] = '';
-        $this->view_data['text_after'] = '';
+        $this->view_data['text_before'] = $settings->beforelist_text;
+        $this->view_data['text_after'] = $settings->afterlist_text;
 
         $filter_data = array('filter_type' => '', 'cities' => array($city->id));
 
@@ -79,8 +80,8 @@ class Main_Controller extends MY_Controller
 
         $items = Item::all(array('conditions' => $q));
 
-        $this->view_data['text_before'] = '';
-        $this->view_data['text_after'] = '';
+        $this->view_data['text_before'] = $settings->beforelist_text;
+        $this->view_data['text_after'] = $settings->afterlist_text;
 
         $admin_filter = $this->load->view('item/admin_filter.php', array('filter_type' => '', 'cities' => array($city), 'kinds' => array($kind)), true);
         $this->view_data['item_list'] = $this->load->view('item/item_list.php', array('items' => $items, 'cities' => array($city), 'kinds' => array($kind), 'admin_filter' => $admin_filter), true);
@@ -112,6 +113,8 @@ class Main_Controller extends MY_Controller
                 $type_q = 'status = "saled" AND NOT saled_by';
             elseif ($filter_type == 'near_finish')
                 $type_q = 'status = "publish" AND 1';
+            elseif($filter_type == 'finished')
+                $type_q = 'status = "finished"';
             else
                 $type_q = '1';
             $type_q = '(' . $type_q . ')';
@@ -231,10 +234,10 @@ class Main_Controller extends MY_Controller
 
         $this->email->initialize(array('mailtype' => 'html'));
 
-        $this->email->from($site_email, 'Имя сайта');
+        $this->email->from($site_email, 'dogscat.com');
         $this->email->to($item->user->email);
 
-        $this->email->subject('Информация об объявлении');
+        $this->email->subject('Информация об объявлении #'.$item->id);
         $this->email->message($email_template);
 
         $this->email->send();
@@ -272,6 +275,22 @@ class Main_Controller extends MY_Controller
 
 
         echo 'OK';
+        die;
+    }
+
+    public function update_finish_time(){
+
+        foreach(Item::all(array('conditions' => array('status' => 'public'))) as $item){
+
+         if($item->finish_time->getTimestamp()-3600 <= time())
+            {
+                $item->status = 'finished';
+                $item->closed_time = time_to_mysqldatetime(time());
+                $item->closed_by = 0;
+                $item->save();
+                $this->send_email($item->id);
+            }
+        }
         die;
     }
 }

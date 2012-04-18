@@ -1,5 +1,5 @@
 <div id="item_view" class="block">
-    <div class="block-header">8 499 608-08-01 бесплатная консультация по выбору щенка, рекомендуем только лучших!</div>
+    <div class="block-header"><?=$item->type == 'free' ? KindSetting::get($item->kind_id, $item->city_id)->phone.' бесплатная консультация по выбору щенка, рекомендуем только лучших!' : $item->user->phone?></div>
     <div class="block-content item-block">
         <div class="left-wrapper">
             <div class="item-image">
@@ -13,10 +13,10 @@
 
                 <div class="gallery-images">
 
-                    <? $img_count = 1; foreach ($item->images as $image): ?>
+                    <? $img_count = 1; foreach ($item->images as $image): if($image->image):?>
                     <a <?=$img_count++ % 2 == 0 ? 'class="odd"' : ''?> href="<?=Config::get('item_images_dir') . $image->image?>"  rel="photo"><img title=""
                             src="<?=Config::get('item_images_dir') . $image->image?>"/></a>
-                    <? endforeach; ?>
+                    <? endif; endforeach; ?>
                     <? if ($item->mother_image): ?>
                     <a <?=$img_count++ % 2 == 0 ? 'class="odd"' : ''?> href="<?=Config::get('item_images_dir') . $item->mother_image?>" rel="photo"><img title="Папа"
                             src="<?=Config::get('item_images_dir') . $item->mother_image?>"/></a>
