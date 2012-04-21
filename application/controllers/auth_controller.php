@@ -32,7 +32,7 @@ class Auth_Controller extends MY_Controller
 
         $email_template = str_replace('{{email}}', $user->email, $email_template);
         $email_template = str_replace('{{password}}', $password, $email_template);
-        $email_template = str_replace('{{$user}}', $user->user->fullname, $email_template);
+        $email_template = str_replace('{{$user}}', $user->fullname, $email_template);
         $email_template = str_replace('{{$site_name}}', Config::get('site_name'), $email_template);
 
         $email_template = str_replace("\n", '<br/>', $email_template);

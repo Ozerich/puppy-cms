@@ -164,6 +164,7 @@
         </div>
 
     </div>
+    <br clear="all"/>
 </div>
 
 <div class="main-params-wr">
@@ -223,6 +224,9 @@
 <div class="images">
     <? if ($item->image): ?>
     <div class="current-photo"><img width="120" src="<?=Config::get('item_images_dir') . $item->image?>"/></div>
+    <? if($this->user->access_edit): ?>
+        <a href="download.php?file=<?=Config::get('item_images_dir') . $item->image?>" class="download-image">Скачать</a>
+        <? endif; ?>
     <? endif; ?>
     <div class="image mainimage">
         <label for="main_image">Основная фотография (будет видна на главной странице):</label>
@@ -233,8 +237,12 @@
     <? for ($i = 1; $i <= Config::get('item_images_count'); $i++): ?>
 
     <? if (isset($item->images[$i - 1]) && $item->images[$i - 1]->image): ?>
-        <div class="current-photo"><img width="120" src="<?=Config::get('item_images_dir') . $item->images[$i - 1]->image?>"/></div>
-    <? endif; ?>
+        <div class="current-photo"><img width="120"
+                                        src="<?=Config::get('item_images_dir') . $item->images[$i - 1]->image?>"/></div>
+            <? if($this->user->access_edit): ?>
+                    <a href="download.php?file=<?=Config::get('item_images_dir') . $item->images[$i - 1]->image?>" class="download-image">Скачать</a>
+                <? endif; ?>
+        <? endif; ?>
     <div class="image">
         <label for="image<?=$i?>">Фотография <?=$i?>:</label>
         <input type="file" name="image_<?=$i?>" id="image<?=$i?>"/>
@@ -256,7 +264,7 @@
 
     <div class="price-commission">Цена на сайте с учетом суммы оплаты за услуги сайта:
         <span class="value"><span
-            id="addprice_value"><?=$item->site_price?></span> <?=$this->user->city->valute?></span>
+            id="addprice_value"><?=$item->site_price?></span> <?=$item->user->city->valute?></span>
 
         <div id="price-loader"></div>
     </div>
@@ -282,21 +290,31 @@
         <div class="agreement-content" style="display:<?=$item->type == 'paid_2' ? 'block' : 'none'?>"
              id="agreement_paid_2"><?=isset($settings[$kind->id]) ? $settings[$kind->id]->paid2_agreement : ''?></div>
 
+        <? if (!$this->user->access_edit || $item->user_id == $user->id): ?>
+
         <div class="agreement-checkbox">
 
             <label for="agreement_1"><input type="checkbox" id="agreement_1"/>Поставьте галочку, если согласны с этими
                 условиями, прописанными в Договоре,
                 который вы, ставя галочку, подписываете в электронном виде.</label>
         </div>
+        <? endif; ?>
     </div>
     <div class="agreement" style="display:<?=$ind ? 'none' : 'block'?>" id="agreement2_<?=$kind->id?>">
+
+        <? if (!$this->user->access_edit || $item->user_id == $user->id): ?>
+
         <div class="agreement-checkbox">
             <label for="agreement_2"><input type="checkbox" id="agreement_2"/>Поставьте галочку, если согласны с
                 условиями</label>
         </div>
+
+        <? endif; ?>
+
     </div>
     <? endforeach; ?>
 </div>
+
 
 </div>
 
@@ -316,6 +334,11 @@
 </div>
 
 <input type="hidden" id="item_id" value="<?=$item->id?>"/>
+<? if (!$this->user->access_edit || $item->user_id == $user->id): ?>
 <input type="submit" class="item-submit" id="edit_item_submit" value="Сохранить данные и опубликовать объявление"/>
+    <? else: ?>
+<input type="submit" class="item-submit admin" id="save_item_submit" value="Сохранить"/>
+<input type="submit" class="item-submit admin" id="edit_item_submit" value="Сохранить и опубликовать"/>
+    <? endif; ?>
 </div>
 </form>

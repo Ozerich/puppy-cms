@@ -158,6 +158,13 @@ class Item extends ActiveRecord\Model
 
         $template = str_replace('{{metro}}', $this->user->metro, $template);
 
+        $documents = $this->documents;
+        $document_text = '';
+        foreach($documents as $doc)
+            $document_text .= $doc->name.', ';
+        $document_text = $document_text ? substr($document_text, 0, -2) : '';
+        $template = str_replace('{{documents}}', $document_text, $template);
+
         $template = str_replace(array('{{mother_tituls}}', '{{mother_weight}}', '{{mother_height}}', '{{mother_age}}'),
             array($this->mother_prizes, $this->mother_weight, $this->mother_height, $this->mother_age), $template);
 

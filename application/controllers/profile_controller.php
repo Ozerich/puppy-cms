@@ -103,7 +103,7 @@ class Profile_Controller extends MY_Controller
 
         $this->upload->initialize(array(
             'upload_path' => 'img/tmp',
-            'allowed_types' => 'gif|jpg|png',
+            'allowed_types' => 'gif|jpg|png|jpeg',
             'encrypt_name' => TRUE
         ));
 
@@ -162,7 +162,11 @@ class Profile_Controller extends MY_Controller
             $item->price = $price;
             $item->site_price = $site_price;
             $item->type = $type;
-            $item->change_status('edited');
+
+            if(!$this->user->access_edit || isset($_POST['is_save']) && $_POST['is_save'] == 1)
+                $item->change_status('edited');
+            else
+                $item->change_status('public');
 
             if ($this->input->post('main_image_filename'))
                 $item->image = $this->proc_image($item->id, 'main', $this->input->post('main_image_filename'));

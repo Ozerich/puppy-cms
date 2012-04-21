@@ -40,7 +40,7 @@ function update_list_events() {
 
     $('.publish-till').setdatepicker();
 
-    $('#item_list .item-admin .item-status').change(function () {
+    $('.item-admin .item-status').change(function () {
         var block = $(this).parents('.item-admin');
         $(block).find('.status-params').hide();
         $('#' + $(this).attr('id') + '_' + $(this).val()).show();
@@ -56,8 +56,8 @@ function update_list_events() {
 
 function update_item(event, item_id) {
     var block = $(event.target).parents('.item-admin');
-    var error = $(block).find('.error, .success').hide();
-
+    var error = $(block).find('.error').hide();
+    $(block).find('.success').hide();
     if ($(block).find('.publish-till').is(':visible') && $(block).find('.publish-till').val().length != 10)
         $(error).css('display', 'inline-block');
 
@@ -89,6 +89,23 @@ function CheckItemErrors(is_edit) {
             $(error_block).append('<li>Поле "' + $(this).prev().html() + '" не заполнено</li>');
     });
 
+    $('#mother input[type=text]:visible').each(function(){
+        if($(this).val() == '')
+        {
+            $(error_block).append('<li>Не все поля у мамы заполнены</li>');
+            return false;
+        }
+    });
+
+
+    $('#father input[type=text]:visible').each(function(){
+        if($(this).val() == '')
+        {
+            $(error_block).append('<li>Не все поля у папы заполнены</li>');
+            return false;
+        }
+    });
+
     if ($('#main_image').val() == '' && !is_edit)
         $(error_block).append('<li>Основная фотография не выбрана</li>');
 
@@ -105,7 +122,7 @@ function CheckItemErrors(is_edit) {
         $(error_block).append('<li>Рост должен быть числом</li>');
 
     if ($('.error-block ul li').size() == 0)
-        if ($('.agreement-checkbox:visible input:checked').size() != 2)
+        if ($('.agreement-checkbox:visible').size() == 2 && $('.agreement-checkbox:visible input:checked').size() != 2)
             $(error_block).append('<li>Вы не приняли условия соглашени</li>');
 
     if ($('.error-block ul li').size() > 0) {
@@ -118,7 +135,7 @@ function CheckItemErrors(is_edit) {
 }
 
 
-function FinishUploadFiles(errors, is_edit) {
+function FinishUploadFiles(errors, is_edit, is_save) {
 
     $('#file_loader').hide();
 
@@ -147,20 +164,22 @@ function FinishUploadFiles(errors, is_edit) {
 
     $.ajax({
         url:is_edit ? 'edit/' + $('#item_id').val() : 'profile/add_item',
-        data:data,
+        data:data + '&is_save=' + (is_save ? 1 : 0),
         type:'post',
         success:function (data) {
-            document.location = 'profile';
+            document.location = 'view/' + $('#item_id').val();
         },
         error:function () {
             $('#new_item_submit').show();
+            $('#edit_item_submit').show();
         },
         complete:function () {
             $('#data_loader').hide();
+            $('#new_item_submit').show();
+            $('#edit_item_submit').show();
         }
     });
 
-    $('#edit_item_submit').show();
 }
 
 function update_user_items_events() {
@@ -334,9 +353,10 @@ $(document).ready(function () {
                 $('#addprice_value').html($('#new-item #item_price').val());
         });
 
-    $('#new_item_submit, #edit_item_submit').click(function () {
+    $('#new_item_submit, #edit_item_submit,#save_item_submit').click(function () {
 
-        var is_edit = $(this).attr('id') == 'edit_item_submit';
+        var is_edit = $(this).attr('id') != 'new_item_submit';
+        var is_save = $(this).attr('id') == 'save_item_submit';
         if (!CheckItemErrors(is_edit))
             return false;
         $(this).hide();
@@ -358,7 +378,7 @@ $(document).ready(function () {
                 good_count++;
 
         if (good_count == 0)
-            FinishUploadFiles(0, is_edit);
+            FinishUploadFiles(0, is_edit,is_save);
 
         var loaded_count = 0;
         var errors = false;
@@ -389,7 +409,7 @@ $(document).ready(function () {
 
                         loaded_count++;
                         if (loaded_count == good_count)
-                            FinishUploadFiles(errors, is_edit);
+                            FinishUploadFiles(errors, is_edit,is_save);
                     }
                 });
         }
