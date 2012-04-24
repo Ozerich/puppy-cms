@@ -201,6 +201,7 @@ class Profile_Controller extends MY_Controller
             $item->height = $item->field_height;
             $item->save();
 
+            echo $item->id;
             exit();
         }
 
@@ -278,6 +279,7 @@ class Profile_Controller extends MY_Controller
         $item->height = $item->field_height;
         $item->save();
 
+        echo $item->id;
         exit();
     }
 

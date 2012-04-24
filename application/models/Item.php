@@ -216,7 +216,12 @@ class Item extends ActiveRecord\Model
             $now = time_to_mysqldatetime(time());
             $this->publish_time = $now;
             $this->publish_by = $this->user->id;
-            $this->finish_time = inputdate_to_mysqldate($params['publish_till']) . substr($now, 10);
+            if (!isset($params['publish_till'])) {
+                $this->finish_time = new DateTime();
+                $this->finish_time = $this->finish_time->add(new DateInterval('P30D'));
+            }
+            else
+                $this->finish_time = inputdate_to_mysqldate($params['publish_till']) . substr($now, 10);
             $this->closed_time = null;
             $this->closed_by = 0;
         }

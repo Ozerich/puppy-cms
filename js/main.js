@@ -167,7 +167,7 @@ function FinishUploadFiles(errors, is_edit, is_save) {
         data:data + '&is_save=' + (is_save ? 1 : 0),
         type:'post',
         success:function (data) {
-            document.location = 'view/' + $('#item_id').val();
+            document.location = 'view/' + data;
         },
         error:function () {
             $('#new_item_submit').show();
