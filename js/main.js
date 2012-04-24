@@ -141,7 +141,7 @@ function FinishUploadFiles(errors, is_edit, is_save) {
 
     if (errors == true) {
         var error_block = $('.error-block').show().find('ul').empty().append('<li>Ошибка загрузки файлов</li>');
-        $('.item_submit').show();
+        $('.item-submit').show();
         return false;
     }
 

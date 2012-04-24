@@ -178,7 +178,6 @@ class Profile_Controller extends MY_Controller
                 $item->father_image = $this->proc_image($item->id, 'father', $this->input->post('father_image_filename'));
 
             ItemDocument::reset($item->id);
-            ItemImage::reset($item->id);
             ItemField::reset($item->id);
 
             $documents = explode(',', $this->input->post('documents'));
@@ -189,8 +188,11 @@ class Profile_Controller extends MY_Controller
 
             for ($i = 1; $i <= Config::get('item_images_count'); $i++)
                 if ($this->input->post('image' . $i . '_filename'))
+                {
+                    ItemImage::table()->delete(array('item_id' => $item->id, 'pos' => $i));
                     ItemImage::create(array('item_id' => $item->id, 'pos' => $i, 'image' => $this->proc_image($item->id, 'photo_' . $i,
                         $this->input->post('image' . $i . '_filename'))));
+                }
 
             foreach ($kind->fields as $field)
                 ItemField::create(array('item_id' => $item->id, 'field_id' => $field->id, 'value' => $this->input->post('param_' . $field->id)));

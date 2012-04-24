@@ -152,24 +152,34 @@ class Item extends ActiveRecord\Model
         $template = str_replace('{{wool_length}}', ItemField::get($this->id, Field::wool_field_id()), $template);
         $template = str_replace('{{bite}}', ItemField::get($this->id, Field::bite_field_id()), $template);
         $template = str_replace('{{okras}}', ItemField::get($this->id, Field::okras_field_id()), $template);
-        $template = str_replace('{{kontakt}}', $this->type != 'free' ? '<span style="color: #F26521;font-weight: bold;font-size: 16px;">Звоните: '.$this->user->phone." ".$this->user->name.'</span>' :
-                '<span style="color: #F26521;font-weight: bold;font-size: 16px;">'.KindSetting::get($this->kind_id, $this->city_id)->phone . '</span>   Консультант по породе бесплатно поможет вам выбрать '.($this->animal_id == 1 ? 'щенка' : 'котёнка').', посоветует питомник и даст номер телефона заводчика у которого вы сможете посмотреть и купить '.($this->animal_id == 1 ? 'щенка' : 'котёнка')
-        , $template);
+        $template = str_replace('{{kontakt}}', $this->type != 'free' ? '<span style="color: #F26521;font-weight: bold;font-size: 16px;">Звоните: ' . $this->user->phone . " " . $this->user->name . '</span>' :
+                    '<span style="color: #F26521;font-weight: bold;font-size: 16px;">' . KindSetting::get($this->kind_id, $this->city_id)->phone . '</span>   Консультант по породе бесплатно поможет вам выбрать ' . ($this->animal_id == 1 ? 'щенка' : 'котёнка') . ', посоветует питомник и даст номер телефона заводчика у которого вы сможете посмотреть и купить ' . ($this->animal_id == 1 ? 'щенка' : 'котёнка')
+            , $template);
 
         $template = str_replace('{{metro}}', $this->user->metro, $template);
 
         $documents = $this->documents;
         $document_text = '';
-        foreach($documents as $doc)
-            $document_text .= $doc->name.', ';
+        foreach ($documents as $doc)
+            $document_text .= $doc->name . ', ';
         $document_text = $document_text ? substr($document_text, 0, -2) : '';
         $template = str_replace('{{documents}}', $document_text, $template);
 
-        $template = str_replace(array('{{mother_tituls}}', '{{mother_weight}}', '{{mother_height}}', '{{mother_age}}'),
-            array($this->mother_prizes, $this->mother_weight, $this->mother_height, $this->mother_age), $template);
+        $complicate_params = array(
+            'mother_tituls' => $this->mother_prizes,
+            'mother_weight' => $this->mother_weight,
+            'mother_height' => $this->mother_height,
+            'mother_age' => $this->mother_age,
+            'father_tituls' => $this->father_prizes,
+            'father_weight' => $this->father_weight,
+            'father_height' => $this->father_height,
+            'father_age' => $this->father_age,
+        );
+        foreach ($complicate_params as $param => $val)
+            if (preg_match_all('#{([^{]*?){' . $param . '}(.*?)}#sui', $template, $param_texts, PREG_SET_ORDER))
+                foreach ($param_texts as $param_text)
+                    $template = str_replace($param_text[0], ($val && $val != '0' ? $param_text[1] . $val . $param_text[2] : ''), $template);
 
-        $template = str_replace(array('{{father_tituls}}', '{{father_weight}}', '{{father_height}}', '{{father_age}}'),
-            array($this->father_prizes, $this->father_weight, $this->father_height, $this->father_age), $template);
 
         $template = str_replace('{{description}}', $this->description, $template);
         $template = str_replace('{{another}}', $this->another, $template);
