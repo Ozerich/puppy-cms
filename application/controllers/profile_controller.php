@@ -103,18 +103,20 @@ class Profile_Controller extends MY_Controller
 
         $this->upload->initialize(array(
             'upload_path' => 'img/tmp',
-            'allowed_types' => 'gif|jpg|png|jpeg',
+            'allowed_types' => 'gif|jpg|png|jpeg|bmp',
             'encrypt_name' => TRUE
         ));
 
         $data = array();
 
-        if (!$this->upload->do_upload(key($_FILES)))
-            $data = 'error';
+        if (!$this->upload->do_upload(key($_FILES))) {
+            $data = $this->upload->display_errors('','');
+            $data = json_encode(array('error' => 1, 'error_text' => $data));
+        }
         else
         {
             $file_data = $this->upload->data();
-            $data = json_encode(array('id' => $elem_id, 'filename' => $file_data['file_name']));
+            $data = json_encode(array('error' => 0, 'id' => $elem_id, 'filename' => $file_data['file_name']));
         }
 
         echo $data;
@@ -163,7 +165,7 @@ class Profile_Controller extends MY_Controller
             $item->site_price = $site_price;
             $item->type = $type;
 
-            if(!$this->user->access_edit || isset($_POST['is_save']) && $_POST['is_save'] == 1)
+            if (!$this->user->access_edit || isset($_POST['is_save']) && $_POST['is_save'] == 1)
                 $item->change_status('edited');
             else
                 $item->change_status('public');
@@ -187,8 +189,7 @@ class Profile_Controller extends MY_Controller
                     ItemDocument::create(array('item_id' => $item->id, 'document_id' => $doc));
 
             for ($i = 1; $i <= Config::get('item_images_count'); $i++)
-                if ($this->input->post('image' . $i . '_filename'))
-                {
+                if ($this->input->post('image' . $i . '_filename')) {
                     ItemImage::table()->delete(array('item_id' => $item->id, 'pos' => $i));
                     ItemImage::create(array('item_id' => $item->id, 'pos' => $i, 'image' => $this->proc_image($item->id, 'photo_' . $i,
                         $this->input->post('image' . $i . '_filename'))));

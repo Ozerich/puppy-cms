@@ -36,7 +36,7 @@ class Kind extends ActiveRecord\Model
     {
         $result = array();
 
-        foreach (KindField::find_all_by_kind_id($this->id) as $kind_field)
+        foreach (KindField::find_all_by_kind_id($this->parent_id ? $this->parent_id : $this->id) as $kind_field)
             $result[] = $kind_field->field;
 
         return $result;

@@ -1,6 +1,7 @@
 <div id="item_view" class="block">
+
     <div
-        class="block-header"><?=$item->type == 'free' ? KindSetting::get($item->kind_id, $item->city_id)->phone . ' бесплатная консультация по выбору щенка, рекомендуем только лучших!' : $item->user->phone?></div>
+        class="block-header"><?=$item->type == 'free' ? KindSetting::get($item->main_kind_id, $item->city_id)->phone . ' бесплатная консультация по выбору щенка, рекомендуем только лучших!' : $item->user->phone?></div>
 
     <div class="block-content item-block">
         <div class="left-wrapper">

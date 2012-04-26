@@ -105,13 +105,14 @@ class Item extends ActiveRecord\Model
 
     public function get_preview_header()
     {
-        $template = $this->kind->header_template;
+        $template = $this->main_kind->header_template;
 
         $template = str_replace('{{id}}', $this->id, $template);
         $template = str_replace('{{sex}}', $this->sex == 'man' ? 'мальчик' : 'девочка', $template);
         $template = str_replace('{{weight}}', $this->weight . ' кг.', $template);
         $template = str_replace('{{rost}}', $this->height . ' см.', $template);
         $template = str_replace('{{city}}', $this->city->name, $template);
+        $template = str_replace('{{kind_name}}', $this->kind->name, $template);
 
         $template = str_replace('{{metro}}', $this->user->metro, $template);
         $wool_length = ItemField::get($this->id, Field::wool_field_id());
@@ -123,7 +124,7 @@ class Item extends ActiveRecord\Model
 
     public function get_preview_text()
     {
-        $template = $this->kind->preview_template;
+        $template = $this->main_kind->preview_template;
 
         $template = str_replace('{{date_birth}}', $this->birthday->format('d.m.Y;'), $template);
         $organization = $this->organization;
@@ -144,7 +145,7 @@ class Item extends ActiveRecord\Model
 
     public function get_full_text()
     {
-        $template = $this->kind->text_template;
+        $template = $this->main_kind->text_template;
 
 
         $template = str_replace('{{ears}}', ItemField::get($this->id, Field::ears_field_id()), $template);
@@ -153,7 +154,7 @@ class Item extends ActiveRecord\Model
         $template = str_replace('{{bite}}', ItemField::get($this->id, Field::bite_field_id()), $template);
         $template = str_replace('{{okras}}', ItemField::get($this->id, Field::okras_field_id()), $template);
         $template = str_replace('{{kontakt}}', $this->type != 'free' ? '<span style="color: #F26521;font-weight: bold;font-size: 16px;">Звоните: ' . $this->user->phone . " " . $this->user->name . '</span>' :
-                    '<span style="color: #F26521;font-weight: bold;font-size: 16px;">' . KindSetting::get($this->kind_id, $this->city_id)->phone . '</span>   Консультант по породе бесплатно поможет вам выбрать ' . ($this->animal_id == 1 ? 'щенка' : 'котёнка') . ', посоветует питомник и даст номер телефона заводчика у которого вы сможете посмотреть и купить ' . ($this->animal_id == 1 ? 'щенка' : 'котёнка')
+                    '<span style="color: #F26521;font-weight: bold;font-size: 16px;">' . KindSetting::get($this->main_kind_id, $this->city_id)->phone . '</span>   Консультант по породе бесплатно поможет вам выбрать ' . ($this->animal_id == 1 ? 'щенка' : 'котёнка') . ', посоветует питомник и даст номер телефона заводчика у которого вы сможете посмотреть и купить ' . ($this->animal_id == 1 ? 'щенка' : 'котёнка')
             , $template);
 
         $template = str_replace('{{metro}}', $this->user->metro, $template);
@@ -254,6 +255,15 @@ class Item extends ActiveRecord\Model
         }
 
         $this->save();
+    }
+
+    public function get_main_kind(){
+        return $this->kind->parent_id == 0 ? $this->kind : Kind::find_by_id($this->kind->parent_id);
+    }
+
+    public function get_main_kind_id(){
+        $kind = Kind::find_by_id($this->kind_id);
+        return $this->kind->parent_id == 0 ? $this->kind->id : $this->kind->parent_id;
     }
 
 }

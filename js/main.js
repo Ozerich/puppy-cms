@@ -139,8 +139,8 @@ function FinishUploadFiles(errors, is_edit, is_save) {
 
     $('#file_loader').hide();
 
-    if (errors == true) {
-        var error_block = $('.error-block').show().find('ul').empty().append('<li>Ошибка загрузки файлов</li>');
+    if (errors != '') {
+        var error_block = $('.error-block').show().find('ul').empty().append('<li>Ошибка загрузки файлов: ' + errors + '</li>');
         $('.item-submit').show();
         return false;
     }
@@ -359,7 +359,8 @@ $(document).ready(function () {
         var is_save = $(this).attr('id') == 'save_item_submit';
         if (!CheckItemErrors(is_edit))
             return false;
-        $(this).hide();
+        $('#new_item_submit, #edit_item_submit,#save_item_submit').hide();
+
 
         $('#file_loader').show();
 
@@ -378,10 +379,10 @@ $(document).ready(function () {
                 good_count++;
 
         if (good_count == 0)
-            FinishUploadFiles(0, is_edit,is_save);
+            FinishUploadFiles('', is_edit,is_save);
 
         var loaded_count = 0;
-        var errors = false;
+        var errors = '';
         for (var file_ind in files) {
             var file = files[file_ind];
             if ($('#' + file.id).val() == '')
@@ -400,13 +401,12 @@ $(document).ready(function () {
                         }
                     },
                     complete:function (jqXHR, textStatus) {
-                        if (jqXHR.responseText == 'error')
-                            errors = true;
+                        data = jQuery.parseJSON(jqXHR.responseText);
+                        if (data.error == 1)
+                            errors = data.error_text;
                         else {
-                            data = jQuery.parseJSON(jqXHR.responseText);
                             $('#' + data.id + '_filename').val(data.filename);
                         }
-
                         loaded_count++;
                         if (loaded_count == good_count)
                             FinishUploadFiles(errors, is_edit,is_save);
