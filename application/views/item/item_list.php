@@ -64,6 +64,7 @@
         </div>
         <? if ($this->user && $this->user->access_edit): ?>
             <div class="item-admin">
+                <input type="hidden" class="item-id" value="<?=$item->id?>"/>
                 <form action="#">
                     <div class="admin-preview">
                         <h2><?=$item->preview_header?></h2>
@@ -150,7 +151,7 @@
                                    value="0">Нет
                         </div>
                         <div class="option">
-                            <a href="mailto:<?=$item->user->email?>">Написать автору</a>
+                            <a href="mailto:<?=$item->user->email?>">Написать автору</a></br>
                         </div>
                     </div>
                     <div class="submit-area">
@@ -159,6 +160,8 @@
                         <span class="success">Объявление обновлено</span>
                         <button class="save-button" onclick="return update_item(event, '<?=$item->id?>');">Сохранить
                         </button>
+                        <a href="#" class="deleteitem">Удалить</a>
+                        <span class="deleteitem deleted" style="display: none">Удалено</span>
                         <br clear="all"/>
                     </div>
                 </form>

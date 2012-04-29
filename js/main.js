@@ -428,4 +428,18 @@ $(document).ready(function () {
         $(this).remove();
         return false;
     });
+
+    $('.current-photo .deleteimage').click(function(){
+        $(this).parents('.current-photo').remove();
+        return false;
+    });
+
+    $('.item-admin .deleteitem').click(function(){
+        $(this).hide();
+        var block = $(this).parents('.item-admin');
+        $(block).find('.deleted').show();
+        $(block).find('.save-button').hide();
+        $.get('profile/delete_item/' + $(block).find('.item-id').val());
+        return false;
+    });
 });

@@ -123,6 +123,17 @@ class Profile_Controller extends MY_Controller
         exit();
     }
 
+    public function delete_item($item_id = 0)
+    {
+        $item = Item::find_by_id($item_id);
+
+        if(!$item || !$this->user || !$this->user->access_edit)
+            show_404();
+        $item->delete();
+
+        die('ok');
+    }
+
     public function edit_item($item_id = 0)
     {
         $item = Item::find_by_id($item_id);
@@ -189,11 +200,13 @@ class Profile_Controller extends MY_Controller
                     ItemDocument::create(array('item_id' => $item->id, 'document_id' => $doc));
 
             for ($i = 1; $i <= Config::get('item_images_count'); $i++)
+            {
+                ItemImage::table()->delete(array('item_id' => $item->id, 'pos' => $i));
                 if ($this->input->post('image' . $i . '_filename')) {
-                    ItemImage::table()->delete(array('item_id' => $item->id, 'pos' => $i));
                     ItemImage::create(array('item_id' => $item->id, 'pos' => $i, 'image' => $this->proc_image($item->id, 'photo_' . $i,
                         $this->input->post('image' . $i . '_filename'))));
                 }
+            }
 
             foreach ($kind->fields as $field)
                 ItemField::create(array('item_id' => $item->id, 'field_id' => $field->id, 'value' => $this->input->post('param_' . $field->id)));

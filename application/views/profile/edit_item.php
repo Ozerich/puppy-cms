@@ -223,11 +223,13 @@
 </div>
 <div class="images">
     <? if ($item->image): ?>
-    <div class="current-photo"><img width="120" src="<?=Config::get('item_images_dir') . $item->image?>"/></div>
+    <div class="current-photo"><img width="120" src="<?=Config::get('item_images_dir') . $item->image?>"/>
     <? if($this->user->access_edit): ?>
         <a href="download.php?file=<?=Config::get('item_images_dir') . $item->image?>" class="download-image">Скачать</a>
+        <a href="#" class="deleteimage">Удалить</a>
         <? endif; ?>
     <? endif; ?>
+</div>
     <div class="image mainimage">
         <label for="main_image">Основная фотография (будет видна на главной странице):</label>
         <input type="file" name="main_image" id="main_image"/>
@@ -238,10 +240,12 @@
 
     <? if (isset($item->images[$i - 1]) && $item->images[$i - 1]->image): ?>
         <div class="current-photo"><img width="120"
-                                        src="<?=Config::get('item_images_dir') . $item->images[$i - 1]->image?>"/></div>
+                                        src="<?=Config::get('item_images_dir') . $item->images[$i - 1]->image?>"/>
             <? if($this->user->access_edit): ?>
                     <a href="download.php?file=<?=Config::get('item_images_dir') . $item->images[$i - 1]->image?>" class="download-image">Скачать</a>
-                <? endif; ?>
+            <? endif; ?>
+            <a href="#" class="deleteimage">Удалить</a>
+        </div>
         <? endif; ?>
     <div class="image">
         <label for="image<?=$i?>">Фотография <?=$i?>:</label>
