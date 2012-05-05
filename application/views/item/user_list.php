@@ -30,8 +30,9 @@
                     <td class="sell">C-<?=$user->sell_site?>, З-<?=$user->sell_plant?></td>
                     <td class="best"><?=$user->is_best ? 'Да' : 'Нет'?></td>
                     <td class="items">
-                        <? foreach($user->items as $item): ?>
-                            <a href="view/<?=$item->id?>"><?=$item->id?></a>
+                        <? foreach($user->items as $item):
+                        ?>
+                            <a class="<?=$item->status?>" href="view/<?=$item->id?>"><?=$item->id?></a>
                         <? endforeach; ?>
                     </td>
                     <td class="actions">

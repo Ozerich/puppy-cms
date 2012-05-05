@@ -151,7 +151,7 @@ class Profile_Controller extends MY_Controller
                 show_404();
 
             $type = $this->input->post('pay_type');
-            $site_price = ($type == "free" ? Commission::get_commission($this->user->city_id, $price) : 0) + $price;
+            $site_price = ($type == "free" ? Commission::get_commission($item->user->city_id, $price) : 0) + $price;
 
             $item->kind_id = $kind->id;
             $item->plant_count = $this->input->post('plant_count');

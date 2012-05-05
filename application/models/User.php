@@ -123,7 +123,7 @@ class User extends ActiveRecord\Model
 
     public function get_closed_count()
     {
-        return count(Item::all(array('conditions' => array('user_id = ? AND status = ?', $this->id, 'closed'))));
+        return count(Item::all(array('conditions' => array('user_id = ? AND status = ?', $this->id, 'canceled'))));
     }
 }
 

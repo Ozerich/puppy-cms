@@ -306,6 +306,9 @@
     </div>
     <div class="agreement" style="display:<?=$ind ? 'none' : 'block'?>" id="agreement2_<?=$kind->id?>">
 
+        <div class="agreement-content" style="display:block">
+            <?=Config::get('agreement2_text');?>
+        </div>
         <? if (!$this->user->access_edit || $item->user_id == $user->id): ?>
 
         <div class="agreement-checkbox">

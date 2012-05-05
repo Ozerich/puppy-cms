@@ -53,6 +53,15 @@
 
                     <p><?=$item->preview_text?></p>
                 </div>
+                <div class="item-bottom-text">
+                    <? if ($this->user && $this->user->access_edit): ?>
+                    <?= $item->user->plain_contact.' - '.$item->price ?>
+                    <? else: ?>
+                    <?=
+                    $item->type != 'free' ?  $item->user->phone . " " . $item->user->name :
+                        KindSetting::get($item->kind_id, $item->city_id)->phone . ' Консультант по породе бесплатно поможет вам выбрать '.($item->animal_id == 1 ? 'щенка' : 'котёнка').', посоветует питомник и даст номер телефона заводчика у которого вы сможете посмотреть и купить '.($item->animal_id == 1 ? 'щенка' : 'котёнка')?>
+                    <? endif; ?>
+                </div>
                 <br clear="all"/>
             </div>
             <div class="main-content">
@@ -63,7 +72,6 @@
             </div>
 
         </div>
-        <br clear="all"/>
     </div>
     <? if ($this->user && $this->user->access_edit): ?>
     <div class="item-admin" style="display:block; margin-top:10px;">

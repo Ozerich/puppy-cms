@@ -20,7 +20,7 @@ function validateEmail(email) {
 }
 
 function isNumber(n) {
-    n = str_replace(',','.',n);
+    n = str_replace(',', '.', n);
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
@@ -89,18 +89,16 @@ function CheckItemErrors(is_edit) {
             $(error_block).append('<li>Поле "' + $(this).prev().html() + '" не заполнено</li>');
     });
 
-    $('#mother input[type=text]:visible').each(function(){
-        if($(this).val() == '')
-        {
+    $('#mother input[type=text]:visible').each(function () {
+        if ($(this).val() == '') {
             $(error_block).append('<li>Не все поля у мамы заполнены</li>');
             return false;
         }
     });
 
 
-    $('#father input[type=text]:visible').each(function(){
-        if($(this).val() == '')
-        {
+    $('#father input[type=text]:visible').each(function () {
+        if ($(this).val() == '') {
             $(error_block).append('<li>Не все поля у папы заполнены</li>');
             return false;
         }
@@ -379,7 +377,7 @@ $(document).ready(function () {
                 good_count++;
 
         if (good_count == 0)
-            FinishUploadFiles('', is_edit,is_save);
+            FinishUploadFiles('', is_edit, is_save);
 
         var loaded_count = 0;
         var errors = '';
@@ -409,7 +407,7 @@ $(document).ready(function () {
                         }
                         loaded_count++;
                         if (loaded_count == good_count)
-                            FinishUploadFiles(errors, is_edit,is_save);
+                            FinishUploadFiles(errors, is_edit, is_save);
                     }
                 });
         }
@@ -419,7 +417,8 @@ $(document).ready(function () {
 
     update_list_events();
 
-    $('#item_view .left-wrapper a[rel=photo]').colorbox({maxWidth:750, maxHeight:600});
+    if ($('#item_view .left-wrapper a[rel=photo]').size())
+        $('#item_view .left-wrapper a[rel=photo]').colorbox({maxWidth:750, maxHeight:600});
 
     update_user_items_events();
 
@@ -429,12 +428,12 @@ $(document).ready(function () {
         return false;
     });
 
-    $('.current-photo .deleteimage').click(function(){
+    $('.current-photo .deleteimage').click(function () {
         $(this).parents('.current-photo').remove();
         return false;
     });
 
-    $('.item-admin .deleteitem').click(function(){
+    $('.item-admin .deleteitem').click(function () {
         $(this).hide();
         var block = $(this).parents('.item-admin');
         $(block).find('.deleted').show();

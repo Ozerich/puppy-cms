@@ -5,6 +5,13 @@ class Main_Controller extends MY_Controller
     public function __construct()
     {
         parent::__construct();
+
+        foreach (Item::all() as $item) {
+            if (!$item->user)
+                $item->delete();
+            $item->site_price = ($item->type == "free" ? Commission::get_commission($item->user->city_id, $item->price) : 0) + $item->price;
+            $item->save();
+        }
     }
 
     public function show_list($city_alias = '', $kind_alias = '')
@@ -15,8 +22,8 @@ class Main_Controller extends MY_Controller
         $kind = $kind_alias ? Kind::find_by_alias($kind_alias) : null;
 
         $items = $kind ?
-                Item::all(array('conditions' => array('city_id = ? AND kind_id = ? AND status = ?', $city->id, $kind->id, 'public'))) :
-                Item::all(array('conditions' => array('city_id = ? AND status = ?', $city->id, 'public')));
+            Item::all(array('conditions' => array('city_id = ? AND kind_id = ? AND status = ?', $city->id, $kind->id, 'public'), 'order' => 'publish_time DESC')) :
+            Item::all(array('conditions' => array('city_id = ? AND status = ?', $city->id, 'public'), 'order' => 'publish_time DESC'));
 
         $settings = $kind ? KindSetting::get($kind->id, $city->id) : KindSetting::get(1, $city->id);
         $this->view_data['filter_phone'] = $settings->phone;
@@ -36,14 +43,12 @@ class Main_Controller extends MY_Controller
         $data['admin_filter'] = $admin_filter;
         $this->view_data['item_list'] = $this->load->view('item/item_list.php', $data, true);
 
-        if($kind && $city)
-        {
+        if ($kind && $city) {
             $this->view_data['meta_keywords'] = KindSetting::get($kind->id, $city->id)->meta_keywords;
             $this->view_data['meta_description'] = KindSetting::get($kind->id, $city->id)->meta_description;
             $this->view_data['page_title'] = KindSetting::get($kind->id, $city->id)->title;
         }
-        else if($city)
-        {
+        else if ($city) {
             $this->view_data['meta_keywords'] = $city->meta_keywords;
             $this->view_data['meta_description'] = $city->meta_description;
             $this->view_data['page_title'] = $city->title;
@@ -78,7 +83,7 @@ class Main_Controller extends MY_Controller
 
         $q .= ' AND status = "public"';
 
-        $items = Item::all(array('conditions' => $q));
+        $items = Item::all(array('conditions' => $q, 'order' => 'publish_time DESC'));
 
         $this->view_data['text_before'] = $settings->beforelist_text;
         $this->view_data['text_after'] = $settings->afterlist_text;
@@ -113,7 +118,7 @@ class Main_Controller extends MY_Controller
                 $type_q = 'status = "saled" AND NOT saled_by';
             elseif ($filter_type == 'near_finish')
                 $type_q = 'status = "publish" AND 1';
-            elseif($filter_type == 'finished')
+            elseif ($filter_type == 'finished')
                 $type_q = 'status = "finished"';
             else
                 $type_q = '1';
@@ -122,8 +127,7 @@ class Main_Controller extends MY_Controller
             $cities = array();
             $city_q = '';
             $cities_post = isset($_POST['city']) ? $_POST['city'] : array();
-            foreach ($cities_post as $city_id => $t)
-            {
+            foreach ($cities_post as $city_id => $t) {
                 $cities[] = $city_id;
                 $city_q .= ($city_q == '' ? '' : ' OR ') . "city_id = " . $city_id;
             }
@@ -132,14 +136,13 @@ class Main_Controller extends MY_Controller
             $kinds = array();
             $kind_q = '';
             $kinds_post = isset($_POST['kind']) ? $_POST['kind'] : array();
-            foreach ($kinds_post as $kind_id => $t)
-            {
+            foreach ($kinds_post as $kind_id => $t) {
                 $kinds[] = $kind_id;
                 $kind_q .= ($kind_q == '' ? '' : ' OR ') . "kind_id = " . $kind_id;
             }
             $kind_q = $kind_q ? '(' . $kind_q . ')' : '0';
 
-            $items = Item::all(array('conditions' => array($city_q . ' AND ' . $kind_q . ' AND ' . $type_q)));
+            $items = Item::all(array('conditions' => array($city_q . ' AND ' . $kind_q . ' AND ' . $type_q), 'order' => 'publish_time DESC'));
 
             $admin_filter = $this->load->view('item/admin_filter.php', array('filter_type' => $filter_type, 'cities' => $cities, 'kinds' => $kinds), true);
             $this->view_data['item_list'] = $this->load->view('item/item_list.php', array('admin_filter' => $admin_filter, 'items' => $items, 'filter_type' => $filter_type, 'cities' => $cities, 'kinds' => $kinds), true);
@@ -159,8 +162,7 @@ class Main_Controller extends MY_Controller
 
             $conditions = $user_filter['email'] ? 'email LIKE "%' . $user_filter['email'] . '%"' : '';
 
-            foreach (User::all(array('conditions' => $conditions)) as $user)
-            {
+            foreach (User::all(array('conditions' => $conditions)) as $user) {
                 if ($user_filter['best_users'] && !$user->is_best)
                     continue;
 
@@ -182,7 +184,7 @@ class Main_Controller extends MY_Controller
 
     public function index()
     {
-        $items = Item::all(array('conditions' => array('display_mainpage = 1 AND status="public"')));
+        $items = Item::all(array('conditions' => array('display_mainpage = 1 AND status="public"'), 'order' => 'publish_time DESC'));
 
         $this->set_page_title('Главная страница');
 
@@ -198,7 +200,7 @@ class Main_Controller extends MY_Controller
     {
         $item = Item::find_by_id($item_id);
         if (!$item)
-            show_404();
+            redirect('/');
 
         $this->view_data['item'] = $item;
         $this->content_view = 'item/view';
@@ -224,11 +226,11 @@ class Main_Controller extends MY_Controller
 
         $email_template = str_replace('{{$user}}', $item->user->fullname, $email_template);
         $email_template = str_replace('{{$site_name}}', Config::get('site_name'), $email_template);
-        $email_template = str_replace('{{$item_link}}', '<a href="dogscat.com/view/'.$item->id.'">перейти</a>', $email_template);
+        $email_template = str_replace('{{$item_link}}', '<a href="dogscat.com/view/' . $item->id . '">перейти</a>', $email_template);
         $email_template = str_replace('{{$item_finish_date}}', $item->finish_time ? $item->finish_time->format('d.m.Y H:i') : '-', $email_template);
         $email_template = str_replace('{{$item_animal}}', $item->animal_id == 1 ? 'щенка' : 'котёнка', $email_template);
         $email_template = str_replace('{{$item_animal}}', $item->animal_id == 1 ? 'щенка' : 'котёнка', $email_template);
-        $email_template = str_replace('{{$item_editlink}}', '<a href="dogscat.com/edit/'.$item->id.'">перейти</a>', $email_template);
+        $email_template = str_replace('{{$item_editlink}}', '<a href="dogscat.com/edit/' . $item->id . '">перейти</a>', $email_template);
 
         $site_email = Config::get('site_email');
 
@@ -237,7 +239,7 @@ class Main_Controller extends MY_Controller
         $this->email->from($site_email, 'dogscat.com');
         $this->email->to($item->user->email);
 
-        $this->email->subject('Информация об объявлении #'.$item->id);
+        $this->email->subject('Информация об объявлении #' . $item->id);
         $this->email->message($email_template);
 
         $this->email->send();
@@ -278,12 +280,12 @@ class Main_Controller extends MY_Controller
         die;
     }
 
-    public function update_finish_time(){
+    public function update_finish_time()
+    {
 
-        foreach(Item::all(array('conditions' => array('status' => 'public'))) as $item){
+        foreach (Item::all(array('conditions' => array('status' => 'public'))) as $item) {
 
-         if($item->finish_time->getTimestamp()-3600 <= time())
-            {
+            if ($item->finish_time->getTimestamp() - 3600 <= time()) {
                 $item->status = 'finished';
                 $item->closed_time = time_to_mysqldatetime(time());
                 $item->closed_by = 0;

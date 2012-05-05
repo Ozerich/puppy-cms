@@ -185,6 +185,9 @@ class Item extends ActiveRecord\Model
         $template = str_replace('{{description}}', $this->description, $template);
         $template = str_replace('{{another}}', $this->another, $template);
 
+        $template = str_replace('{{paid_phone_text}}', $this->type == "free" ? '' : 'Звоните: '.$this->user->phone.' '.$this->user->name, $template);
+        $template = str_replace('{{site_phone}}',KindSetting::get($this->main_kind_id, $this->city_id)->phone, $template);
+
         $template = str_replace("\n", "<br/>", $template);
 
         return $template;
