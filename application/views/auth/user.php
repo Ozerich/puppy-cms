@@ -3,7 +3,7 @@
     <div class="block-header">Вход:</div>
 
     <div class="block-content">
-        <div class="error-block">
+        <div class="error-block" style="display:<?=isset($error) ? 'block' : 'none'?>">
             <?=isset($error) ? $error : ''?>
         </div>
         <div class="login-block">

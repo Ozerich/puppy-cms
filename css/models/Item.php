@@ -105,14 +105,13 @@ class Item extends ActiveRecord\Model
 
     public function get_preview_header()
     {
-        $template = $this->main_kind->header_template;
+        $template = $this->kind->header_template;
 
         $template = str_replace('{{id}}', $this->id, $template);
         $template = str_replace('{{sex}}', $this->sex == 'man' ? 'мальчик' : 'девочка', $template);
         $template = str_replace('{{weight}}', $this->weight . ' кг.', $template);
         $template = str_replace('{{rost}}', $this->height . ' см.', $template);
         $template = str_replace('{{city}}', $this->city->name, $template);
-        $template = str_replace('{{kind_name}}', $this->kind->name, $template);
 
         $template = str_replace('{{metro}}', $this->user->metro, $template);
         $wool_length = ItemField::get($this->id, Field::wool_field_id());
@@ -124,7 +123,7 @@ class Item extends ActiveRecord\Model
 
     public function get_preview_text()
     {
-        $template = $this->main_kind->preview_template;
+        $template = $this->kind->preview_template;
 
         $template = str_replace('{{date_birth}}', $this->birthday->format('d.m.Y;'), $template);
         $organization = $this->organization;
@@ -145,7 +144,10 @@ class Item extends ActiveRecord\Model
 
     public function get_full_text()
     {
-        $template = $this->main_kind->text_template;
+        $template = $this->kind->text_template;
+
+        $kontact = $this->type == 'free' ? $this->user->plain_contact : KindSetting::get($this->kind_id, $this->city_id)->manager_contact
+            . ' Консультант по породе бесплатно поможет вам выбрать щенка, пососветует питомник и даст номер телефона заводчикау которого вы сможете посмотреть и купить щенка';
 
 
         $template = str_replace('{{ears}}', ItemField::get($this->id, Field::ears_field_id()), $template);
@@ -153,42 +155,18 @@ class Item extends ActiveRecord\Model
         $template = str_replace('{{wool_length}}', ItemField::get($this->id, Field::wool_field_id()), $template);
         $template = str_replace('{{bite}}', ItemField::get($this->id, Field::bite_field_id()), $template);
         $template = str_replace('{{okras}}', ItemField::get($this->id, Field::okras_field_id()), $template);
-		if($this->type != "paid_2")
-        $template = str_replace('{{kontakt}}', $this->type != 'free' ? '<span style="color: #F26521;font-weight: bold;font-size: 16px;">Звоните: ' . $this->user->phone . " " . $this->user->name . '</span>' :
-                    '<span style="color: #F26521;font-weight: bold;font-size: 16px;">' . KindSetting::get($this->main_kind_id, $this->city_id)->phone . '</span>   Консультант по породе бесплатно поможет вам выбрать ' . ($this->animal_id == 1 ? 'щенка' : 'котёнка') . ', посоветует питомник и даст номер телефона заводчика у которого вы сможете посмотреть и купить ' . ($this->animal_id == 1 ? 'щенка' : 'котёнка')
-            , $template);
-		$template = str_replace('{{kontakt}}', '', $template);
+        $template = str_replace('{{kontakt}}', '1', $template);
 
         $template = str_replace('{{metro}}', $this->user->metro, $template);
 
-        $documents = $this->documents;
-        $document_text = '';
-        foreach ($documents as $doc)
-            $document_text .= $doc->name . ', ';
-        $document_text = $document_text ? substr($document_text, 0, -2) : '';
-        $template = str_replace('{{documents}}', $document_text, $template);
+        $template = str_replace(array('{{mother_tituls}}', '{{mother_weight}}', '{{mother_height}}', '{{mother_age}}'),
+            array($this->mother_prizes, $this->mother_weight, $this->mother_height, $this->mother_age), $template);
 
-        $complicate_params = array(
-            'mother_tituls' => $this->mother_prizes,
-            'mother_weight' => $this->mother_weight,
-            'mother_height' => $this->mother_height,
-            'mother_age' => $this->mother_age,
-            'father_tituls' => $this->father_prizes,
-            'father_weight' => $this->father_weight,
-            'father_height' => $this->father_height,
-            'father_age' => $this->father_age,
-        );
-        foreach ($complicate_params as $param => $val)
-            if (preg_match_all('#{([^{]*?){' . $param . '}(.*?)}#sui', $template, $param_texts, PREG_SET_ORDER))
-                foreach ($param_texts as $param_text)
-                    $template = str_replace($param_text[0], ($val && $val != '0' ? $param_text[1] . $val . $param_text[2] : ''), $template);
-
+        $template = str_replace(array('{{father_tituls}}', '{{father_weight}}', '{{father_height}}', '{{father_age}}'),
+            array($this->father_prizes, $this->father_weight, $this->father_height, $this->father_age), $template);
 
         $template = str_replace('{{description}}', $this->description, $template);
         $template = str_replace('{{another}}', $this->another, $template);
-
-        $template = str_replace('{{paid_phone_text}}', $this->type == "free" ? '' : 'Звоните: '.$this->user->phone.' '.$this->user->name, $template);
-        $template = str_replace('{{site_phone}}',KindSetting::get($this->main_kind_id, $this->city_id)->phone, $template);
 
         $template = str_replace("\n", "<br/>", $template);
 
@@ -222,12 +200,7 @@ class Item extends ActiveRecord\Model
             $now = time_to_mysqldatetime(time());
             $this->publish_time = $now;
             $this->publish_by = $this->user->id;
-            if (!isset($params['publish_till'])) {
-                $this->finish_time = new DateTime();
-                $this->finish_time = $this->finish_time->add(new DateInterval('P30D'));
-            }
-            else
-                $this->finish_time = inputdate_to_mysqldate($params['publish_till']) . substr($now, 10);
+            $this->finish_time = inputdate_to_mysqldate($params['publish_till']) . substr($now, 10);
             $this->closed_time = null;
             $this->closed_by = 0;
         }
@@ -260,15 +233,6 @@ class Item extends ActiveRecord\Model
         }
 
         $this->save();
-    }
-
-    public function get_main_kind(){
-        return $this->kind->parent_id == 0 ? $this->kind : Kind::find_by_id($this->kind->parent_id);
-    }
-
-    public function get_main_kind_id(){
-        $kind = Kind::find_by_id($this->kind_id);
-        return $this->kind->parent_id == 0 ? $this->kind->id : $this->kind->parent_id;
     }
 
 }

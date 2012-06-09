@@ -73,6 +73,7 @@ $route['admin/config/(:any)'] = 'admin/config_controller/$1';
 $route['login'] = 'auth_controller/user';
 $route['logout'] = 'auth_controller/logout';
 $route['register'] = 'auth_controller/register';
+$route['auth/remind'] = 'auth_controller/remind';
 
 $route['profile'] = 'profile_controller';
 $route['profile/(:any)'] = 'profile_controller/$1';
@@ -89,6 +90,8 @@ $route['statji'] = 'article_controller';
 
 $route['user/(:num)'] = 'user_controller/index/$1';
 $route['user/(:any)'] = 'user_controller/$1';
+
+$route['sms_billing'] = 'main_controller/sms_billing';
 
 $route['(:any)'] = 'main_controller/show_list/$1';
 $route['(:any)/(:any)'] = 'main_controller/show_list/$1/$2';

@@ -4,15 +4,36 @@ class Main_Controller extends MY_Controller
 {
     public function __construct()
     {
+
         parent::__construct();
 
         foreach (Item::all() as $item) {
             if (!$item->user)
                 $item->delete();
-            $item->site_price = ($item->type == "free" ? Commission::get_commission($item->user->city_id, $item->price) : 0) + $item->price;
+
+            if($item->user)
+                $item->site_price = ($item->type == "free" ? Commission::get_commission($item->user->city_id, $item->price) : 0) + $item->price;
             $item->save();
         }
     }
+	
+	public function sms_billing()
+	{
+		$msg = substr($_GET['msg'],7);
+		$sekretKey ="Vital Ozierski";
+		$skey=$_GET['skey'];
+		
+		$item =	Item::find_by_id($msg);
+		
+		if($skey == md5($_GET['sms_id'].$sekretKey) && $item && $item->type == "paid_2")
+		{
+			echo("ok");
+			echo("\n");
+			echo($item->user->phone);
+		}
+		
+		die;
+	}
 
     public function show_list($city_alias = '', $kind_alias = '')
     {
@@ -136,9 +157,20 @@ class Main_Controller extends MY_Controller
             $kinds = array();
             $kind_q = '';
             $kinds_post = isset($_POST['kind']) ? $_POST['kind'] : array();
+
             foreach ($kinds_post as $kind_id => $t) {
                 $kinds[] = $kind_id;
-                $kind_q .= ($kind_q == '' ? '' : ' OR ') . "kind_id = " . $kind_id;
+                $kind = Kind::find_by_id($kind_id);
+                $cur_q = "kind_id = " . $kind_id;
+
+                if($kind->subkinds)
+                {
+                    $cur_q = "";
+                    foreach($kind->subkinds as $subkind)
+                        $cur_q .= ($cur_q == '' ? '' : ' OR ').'kind_id=' . $subkind->id;
+                }
+
+                $kind_q .= ($kind_q == '' ? '' : ' OR ') . $cur_q;
             }
             $kind_q = $kind_q ? '(' . $kind_q . ')' : '0';
 

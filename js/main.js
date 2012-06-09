@@ -442,3 +442,11 @@ $(document).ready(function () {
         return false;
     });
 });
+
+function remind_password()
+{
+    $('#remind_password').hide();
+    $('#remind_password_ok').show();
+    $.post('auth/remind', 'email=' + $('#email_remind').val());
+}
+

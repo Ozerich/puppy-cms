@@ -112,7 +112,7 @@ class User extends ActiveRecord\Model
 
     public function get_plain_contact()
     {
-        return '<b>' . $this->name . ' ' . $this->surname . '</b> (<a href="user/' . $this->id . '">' . $this->email . '</a>). ' . ($this->city ? $this->city->name : 'Нет города') . ', ' . $this->address . ', м.' . $this->metro . '. ' . $this->phone;
+        return '<b>' . $this->name . ' ' . $this->surname . '</b> (<a href="mailto:' . $this->email . '">' . $this->email . '</a>). ' . ($this->city ? $this->city->name : 'Нет города') . ', ' . $this->address . ', м.' . $this->metro . '. ' . $this->phone;
     }
 
 
@@ -123,20 +123,7 @@ class User extends ActiveRecord\Model
 
     public function get_closed_count()
     {
-        return count(Item::all(array('conditions' => array('user_id = ? AND status = ?', $this->id, 'canceled'))));
-    }
-
-
-    public function remind_password()
-    {
-        $new_pass = "";
-        for($i = 0; $i < 8; $i++)
-            $new_pass .= chr(((rand() % 2) == 0 ? ord('a') : ord('A')) + (rand() % 25));
-
-        $this->pass = $new_pass;
-        $this->save();
-
-        mail($this->email, 'Новый пароль к сайту', 'Ваш новый пароль: '.$new_pass);
+        return count(Item::all(array('conditions' => array('user_id = ? AND status = ?', $this->id, 'closed'))));
     }
 }
 

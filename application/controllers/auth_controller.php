@@ -51,6 +51,11 @@ class Auth_Controller extends MY_Controller
     public function register()
     {
         if ($_POST) {
+
+            $user_found = User::find_by_email($this->input->post('email'));
+            if($user_found)
+                die("Пользователь с таким email уже существует");
+
             $user = User::create(array(
                 'type' => 'user',
                 'email' => $this->input->post('email'),
@@ -81,8 +86,16 @@ class Auth_Controller extends MY_Controller
             $password = $_POST['password'];
 
             $result = User::validate_login($email, $password);
-            if (!$result) {
-                $this->view_data['error'] = 'Неверный e-mail или пароль';
+            $this->load->helper('email');
+            if(!valid_email($email))
+            {
+                $this->view_data['error'] = 'Некорректный формат e-mail';
+            }
+            else if (!$result) {
+                $this->view_data['error'] = 'Неверный e-mail или пароль<br/><input type="hidden" id="email_remind" value="'.$email.'"/>
+                <a id="remind_password" onclick="remind_password(); return false;" href="auth/remind">Напомнить пароль</a>
+                <div id="remind_password_ok">Пароль отправлен на <b>'.$email.'</b></div>
+                ';
                 $this->view_data['email'] = $email;
             }
             else
@@ -97,8 +110,18 @@ class Auth_Controller extends MY_Controller
     public function logout()
     {
         User::logout();
-
         redirect('');
+    }
+
+    public function remind()
+    {
+        $email = $this->input->post('email');
+        $user = User::find_by_email($email);
+
+        if(!$user)
+            show_404();
+
+        $user->remind_password();
     }
 }
 

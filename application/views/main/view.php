@@ -1,12 +1,7 @@
 <div id="item_view" class="block">
-
     <div
-        class="block-header"><? if($item->type == "paid2"): ?>
-		<?=
-		$item->type == 'free' ? KindSetting::get($item->main_kind_id, $item->city_id)->phone . ' бесплатная консультация по выбору щенка, рекомендуем только лучших!' : $item->user->phone
-		?>
-		<? endif; ?>
-		</div>
+            <?print_r($item->main_kind['id']);exit(); ?>
+        class="block-header"><?=$item->type == 'free' ? KindSetting::get($item->main_kind->id, $item->city_id)->phone . ' бесплатная консультация по выбору щенка, рекомендуем только лучших!' : $item->user->phone?></div>
 
     <div class="block-content item-block">
         <div class="left-wrapper">
@@ -58,19 +53,6 @@
 
                     <p><?=$item->preview_text?></p>
                 </div>
-                <div class="item-bottom-text">
-					<? if($item->type == "paid_2"): ?>
-					Отправьте смс с текстом "dogscat<?=$item->id?>" на короткий номер 4448 и в ответ получите номер телефона владельца щенка. Стоимость смс 60р.
-					<? else: ?>
-                    <? if ($this->user && $this->user->access_edit): ?>
-                    <?= $item->user->plain_contact.' - '.$item->price ?>
-                    <? else: ?>
-                    <?=
-                    $item->type != 'free' ?  $item->user->phone . " " . $item->user->name :
-                        KindSetting::get($item->main_kind_id, $item->city_id)->phone . ' Консультант по породе бесплатно поможет вам выбрать '.($item->animal_id == 1 ? 'щенка' : 'котёнка').', посоветует питомник и даст номер телефона заводчика у которого вы сможете посмотреть и купить '.($item->animal_id == 1 ? 'щенка' : 'котёнка')?>
-                    <? endif; ?>
-                    <? endif; ?>
-                </div>
                 <br clear="all"/>
             </div>
             <div class="main-content">
@@ -81,6 +63,7 @@
             </div>
 
         </div>
+        <br clear="all"/>
     </div>
     <? if ($this->user && $this->user->access_edit): ?>
     <div class="item-admin" style="display:block; margin-top:10px;">
@@ -165,7 +148,7 @@
                            value="0">Нет
                 </div>
                 <div class="option">
-                    <a href="user/<?=$item->user_id?>">Написать автору</a>
+                    <a href="mailto:<?=$item->user->email?>">Написать автору</a>
                 </div>
             </div>
             <div class="submit-area">
