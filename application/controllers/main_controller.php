@@ -19,18 +19,24 @@ class Main_Controller extends MY_Controller
 	
 	public function sms_billing()
 	{
-		$msg = substr($_GET['msg'],7);
+		if(!isset($_GET['msg']))
+		{
+			echo "ok\n неправильно введены данные";
+			die;
+		}
+		$msg = substr($_GET['msg'],3);
 		$sekretKey ="Vital Ozierski";
-		$skey=$_GET['skey'];
+		//$skey=isset($_GET['skey']) ? $_GET['skey'] : '';
 		
 		$item =	Item::find_by_id($msg);
-		
-		if($skey == md5($_GET['sms_id'].$sekretKey) && $item && $item->type == "paid_2")
-		{
-			echo("ok");
-			echo("\n");
-			echo($item->user->phone);
-		}
+		if(!$item)
+			echo "ok\n неправильно введены данные";
+			else
+			{
+				echo("ok");
+				echo("\n");
+				echo($item->user->phone);
+			}
 		
 		die;
 	}

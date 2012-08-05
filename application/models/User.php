@@ -56,6 +56,9 @@ class User extends ActiveRecord\Model
         $CI =& get_instance();
 
         $CI->session->set_userdata("user_id", $user_id);
+		
+		$user = User::find_by_id($user_id);
+		$CI->session->set_userdata('access_admin', $user->is_access_admin);
     }
 
     public static function logout()

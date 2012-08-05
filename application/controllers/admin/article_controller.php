@@ -6,6 +6,9 @@ class Article_Controller extends MY_Controller
     {
         parent::__construct(true);
 
+				if(!$this->session->userdata('access_admin'))
+			show_404();
+		
         $images_dir = Config::get('article_images_dir');
         if (!file_exists($images_dir))
             mkdir($images_dir);

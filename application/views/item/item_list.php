@@ -1,4 +1,4 @@
-<?= $admin_filter ?>
+﻿<?= $admin_filter ?>
 
 <div id="item_list">
     <? if (!isset($items) || !$items): ?>
@@ -51,7 +51,7 @@
                     </div>
                     <div class="item-bottom-text">
 					<? if($item->type == "paid_2"): ?>
-					Отправьте смс с текстом "dogscat<?=$item->id?>" на короткий номер 4448 и в ответ получите номер телефона владельца щенка. Стоимость смс 60р.
+					Отправьте смс с текстом "ajp<?=$item->id?>" (английские буквы!) на короткий номер 4448 и в ответ получите номер телефона владельца щенка. Стоимость смс 60р.
 					<? else: ?>
                        <? if ($this->user && $this->user->access_edit): ?>
                         <?= $item->user->plain_contact.' - '.$item->price ?>

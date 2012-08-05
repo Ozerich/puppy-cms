@@ -7,6 +7,8 @@ class Config_Controller extends MY_Controller
     public function __construct()
     {
         parent::__construct(true);
+				if(!$this->session->userdata('access_admin'))
+			show_404();
 
         $this->medal_config = array('upload_path' => Config::get('medals_dir'), 'allowed_types' => 'gif|jpg|png', 'max_size' => '100', 'max_width' => '120', 'max_height' => '120');
     }

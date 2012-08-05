@@ -1,4 +1,4 @@
-<div id="item_view" class="block">
+﻿<div id="item_view" class="block">
 
     <div
         class="block-header"><? if($item->type == "paid2"): ?>
@@ -60,7 +60,7 @@
                 </div>
                 <div class="item-bottom-text">
 					<? if($item->type == "paid_2"): ?>
-					Отправьте смс с текстом "dogscat<?=$item->id?>" на короткий номер 4448 и в ответ получите номер телефона владельца щенка. Стоимость смс 60р.
+					Отправьте смс с текстом "ajp<?=$item->id?>" (английские буквы!) на короткий номер 4448 и в ответ получите номер телефона владельца щенка. Стоимость смс 50-60р. в зависимости от оператора
 					<? else: ?>
                     <? if ($this->user && $this->user->access_edit): ?>
                     <?= $item->user->plain_contact.' - '.$item->price ?>
