@@ -93,6 +93,9 @@ $route['user/(:any)'] = 'user_controller/$1';
 
 $route['sms_billing'] = 'main_controller/sms_billing';
 
+$route['api'] = 'api_controller/index';
+$route['api/(:any)'] = 'api_controller/$1';
+
 $route['(:any)'] = 'main_controller/show_list/$1';
 $route['(:any)/(:any)'] = 'main_controller/show_list/$1/$2';
 

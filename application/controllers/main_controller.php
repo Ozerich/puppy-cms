@@ -240,6 +240,7 @@ class Main_Controller extends MY_Controller
         if (!$item)
             redirect('/');
 
+
         $this->view_data['item'] = $item;
         $this->content_view = 'item/view';
     }

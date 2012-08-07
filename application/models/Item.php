@@ -271,6 +271,12 @@ class Item extends ActiveRecord\Model
         return $this->kind->parent_id == 0 ? $this->kind->id : $this->kind->parent_id;
     }
 
+    public function get_plain_price()
+    {
+        $city = City::find_by_id($this->city_id);
+        return $this->price." ".$city->valute;
+    }
+
 }
 
 ?>
