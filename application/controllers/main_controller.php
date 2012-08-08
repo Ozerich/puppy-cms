@@ -44,23 +44,43 @@ class Main_Controller extends MY_Controller
     public function show_list($city_alias = '', $kind_alias = '')
     {
         $city = City::find_by_alias($city_alias);
-        if (!$city) show_404();
+        if (!$city) 
+		{		
+		
+			$kind = Kind::find_by_alias($city_alias);
+			if(!$kind) 
+				show_404();
+		}
+		else
+			$kind = $kind_alias ? Kind::find_by_alias($kind_alias) : null;
 
-        $kind = $kind_alias ? Kind::find_by_alias($kind_alias) : null;
+		if(!$city)
+			$items = Item::all(array('conditions' => array('kind_id = ? AND status = ?', $kind->id, 'public'), 'order' => 'publish_time DESC'));
+        else
+		{
+			
+			$items = $kind ?
+				Item::all(array('conditions' => array('city_id = ? AND kind_id = ? AND status = ?', $city->id, $kind->id, 'public'), 'order' => 'publish_time DESC')) :
+				Item::all(array('conditions' => array('city_id = ? AND status = ?', $city->id, 'public'), 'order' => 'publish_time DESC'));
+		}
 
-        $items = $kind ?
-            Item::all(array('conditions' => array('city_id = ? AND kind_id = ? AND status = ?', $city->id, $kind->id, 'public'), 'order' => 'publish_time DESC')) :
-            Item::all(array('conditions' => array('city_id = ? AND status = ?', $city->id, 'public'), 'order' => 'publish_time DESC'));
-
-        $settings = $kind ? KindSetting::get($kind->id, $city->id) : KindSetting::get(1, $city->id);
+		
+        $settings = $kind && $city ? KindSetting::get($kind->id, $city->id) : ($city ? KindSetting::get(1, $city->id) : KindSetting::get(1,1));
         $this->view_data['filter_phone'] = $settings->phone;
 
         $this->view_data['text_before'] = $settings->beforelist_text;
         $this->view_data['text_after'] = $settings->afterlist_text;
 
-        $filter_data = array('filter_type' => '', 'cities' => array($city->id));
+		$cities_filter = array();
+		if($city)
+			$cities_filter = array($city->id);
+		else
+			foreach(City::all() as $city)
+				$cities_filter[] = $city->id;
+				
+        $filter_data = array('filter_type' => '', 'cities' => $cities_filter);
 
-        $data = array('items' => $items, 'cities' => array($city->id));
+        $data = array('items' => $items, 'cities' => $cities_filter);
         if ($kind)
             $filter_data['kinds'] = array($kind->id);
 
