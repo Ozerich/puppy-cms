@@ -147,6 +147,9 @@
                 <div id="header-left"></div>
                 <div id="header-right"></div>
             </a>
+           <a href="create" id="new-item"> Вход</a>
+<a href="create" id="new-item">Добавить объявление</a>
+<a href="http://dogscat.com/statji/tecnic/kontakt">Контакты</a>
         </div>
 
         <? if ($this->user): ?>

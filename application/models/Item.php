@@ -106,11 +106,10 @@ class Item extends ActiveRecord\Model
     public function get_preview_header()
     {
         $template = $this->main_kind->header_template;
-
         $template = str_replace('{{id}}', $this->id, $template);
         $template = str_replace('{{sex}}', $this->sex == 'man' ? 'мальчик' : 'девочка', $template);
-        $template = str_replace('{{weight}}', $this->weight . ' кг.', $template);
-        $template = str_replace('{{rost}}', $this->height . ' см.', $template);
+        $template = str_replace('{{weight}}', $this->field_weight . ' кг.', $template);
+        $template = str_replace('{{rost}}', $this->field_height . ' см.', $template);
         $template = str_replace('{{city}}', $this->city->name, $template);
         $template = str_replace('{{kind_name}}', $this->kind->name, $template);
 

@@ -53,6 +53,8 @@ class Api_Controller extends MY_Controller
         foreach($items as $item)
             $data[$item->id] = array(
                 'id' => $item->id,
+				'sex' => $item->sex,
+				'weight' => floatval($item->weight),
                 'link' => site_url('view/'.$item->id),
                 'preview_header' => $item->preview_header,
                 'preview_text' => $item->preview_text,

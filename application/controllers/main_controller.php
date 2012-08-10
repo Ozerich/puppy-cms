@@ -285,11 +285,11 @@ class Main_Controller extends MY_Controller
 
         $email_template = str_replace('{{$user}}', $item->user->fullname, $email_template);
         $email_template = str_replace('{{$site_name}}', Config::get('site_name'), $email_template);
-        $email_template = str_replace('{{$item_link}}', '<a href="dogscat.com/view/' . $item->id . '">перейти</a>', $email_template);
+        $email_template = str_replace('{{$item_link}}', '<a href="'.$_SERVER['HTTP_HOST'].'/view/' . $item->id . '">перейти</a>', $email_template);
         $email_template = str_replace('{{$item_finish_date}}', $item->finish_time ? $item->finish_time->format('d.m.Y H:i') : '-', $email_template);
         $email_template = str_replace('{{$item_animal}}', $item->animal_id == 1 ? 'щенка' : 'котёнка', $email_template);
         $email_template = str_replace('{{$item_animal}}', $item->animal_id == 1 ? 'щенка' : 'котёнка', $email_template);
-        $email_template = str_replace('{{$item_editlink}}', '<a href="dogscat.com/edit/' . $item->id . '">перейти</a>', $email_template);
+        $email_template = str_replace('{{$item_editlink}}', '<a href="'.$_SERVER['HTTP_HOST'].'/edit/' . $item->id . '">перейти</a>', $email_template);
 
         $site_email = Config::get('site_email');
 

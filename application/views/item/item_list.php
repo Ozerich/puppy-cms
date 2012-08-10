@@ -55,11 +55,16 @@
 					<? else: ?>
                        <? if ($this->user && $this->user->access_edit): ?>
                         <?= $item->user->plain_contact.' - '.$item->price ?>
+						
+					<br/><br/>
+					<?=$item->user->information?><br/>
+					<a href="/user/<?=$item->user_id?>">Редактировать пользователя</a>
                         <? else: ?>
                         <?=
                         $item->type != 'free' ?  $item->user->phone . " " . $item->user->name :
                             KindSetting::get($item->main_kind_id, $item->city_id)->phone . ' Консультант по породе бесплатно поможет вам выбрать '.($item->animal_id == 1 ? 'щенка' : 'котёнка').', посоветует питомник и даст номер телефона заводчика у которого вы сможете посмотреть и купить '.($item->animal_id == 1 ? 'щенка' : 'котёнка')?>
-                        <? endif; ?>
+                        <br/>					
+						<? endif; ?>
 					<? endif; ?>
                    </div>
                     <br clear="all"/>
