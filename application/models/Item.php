@@ -53,6 +53,11 @@ class Item extends ActiveRecord\Model
         $field = Field::height_field();
         return ItemField::get($this->id, $field->id);
     }
+	
+	public function get_wool_length()
+	{	
+		return ItemField::get($this->id, Field::wool_field_id());
+	}
 
     public function get_plain_paidtype()
     {

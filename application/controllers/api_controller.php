@@ -48,9 +48,15 @@ class Api_Controller extends MY_Controller
             $conditions['kind_id'] = $kind_id;
 
         $items = Item::find('all', array('conditions' => $conditions));
-        $data = array();
 
-        foreach($items as $item)
+		$data = array();
+		
+        foreach($items as $item){
+		
+			$wool_length = $item->wool_length;
+			if($wool_length)
+				$wool_length = $wool_length == 'короткошерстный' ? 'short' : 'long';
+				
             $data[$item->id] = array(
                 'id' => $item->id,
 				'sex' => $item->sex,
@@ -59,8 +65,11 @@ class Api_Controller extends MY_Controller
                 'preview_header' => $item->preview_header,
                 'preview_text' => $item->preview_text,
                 'preview_image' => site_url($item->preview_image),
-                'price' => $item->site_price);
-
+                'price' => $item->site_price,
+				'wool_length' => $wool_length,
+			);
+		}
+		
        $this->response($data);
     }
 }

@@ -132,8 +132,8 @@ class Main_Controller extends MY_Controller
 
         $items = Item::all(array('conditions' => $q, 'order' => 'publish_time DESC'));
 
-        $this->view_data['text_before'] = $settings->beforelist_text;
-        $this->view_data['text_after'] = $settings->afterlist_text;
+        $this->view_data['text_before'] = $settings ? $settings->beforelist_text : '';
+        $this->view_data['text_after'] = $settings ? $settings->afterlist_text : '';
 
         $admin_filter = $this->load->view('item/admin_filter.php', array('filter_type' => '', 'cities' => array($city), 'kinds' => array($kind)), true);
         $this->view_data['item_list'] = $this->load->view('item/item_list.php', array('items' => $items, 'cities' => array($city), 'kinds' => array($kind), 'admin_filter' => $admin_filter), true);
@@ -141,7 +141,7 @@ class Main_Controller extends MY_Controller
         echo json_encode(
             array(
                 'data' => $this->load->view('main/index.php', $this->view_data, true),
-                'phone' => $settings->phone));
+                'phone' => $settings ? $settings->phone : ''));
         die;
     }
 
@@ -285,11 +285,11 @@ class Main_Controller extends MY_Controller
 
         $email_template = str_replace('{{$user}}', $item->user->fullname, $email_template);
         $email_template = str_replace('{{$site_name}}', Config::get('site_name'), $email_template);
-        $email_template = str_replace('{{$item_link}}', '<a href="'.$_SERVER['HTTP_HOST'].'/view/' . $item->id . '">перейти</a>', $email_template);
+        $email_template = str_replace('{{$item_link}}', '<a href="dogscat.com/view/' . $item->id . '">перейти</a>', $email_template);
         $email_template = str_replace('{{$item_finish_date}}', $item->finish_time ? $item->finish_time->format('d.m.Y H:i') : '-', $email_template);
         $email_template = str_replace('{{$item_animal}}', $item->animal_id == 1 ? 'щенка' : 'котёнка', $email_template);
         $email_template = str_replace('{{$item_animal}}', $item->animal_id == 1 ? 'щенка' : 'котёнка', $email_template);
-        $email_template = str_replace('{{$item_editlink}}', '<a href="'.$_SERVER['HTTP_HOST'].'/edit/' . $item->id . '">перейти</a>', $email_template);
+        $email_template = str_replace('{{$item_editlink}}', '<a href="dogscat.com/edit/' . $item->id . '">перейти</a>', $email_template);
 
         $site_email = Config::get('site_email');
 
