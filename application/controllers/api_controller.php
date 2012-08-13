@@ -55,7 +55,7 @@ class Api_Controller extends MY_Controller
 		
 			$wool_length = $item->wool_length;
 			if($wool_length)
-				$wool_length = $wool_length == 'êîğîòêîøåğñòíûé' ? 'short' : 'long';
+				$wool_length = $wool_length == 'ĞºĞ¾Ñ€Ğ¾Ñ‚ĞºĞ¾ÑˆĞµÑ€ÑÑ‚Ğ½Ñ‹Ğ¹' ? 'short' : 'long';
 				
             $data[$item->id] = array(
                 'id' => $item->id,
