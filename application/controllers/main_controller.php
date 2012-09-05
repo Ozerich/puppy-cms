@@ -247,7 +247,6 @@ class Main_Controller extends MY_Controller
         $this->set_page_title('Главная страница');
 
         $admin_filter = $this->load->view('item/admin_filter.php', array('filter_type' => '',), true);
-
         $this->view_data['item_list'] = $this->load->view('item/item_list.php', array('items' => $items, 'admin_filter' => $admin_filter), true);
 
         $this->view_data['text_before'] = '';

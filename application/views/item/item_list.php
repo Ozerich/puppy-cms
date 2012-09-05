@@ -1,7 +1,5 @@
-﻿<?= $admin_filter ?>
-
 <div id="item_list">
-    <? if (!isset($items) || !$items): ?>
+<? if (!isset($items) || !$items): ?>
     <div class="no-items">
         <p>Объявлений не найдено</p>
     </div>

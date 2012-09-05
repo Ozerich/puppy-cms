@@ -28,6 +28,15 @@ class MY_Controller extends CI_Controller
             $this->view_folder = 'admin';
             $this->layout_view = 'admin';
         }
+		
+		$reviews = array();
+		foreach(Article::find('all', array('conditions' => array('category_id = ?', 7), 'order' => 'created_time DESC')) as $review)
+			$reviews[] = array(
+				'id' => $review->id,
+				'image' => site_url('img/articles/'.$review->image),
+				'preview' => $review->preview,
+			);
+		$this->view_data['all_reviews'] = $reviews;
     }
 
     public function _output($output)

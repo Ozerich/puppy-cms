@@ -441,6 +441,11 @@ $(document).ready(function () {
         $.get('profile/delete_item/' + $(block).find('.item-id').val());
         return false;
     });
+	
+	$('#reviews_block').css('height', $('.content-wr').height() + 'px');
+	setTimeout(function(){
+		$('#reviews_block').css('height', $('.content-wr').height() + 'px');
+	}, 2000);
 });
 
 function remind_password()

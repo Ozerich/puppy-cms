@@ -137,32 +137,51 @@
     <div id="right-wrapper">
         <div id="header">
 
-            <a href="/">
-                <div id="header-content">
-                    <h2>
-                        Щенки и котята от<br/>
-                        проверенных питомников
-                    </h2>
-                </div>
-                <div id="header-left"></div>
-                <div id="header-right"></div>
-            </a>
-           <a href="create" id="new-item"> Вход</a>
-<a href="create" id="new-item">Добавить объявление</a>
-<a href="http://dogscat.com/statji/tecnic/kontakt">Контакты</a>
-        </div>
+				<div class="header-phones">
+					<p>Москва <b>8 499 608-08-91</b></p>
+					<p>Санкт-Петербург <b>+7 931 288-72-23</b></p>
+					<p>Киев <b>097-289-72-23</b></p>
+					<p>Минск <b>+375 29 860-27-86</b></p>
+					<p><b>dogscatru@gmail.com</b></p>
+				</div>
 
-        <? if ($this->user): ?>
-        <div id="top_menu">
-            <a href="profile">Личный кабинет (объявления)</a>
-            <a href="logout">Выйти</a>
-            <a href="statji">Новости сайта</a>
-        </div>
-        <? endif; ?>
+			<div id="top_menu">	
 
-        <div id="content">
-            <?=$page_content?>
-        </div>
+			<? if ($this->user): ?>
+				<a href="/">Главная</a>
+				<a href="profile">Личный кабинет (объявления)</a>
+				<a href="logout">Выйти</a>
+				<a href="statji">Новости сайта</a>
+			<? else: ?>
+				<a href="/">Главная</a>
+				<a href="create" id="new-item">Добавить объявление</a>
+				<a href="http://dogscat.com/statji/tecnic/kontakt">Контакты</a>
+				<a href="create" id="new-item"> Вход</a>
+			<? endif; ?>
+			</div>
+			
+			<p class="header-text">
+				Звоните и получите бесплатную консультацию специалиста, договоритесь о времени просмотра щенка. 
+				Увидеть и купить щенка йоркширского терьера вы можете у заводчика.
+			</p>
+        
+		</div>
+		
+		<div class="content-wr">
+	
+			<div id="reviews_block">
+				<a href="<?=site_url('statji/otzyvy')?>" class="review_header">Отзывы</a>
+				<? foreach($all_reviews as $review): ?>
+					<div class="review">
+						<img src="<?=$review['image']?>"/>
+						<p><?=$review['preview']?></p>
+						<br clear="all"/>
+					</div>
+				<? endforeach; ?>
+			</div>
+			<div id="content"><?=$page_content?></div>
+			<br clear="all"/>
+		</div>
     </div>
     <br class="clear">
 </div>

@@ -1,4 +1,4 @@
-﻿<div id="item_view" class="block">
+<div id="item_view" class="block">
 
     <div
         class="block-header"><? if($item->type == "paid2"): ?>
