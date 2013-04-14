@@ -44,6 +44,12 @@
         <label for="html_bottom_2">HTML в левом блоке:</label>
         <textarea id="html_bottom_2" name="html_bottom_2"><?=Config::find_by_param('html_bottom_2')->value?></textarea>
     </div>
+
+    <div class="param text">
+        <label for="404_error">Текст на странице с 404:</label>
+        <textarea id="404_error" name="404"><?=Config::find_by_param('404')->value?></textarea>
+    </div>
+
     <div class="buttons">
         <input type="submit" class="noimg" value="Сохранить"/>
         <a href="admin/articles" class="noimg button">Отмена</a>

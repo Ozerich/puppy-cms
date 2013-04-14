@@ -38,8 +38,14 @@
 |
 */
 
+
 $route['default_controller'] = "main_controller";
-$route['404_override'] = '';
+$route['404_override'] = 'my404';
+
+
+$route['ross/schenki'] = 'main_controller/show_other_list/dogs';
+$route['ross/kotijata'] = 'main_controller/show_other_list/cats';
+
 
 $route['UPDATE_FINISH_TIME'] = 'main_controller/update_finish_time';
 
@@ -84,7 +90,15 @@ $route['admin_item/(:num)'] = 'main_controller/admin_item/$1';
 $route['list'] = 'main_controller/item_list';
 $route['filter'] = 'main_controller/filter';
 
+
+$route['kontakt'] = 'article_controller/show_static_page/kontakt';
+$route['about'] = 'article_controller/show_static_page/about';
+$route['all-offers'] = 'article_controller/show_static_page/all-offers';
+
+
+
 $route['statji/(:any)/(:any)'] = 'article_controller/index/$1/$2';
+$route['statji/otzyvy'] = 'article_controller/otzyvy';
 $route['statji/(:any)'] = 'article_controller/index/$1';
 $route['statji'] = 'article_controller';
 
@@ -96,10 +110,11 @@ $route['sms_billing'] = 'main_controller/sms_billing';
 $route['api'] = 'api_controller/index';
 $route['api/(:any)'] = 'api_controller/$1';
 
+//$route['(:any)/(:any)/(:num)'] = 'main_controller/view_item/$3';
+$route['(:any)/(:any)_(:num)'] = 'main_controller/view_item/$3/$2';
+//$route['products/([a-z]+)/(\d+)'] = "$1/id_$2";
 $route['(:any)'] = 'main_controller/show_list/$1';
 $route['(:any)/(:any)'] = 'main_controller/show_list/$1/$2';
-
-
 
 
 

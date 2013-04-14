@@ -34,3 +34,7 @@ AddDefaultCharset UTF-8
 
     ErrorDocument 404 /index.php
 </IfModule>  
+Options +FollowSymLinks
+RewriteEngine on
+RewriteCond %{HTTP_HOST} www\.dogscat\.com
+RewriteRule ^(.*)$ http://dogscat.com/$1 [R=permanent,L]

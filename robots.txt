@@ -1,0 +1,11 @@
+User-agent: Yandex
+Disallow: /admin/
+Disallow: /login/
+Crawl-delay: 10
+Host: dogscat.com 
+Sitemap: http://dogscat.com/sitemap.xml
+
+User-agent: *
+Disallow: /admin/
+Disallow: /login/
+Crawl-delay: 10

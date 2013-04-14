@@ -44,7 +44,6 @@ class Kind_Controller extends MY_Controller
     public function view($kind_id = 0)
     {
         $kind = Kind::find_by_id($kind_id);
-
         if (!$kind) {
             show_404();
             exit();

@@ -6,7 +6,7 @@
     <div class="block-content item-block">
         <div class="left-wrapper">
             <div class="item-image">
-                <a rel="photo" href="<?=$item->preview_image?>"><img src="<?=$item->preview_image?>"/></a>
+                <a rel="photo" href="<?=$item->preview_image?>"><img alt="<?=$item->preview_header?>" title="<?=$item->preview_header?>" src="<?=$item->preview_image?>"/></a>
             </div>
             <div class="item-gallery">
                 <p class="gallery-header">

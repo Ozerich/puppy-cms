@@ -1,8 +1,20 @@
 <?php
+$redirects = array(
+	'spb-chih.ru' => 'http://dogscat.com/spb/chihuahua',
+	'spb-shpic.ru' => 'http://dogscat.com/spb/shpiz',
+	'spb-york.ru' => 'http://dogscat.com/spb/yorkshirskiy-terrier',
+	'moscow-husky.ru' => 'http://dogscat.com/moscow/krupnye-porodi',
+	'moscow-chih.ru' => 'http://dogscat.com/moscow/chihuahua',
+	'moscow-york.ru' => 'http://dogscat.com/moscow/yorkshirskiy-terrier',
+);
+if(isset($redirects[$_SERVER['HTTP_HOST']])){
+	header("HTTP/1.1 301 Moved Permanently"); 
+	header("Location: ".$redirects[$_SERVER['HTTP_HOST']]); 
+	exit;
+}
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 date_default_timezone_set('Europe/Moscow');
-
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT

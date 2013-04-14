@@ -1,8 +1,8 @@
 jQuery.fn.setdatepicker = function () {
     var val = $(this).val();
     $(this).datepicker({
-        changeMonth:true,
-        changeYear:true
+        changeMonth: true,
+        changeYear: true
     }).datepicker("option", "showAnim", "blind").datepicker("option", "dateFormat", 'dd.mm.yy').val(val);
     return $(this);
 }
@@ -77,7 +77,14 @@ function update_item(event, item_id) {
 }
 
 function CheckItemErrors(is_edit) {
-    var error_block = $('.error-block ul').empty();
+    var error_block = $('.error-block ul').empty()
+
+    if ($('#title').val().length == 0) {
+        $(error_block).append('<li>Вы не указали заголовок объявления</li>');
+    }
+    else if ($('#title').val().trim().length > 70) {
+        $(error_block).append('<li>Заголовок должен содержать не более 70 символов</li>');
+    }
 
     if ($('#birthday').val().length == 0)
         $(error_block).append('<li>Дата рождения не выбрана</li>');
@@ -153,6 +160,8 @@ function FinishUploadFiles(errors, is_edit, is_save) {
 
     data += '&organization=' + $('.organization-block:visible input[type=radio]:checked').val();
 
+    data += '&title=' + $('#title').val();
+
     data += '&documents=';
     var doc_count = 0;
     $('.documents:visible input[type=checkbox]:checked').each(function () {
@@ -161,17 +170,17 @@ function FinishUploadFiles(errors, is_edit, is_save) {
     });
 
     $.ajax({
-        url:is_edit ? 'edit/' + $('#item_id').val() : 'profile/add_item',
-        data:data + '&is_save=' + (is_save ? 1 : 0),
-        type:'post',
-        success:function (data) {
-            document.location = 'view/' + data;
+        url: is_edit ? 'edit/' + $('#item_id').val() : 'profile/add_item',
+        data: data + '&is_save=' + (is_save ? 1 : 0),
+        type: 'post',
+        success: function (data) {
+            document.location = data;
         },
-        error:function () {
+        error: function () {
             $('#new_item_submit').show();
             $('#edit_item_submit').show();
         },
-        complete:function () {
+        complete: function () {
             $('#data_loader').hide();
             $('#new_item_submit').show();
             $('#edit_item_submit').show();
@@ -363,12 +372,12 @@ $(document).ready(function () {
         $('#file_loader').show();
 
         var files = [];
-        files.push({'id':'mother_image', 'name':'Фотография мамы'});
-        files.push({'id':'father_image', 'name':'Фотография папы'});
-        files.push({'id':'main_image', 'name':'Основная фотография'});
+        files.push({'id': 'mother_image', 'name': 'Фотография мамы'});
+        files.push({'id': 'father_image', 'name': 'Фотография папы'});
+        files.push({'id': 'main_image', 'name': 'Основная фотография'});
         var count = 1;
         $('#new-item .images .image').not('.mainimage').find('input[type=file]').each(function () {
-            files.push({'id':$(this).attr('id'), 'name':'Фотография ' + count++});
+            files.push({'id': $(this).attr('id'), 'name': 'Фотография ' + count++});
         });
 
         var good_count = 0;
@@ -387,18 +396,18 @@ $(document).ready(function () {
                 continue;
             $.ajaxFileUpload(
                 {
-                    url:'profile/upload_image/' + file.id,
-                    secureuri:false,
-                    fileElementId:file.id,
-                    async:false,
-                    success:function (data, status) {
+                    url: 'profile/upload_image/' + file.id,
+                    secureuri: false,
+                    fileElementId: file.id,
+                    async: false,
+                    success: function (data, status) {
                         if (typeof(data.error) != 'undefined') {
                             if (data.error != '') {
                                 alert(data.error);
                             }
                         }
                     },
-                    complete:function (jqXHR, textStatus) {
+                    complete: function (jqXHR, textStatus) {
                         data = jQuery.parseJSON(jqXHR.responseText);
                         if (data.error == 1)
                             errors = data.error_text;
@@ -418,7 +427,7 @@ $(document).ready(function () {
     update_list_events();
 
     if ($('#item_view .left-wrapper a[rel=photo]').size())
-        $('#item_view .left-wrapper a[rel=photo]').colorbox({maxWidth:750, maxHeight:600});
+        $('#item_view .left-wrapper a[rel=photo]').colorbox({maxWidth: 750, maxHeight: 600});
 
     update_user_items_events();
 
@@ -441,15 +450,14 @@ $(document).ready(function () {
         $.get('profile/delete_item/' + $(block).find('.item-id').val());
         return false;
     });
-	
-	$('#reviews_block').css('height', $('.content-wr').height() + 'px');
-	setTimeout(function(){
-		$('#reviews_block').css('height', $('.content-wr').height() + 'px');
-	}, 2000);
+
+    $('#reviews_block').css('height', $('.content-wr').height() + 'px');
+    setTimeout(function () {
+        $('#reviews_block').css('height', $('.content-wr').height() + 'px');
+    }, 2000);
 });
 
-function remind_password()
-{
+function remind_password() {
     $('#remind_password').hide();
     $('#remind_password_ok').show();
     $.post('auth/remind', 'email=' + $('#email_remind').val());

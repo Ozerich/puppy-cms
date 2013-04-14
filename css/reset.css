@@ -120,3 +120,11 @@ q:before, q:after {
 }
 
 /* --------------- /базовые настройки ---------*/
+
+#item_list .item-content > a {
+    color: #f26521;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 5px;
+    text-decoration: none;
+}

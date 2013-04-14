@@ -1,5 +1,6 @@
 <? if ($this->user && $this->user->access_edit): ?>
 <div id="admin_filter">
+	
     <?=form_open('list', array('id' => 'admin_filter_form'))?>
     <div class="status-filter">
         <a href="#" <?=isset($filter_type) && $filter_type == "new_and_edit" ? 'class="current"' : ''?>

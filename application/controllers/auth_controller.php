@@ -37,15 +37,24 @@ class Auth_Controller extends MY_Controller
 
         $email_template = str_replace("\n", '<br/>', $email_template);
 
-        $this->email->initialize(array('mailtype' => 'html'));
+        $this->email->initialize(array(
+				'mailtype' => 'html',
+
+		));
 
         $this->email->from($site_email, 'dogscat.com');
         $this->email->to($user->email);
 
         $this->email->subject('Регистрация на сайте');
         $this->email->message($email_template);
-
-        $this->email->send();
+/*
+$headers  = 'MIME-Version: 1.0' . "\r\n";
+$headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+$headers .= 'To:'.$user->email . "\r\n";
+$headers .= 'From:  Dogscat.com <info@dogscat.com>' . "\r\n";
+mail($user->email, 'Регистрация на сайте', $email_template, $headers);
+*/
+        $result = $this->email->send();
     }
 
     public function register()
@@ -73,7 +82,7 @@ class Auth_Controller extends MY_Controller
             User::login($user->id);
             redirect('profile');
         }
-        else show_404();
+      //  else show_404();
     }
 
     public function user()
@@ -105,6 +114,10 @@ class Auth_Controller extends MY_Controller
 
         $this->layout_view = 'application';
         $this->set_page_title('Вход в систему');
+		
+		$this->view_data['meta_keywords'] = 'продажа щенков, продам щенка, где продать щенков, как продать щенков';
+		$this->view_data['meta_description'] = 'Доверьте такое хлопотное дело, как продажа щенков и котят, нам - DogsCat.com окажет помощь абсолютно бесплатно. Оставьте себе самое приятное - выставки и разведение.';
+		$this->view_data['page_title'] = 'Регистрация на сайте DogsCat.com просто и быстро';
     }
 
     public function logout()

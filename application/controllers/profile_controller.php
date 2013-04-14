@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(E_STRICT);
 class Profile_Controller extends MY_Controller
 {
     public function __construct()
@@ -103,18 +103,16 @@ class Profile_Controller extends MY_Controller
 
         $this->upload->initialize(array(
             'upload_path' => 'img/tmp',
-            'allowed_types' => 'gif|jpg|png|jpeg|bmp',
+            'allowed_types' => 'gif|jpg|png|jpeg|bmp|jpeg',
             'encrypt_name' => TRUE
         ));
 
         $data = array();
 
         if (!$this->upload->do_upload(key($_FILES))) {
-            $data = $this->upload->display_errors('','');
+            $data = $this->upload->display_errors('', '');
             $data = json_encode(array('error' => 1, 'error_text' => $data));
-        }
-        else
-        {
+        } else {
             $file_data = $this->upload->data();
             $data = json_encode(array('error' => 0, 'id' => $elem_id, 'filename' => $file_data['file_name']));
         }
@@ -127,7 +125,7 @@ class Profile_Controller extends MY_Controller
     {
         $item = Item::find_by_id($item_id);
 
-        if(!$item || !$this->user || !$this->user->access_edit)
+        if (!$item || !$this->user || !$this->user->access_edit)
             show_404();
         $item->delete();
 
@@ -155,18 +153,19 @@ class Profile_Controller extends MY_Controller
 
             $item->kind_id = $kind->id;
             $item->plant_count = $this->input->post('plant_count');
+            $item->title = trim($this->input->post('title'));
             $item->plant_name = $this->input->post('plant_name');
             $item->birthday = inputdate_to_mysqldate($this->input->post('birthday'));
             $item->organization_id = $this->input->post('organization');
             $item->mother_name = $this->input->post('mother_name');
             $item->mother_age = $this->input->post('mother_age');
-            $item->mother_weight = str_replace(',','.',$this->input->post('mother_weight'));
-            $item->mother_height = str_replace(',','.',$this->input->post('mother_height'));
+            $item->mother_weight = str_replace(',', '.', $this->input->post('mother_weight'));
+            $item->mother_height = str_replace(',', '.', $this->input->post('mother_height'));
             $item->mother_prizes = $this->input->post('mother_prizes');
             $item->father_name = $this->input->post('father_name');
             $item->father_age = $this->input->post('father_age');
-            $item->father_weight = str_replace(',','.',$this->input->post('father_weight'));
-            $item->father_height = str_replace(',','.',$this->input->post('father_height'));
+            $item->father_weight = str_replace(',', '.', $this->input->post('father_weight'));
+            $item->father_height = str_replace(',', '.', $this->input->post('father_height'));
             $item->father_prizes = $this->input->post('father_prizes');
             $item->sex = $this->input->post('sex');
             $item->video = $this->input->post('video');
@@ -199,8 +198,7 @@ class Profile_Controller extends MY_Controller
                 if ($doc)
                     ItemDocument::create(array('item_id' => $item->id, 'document_id' => $doc));
 
-            for ($i = 1; $i <= Config::get('item_images_count'); $i++)
-            {
+            for ($i = 1; $i <= Config::get('item_images_count'); $i++) {
                 if ($this->input->post('image' . $i . '_filename')) {
                     ItemImage::table()->delete(array('item_id' => $item->id, 'pos' => $i));
                     ItemImage::create(array('item_id' => $item->id, 'pos' => $i, 'image' => $this->proc_image($item->id, 'photo_' . $i,
@@ -211,11 +209,11 @@ class Profile_Controller extends MY_Controller
             foreach ($kind->fields as $field)
                 ItemField::create(array('item_id' => $item->id, 'field_id' => $field->id, 'value' => $this->input->post('param_' . $field->id)));
 
-            $item->weight = $item->field_weight;
-            $item->height = $item->field_height;
+            $item->weight = str_replace(',', '.', $item->field_weight);
+            $item->height = str_replace(',', '.', $item->field_height);
             $item->save();
 
-            echo $item->id;
+            echo $item->url;
             exit();
         }
 
@@ -239,6 +237,7 @@ class Profile_Controller extends MY_Controller
         $item = Item::create(array(
             'user_id' => $this->user->id,
             'city_id' => $this->user->city_id,
+            'title' => trim($this->input->post('title')),
             'kind_id' => $kind->id,
             'animal_id' => $animal_id,
             'plant_count' => $this->input->post('plant_count'),
@@ -247,13 +246,13 @@ class Profile_Controller extends MY_Controller
             'organization_id' => $this->input->post('organization'),
             'mother_name' => $this->input->post('mother_name'),
             'mother_age' => $this->input->post('mother_age'),
-            'mother_weight' => str_replace(',','.',$this->input->post('mother_weight')),
-            'mother_height' => str_replace(',','.',$this->input->post('mother_height')),
+            'mother_weight' => str_replace(',', '.', $this->input->post('mother_weight')),
+            'mother_height' => str_replace(',', '.', $this->input->post('mother_height')),
             'mother_prizes' => $this->input->post('mother_prizes'),
             'father_name' => $this->input->post('father_name'),
             'father_age' => $this->input->post('father_age'),
-            'father_weight' => str_replace(',','.',$this->input->post('father_weight')),
-            'father_height' => str_replace(',','.',$this->input->post('father_height')),
+            'father_weight' => str_replace(',', '.', $this->input->post('father_weight')),
+            'father_height' => str_replace(',', '.', $this->input->post('father_height')),
             'father_prizes' => $this->input->post('father_prizes'),
             'sex' => $this->input->post('sex'),
             'video' => $this->input->post('video'),
@@ -289,11 +288,11 @@ class Profile_Controller extends MY_Controller
         foreach ($kind->fields as $field)
             ItemField::create(array('item_id' => $item->id, 'field_id' => $field->id, 'value' => $this->input->post('param_' . $field->id)));
 
-        $item->weight = $item->field_weight;
-        $item->height = $item->field_height;
+        $item->weight = str_replace(',', '.', $item->field_weight);
+        $item->height = str_replace(',', '.', $item->field_height);
         $item->save();
 
-        echo $item->id;
+        echo $item->url;
         exit();
     }
 

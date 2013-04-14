@@ -21,7 +21,6 @@ html {
 body {
     background: #fce1ce;
     font-family: Verdana, sans-serif;
-    padding: 0 5px;
     height: 100%;
 }
 
@@ -33,12 +32,21 @@ button, input[type=submit], a.button {
     color: #fff;
     font-weight: bold;
     padding: 7px 20px;
-    font-size: 18px;
+    font-size: 16px;
+
 
     &:hover {
         text-decoration: none;
         background: #f53700;
     }
+}
+
+button:hover, input[type=submit]:hover, a.button:hover {
+	color:#F7F7B3;
+	background-color:red;
+	-webkit-box-shadow: 0px 0px 9px rgba(255, 0, 0, 0.35);
+	-moz-box-shadow:    0px 0px 9px rgba(255, 0, 0, 0.35);
+	box-shadow:         0px 0px 9px rgba(255, 0, 0, 0.35);
 }
 
 textarea, input[type=text], input[type=password] {
@@ -64,52 +72,76 @@ label {
     vertical-align: top;
 }
 
+#container-main {
+	width: 98%;	
+	min-width:980px;
+	/*max-width:1660px;*/
+	max-width:1280px;
+    margin:0 auto;
+	padding:0 1%;
+}
 #main-wrapper {
-    width: 100%;
+	
 }
 
 #left-wrapper {
-    width: 300px;
-    padding: 0 10px;
-    background: url('img/filter_img.png') no-repeat center 9px;
+    width: 220px;
+    padding: 0 5px 0 0;
+    background: url('img/filter_img.png') no-repeat center 17px;
     float: left;
     text-align: center;
 }
 
 #right-wrapper {
-    margin-left: 320px;
+    margin-left: 228px;
 }
 
 #filter {
-    margin-top: 110px;
-    border: 4px solid #f75d00;
-    .border-radius(10px, 10px, 10px, 10px);
+    margin-top: 117px;
     text-align: center;
-    padding: 40px 20px 20px 20px;
+    padding: 0 20px 15px 20px;
+}
+#filter,#reviews_block {
+	border: 2px solid #f75d00;
+    -webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	background: #F7CAAD;
 }
 
-#filter h3 {
-    font-size: 18px;
+#left-content {
+	
+}
+#contacts {
+float:right;
+}
+#contacts td { padding:0 5px; }
+div.clear-right {clear:right;}
+
+#filter h3,#reviews_block h3 {
+    font-size: 16px;
     color: #ec5a02;
     font-weight: bold;
-	margin: 0 -20px;
+	text-align:center;
 }
-
+#reviews_block h3 {
+	margin:10px 0 10px;
+}
 #filter_phone {
-    font-size: 24px;
+    font-size: 16px;
     color: #ec5a02;
     font-weight: bold;
-    margin-bottom: 15px;
-    margin-top: -15px;
+    margin: 10px 0 15px;
+    /*margin-top: -15px;*/
 }
 
 #filter #filter-form {
     text-align: left;
-    margin-top: 20px;
+    margin-top: 12px;
 }
 
 #filter #filter-form .filter-param {
-    margin-bottom: 25px;
+    margin-bottom: 8px;
 }
 
 #filter #filter-form .filter-param label {
@@ -124,17 +156,20 @@ label {
 #filter #filter-form .filter-param select {
     width: 172px;
     height: 25px;
+	padding:3px 0;
 }
 
 #filter #filter_submit {
     border: none;
-    font-size: 27px;
+    font-size: 16px;
     font-weight: bold;
     color: #fff;
     background: #f75d00;
     padding: 10px 47px;
     .border-radius(10px, 10px, 10px, 10px);
+	margin-top:8px;
 }
+
 
 #filter #filter_loading {
     display: none;
@@ -143,14 +178,14 @@ label {
 #left-wrapper #new-item {
     color: #f75d00;
     font-weight: bold;
-    font-size: 25px;
+    font-size: 18px;
     text-decoration: underline;
-    padding-top: 20px;
+    padding-top: 15px;
     display: inline-block;
 }
 
 #header {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 	padding: 2px 3px 0;
 }
 
@@ -166,7 +201,8 @@ label {
 #header .header-text{
 	font-size: 14px;
 	color: #72655d;
-	padding: 0 3px;
+	padding: 0 3px 0 14px;
+	margin-top: 8px;
 }
 
 #header-left, #header-right {
@@ -195,17 +231,17 @@ label {
 
 #footer_1, #footer_2 {
     border-top: 4px solid #f66903;
-    padding: 20px 0;
+    padding: 20px 10px;
 }
 
 #reviews_block{
-	width: 260px;
-	background: #fff;
-	height: 100%;
+	height: auto !important;
 	min-height: 100%;
 	padding: 3px;
-	float: right;
+	margin-top:10px;
+	text-align:left;
 }
+#reviews_block span,#reviews_block p {background: #F7CAAD !important;}
 
 #reviews_block .review_header{
 	text-align: center;
@@ -214,9 +250,9 @@ label {
 	border-bottom: 1px solid #ea6627;
 	padding-bottom: 2px;
 	font-weight: bold;
-	font-size: 18px;
+	font-size: 14px;
 }
-
+#filter_loading { width:150px;}
 #reviews_block .review{
 	padding: 4px 5px;
 	border-bottom: 1px solid #ea6627;
@@ -233,22 +269,30 @@ label {
 }
 
 #content {
-	margin-right: 270px;
+	
 }
 
-#top_menu {
+#top_menu,#top_menu_bottom {
 	background:#F75D00;
-	.border-radius(5px, 5px, 5px, 5px);
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 	margin: 5px 0 3px;
 }
-
-#top_menu a {
+#top_menu_bottom {
+text-align:center;
+}
+#top_menu a:hover, #top_menu_bottom a:hover {text-decoration:none;color:#F7F73B;}
+#top_menu a,#top_menu_bottom a {
     display: inline-block;
     color: #fff;
-    margin: 5px 0 5px 15px;
+    margin: 5px 0 5px 7px;
 	font-weight: bold;
 }
-
+span.sep {
+	color:#F7CAAD;
+	margin-left:5px;
+}
 .block {
     margin-bottom: 15px;
 }
@@ -260,6 +304,12 @@ label {
     font-weight: bold;
     display: block;
     padding: 9px 16px;
+	-webkit-border-top-left-radius: 8px;
+-webkit-border-top-right-radius: 8px;
+-moz-border-radius-topleft: 8px;
+-moz-border-radius-topright: 8px;
+border-top-left-radius: 8px;
+border-top-right-radius: 8px;
 }
 
 .block .block-header .header-left {
@@ -274,9 +324,10 @@ label {
 
 .block .block-content {
     background: #fff;
-    padding: 4px;
+    padding: 10px;
 	overflow: hidden;
 }
+#footer_1 {background:#F7CAAD;}
 
 .login-param {
     display: inline-block;
@@ -372,7 +423,11 @@ label {
 }
 
 #new-item {
-    padding: 5px 20px 5px 10px;
+    /*padding: 5px 20px 5px 10px;*/
+}
+
+#new-item .param-title{
+  margin-bottom: 10px;
 }
 
 #new-item .top-info .param {
@@ -388,6 +443,10 @@ label {
 
 #new-item .top-info .param.plant-param {
     width: 358px;
+}
+
+#new-item label .example{
+	font-size: 70%;
 }
 
 #new-item .top-info .param label {
@@ -798,7 +857,7 @@ label {
     text-decoration: none;
 }
 
-#item_list .item-block .item-content h2, #item_view .top-content h2 {
+#item_list .item-block .item-content h2, #item_view .top-content h2, #item_view .item-content a {
     color: #f26521;
     font-weight: bold;
     font-size: 16px;
@@ -807,8 +866,17 @@ label {
 }
 
 #item_list .item-block .item-content p, #item_view .top-content p {
-    font-size: 13px;
+    font-size: 14px;
 }
+#breadcrums {
+margin:12px 0 0 15px;
+color:#E8040E;
+font-weight:bold;
+}
+#breadcrums a {
+color:#E8040E;
+}
+#breadcrums a:hover {text-decoration:underline;}
 
 #item_view .top-content-wr {
     overflow: hidden;

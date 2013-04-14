@@ -138,8 +138,11 @@ class User extends ActiveRecord\Model
 
         $this->pass = $new_pass;
         $this->save();
-
-        mail($this->email, 'Новый пароль к сайту', 'Ваш новый пароль: '.$new_pass);
+$headers  = 'MIME-Version: 1.0' . "\r\n";
+$headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+$headers .= 'To:'.$this->email . "\r\n";
+$headers .= 'From:  Dogscat.com <info@dogscat.com>' . "\r\n";
+        mail($this->email, 'Новый пароль к сайту', 'Ваш новый пароль: '.$new_pass, $headers);
     }
 }
 

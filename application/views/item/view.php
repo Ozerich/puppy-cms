@@ -11,7 +11,7 @@
     <div class="block-content item-block">
         <div class="left-wrapper">
             <div class="item-image">
-                <a rel="photo" href="<?=$item->preview_image?>"><img src="<?=$item->preview_image?>"/></a>
+                <a rel="photo" href="<?=$item->preview_image?>"><img src="<?=$item->preview_image?>" alt="<?=$item->preview_header?>" title="<?=$item->preview_header?>" /></a>
             </div>
             <div class="item-gallery">
                 <p class="gallery-header">
@@ -23,7 +23,7 @@
 
                     <? $img_count = 1; foreach ($item->images as $image): if ($image->image): ?>
                     <a <?=$img_count++ % 2 == 0 ? 'class="odd"' : ''?>
-                        href="<?=Config::get('item_images_dir') . $image->image?>" rel="photo"><img title=""
+                        href="<?=Config::get('item_images_dir') . $image->image?>" rel="photo"><img title="<?=$item->preview_header?>" alt="<?=$item->preview_header?>" 
                                                                                                     src="<?=Config::get('item_images_dir') . $image->image?>"/></a>
                     <? endif; endforeach; ?>
                     <? if ($item->mother_image): ?>
@@ -58,19 +58,24 @@
 
                     <p><?=$item->preview_text?></p>
                 </div>
-                <div class="item-bottom-text">
-					<? if($item->type == "paid_2"): ?>
-					Отправьте смс с текстом "ajp<?=$item->id?>" (английские буквы!) на короткий номер 4448 и в ответ получите номер телефона владельца щенка. Стоимость смс 50-60р. в зависимости от оператора
-					<? else: ?>
-                    <? if ($this->user && $this->user->access_edit): ?>
-                    <?= $item->user->plain_contact.' - '.$item->price ?>
-                    <? else: ?>
-                    <?=
-                    $item->type != 'free' ?  $item->user->phone . " " . $item->user->name :
-                        KindSetting::get($item->main_kind_id, $item->city_id)->phone . ' Консультант по породе бесплатно поможет вам выбрать '.($item->animal_id == 1 ? 'щенка' : 'котёнка').', посоветует питомник и даст номер телефона заводчика у которого вы сможете посмотреть и купить '.($item->animal_id == 1 ? 'щенка' : 'котёнка')?>
-                    <? endif; ?>
-                    <? endif; ?>
-                </div>
+               
+				
+		<?php //		<div class="item-bottom-text"> ?>
+					<? //if($item->type == "paid_2"): ?>
+			<?php //		Отправьте смс с текстом "ajp<?=$item->id?> <?php //" ?> <?php //(английские буквы!) на короткий номер 4448 и в ответ получите номер телефона владельца щенка. Стоимость смс 50-60р. в зависимости от оператора ?>
+					<? //else: ?>
+                    <? //if ($this->user && $this->user->access_edit): ?>
+                    <?//= $item->user->plain_contact.' - '.$item->price ?>
+                    <? //else: ?>
+                    <?//=
+                    //$item->type != 'free' ?  $item->user->phone . " " . $item->user->name :
+                    //    KindSetting::get($item->main_kind_id, $item->city_id)->phone . ' Консультант по породе бесплатно поможет вам выбрать '.($item->animal_id == 1 ? 'щенка' : 'котёнка').', посоветует питомник и даст номер телефона заводчика у которого вы сможете посмотреть и купить '.($item->animal_id == 1 ? 'щенка' : 'котёнка')?>
+                    <? //endif; ?>
+                    <? //endif; ?>
+    <?php //            </div> ?>
+				
+				
+				
                 <br clear="all"/>
             </div>
             <div class="main-content">

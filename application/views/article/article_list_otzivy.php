@@ -6,8 +6,7 @@
             Нету статей
         </div>
         <? else: foreach ($articles as $article): ?>
-				<?php if(($article->category && $article->category->alias=='otzyvy') || ($article->alias && $article->alias=='kontakt')  || ($article->alias && $article->alias=='about') || ($article->alias && $article->alias=='all-offers')) continue; ?>
-		
+		<?php if(($article->alias && $article->alias=='kontakt')  || ($article->alias && $article->alias=='about') || ($article->alias && $article->alias=='all-offers')) continue; ?>
         <div class="article">
             <div class="article-image">
                 <a href="statji/<?=$article->category ? $article->category->alias . '/' : ''?><?=$article->alias?>">

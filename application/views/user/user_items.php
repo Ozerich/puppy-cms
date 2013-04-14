@@ -15,7 +15,7 @@
 </tr>
     <? else: foreach ($items as $item): ?>
 <tr class="item-line">
-    <td class="num"><a href="view/<?=$item->id?>"><?=$item->id?></a></td>
+    <td class="num"><a href="<?=$item->url?>"><?=$item->id?></a></td>
     <td class="status"><?=$item->plain_status?></td>
     <td class="date"><?=$item->created_time ? $item->created_time->format('d.M.y') : '-'?></td>
     <td class="date"><?=$item->closed_time ? $item->closed_time->format('d.M.y') : '-'?></td>

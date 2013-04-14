@@ -34,6 +34,7 @@ class Item extends ActiveRecord\Model
 
     public function get_kind()
     {
+
         return Kind::find_by_id($this->kind_id);
     }
 
@@ -53,19 +54,18 @@ class Item extends ActiveRecord\Model
         $field = Field::height_field();
         return ItemField::get($this->id, $field->id);
     }
-	
-	public function get_wool_length()
-	{	
-		return ItemField::get($this->id, Field::wool_field_id());
-	}
+
+    public function get_wool_length()
+    {
+        return ItemField::get($this->id, Field::wool_field_id());
+    }
 
     public function get_plain_paidtype()
     {
         if ($this->type == 'free')
             return 'Бесплатное (сверх цены добавлена комиссия)';
         elseif ($this->type == 'paid_1')
-            return 'Платное "Недорого"';
-        elseif ($this->type == 'paid_2')
+            return 'Платное "Недорого"'; elseif ($this->type == 'paid_2')
             return 'Платное "Без проблем"';
 
         return 'Не опознаный тип';
@@ -79,8 +79,7 @@ class Item extends ActiveRecord\Model
 
     public function get_plain_status()
     {
-        switch ($this->status)
-        {
+        switch ($this->status) {
             case 'created':
                 return "Новое. Ждет модерации";
             case 'edited':
@@ -108,10 +107,12 @@ class Item extends ActiveRecord\Model
         return Animal::find_by_id($this->animal_id);
     }
 
+
     public function get_preview_header()
     {
         $template = $this->main_kind->header_template;
         $template = str_replace('{{id}}', $this->id, $template);
+        $template = str_replace('{{title}}', $this->title, $template);
         $template = str_replace('{{sex}}', $this->sex == 'man' ? 'мальчик' : 'девочка', $template);
         $template = str_replace('{{weight}}', $this->field_weight . ' кг.', $template);
         $template = str_replace('{{rost}}', $this->field_height . ' см.', $template);
@@ -139,6 +140,12 @@ class Item extends ActiveRecord\Model
         $template = str_replace('{{weight}}', $this->weight . ' кг.', $template);
         $template = str_replace('{{rost}}', $this->height . ' см.', $template);
         $template = str_replace('{{opis_drugich}}', $this->another, $template);
+        $template = str_replace('{{title}}', $this->title, $template);
+        $template = str_replace('{{id}}', $this->id, $template);
+        $template = str_replace('{{weight}}', $this->field_weight . ' кг.', $template);
+        $template = str_replace('{{rost}}', $this->field_height . ' см.', $template);
+        $template = str_replace('{{city}}', $this->city->name, $template);
+        $template = str_replace('{{sex}}', $this->sex == 'man' ? 'мальчик' : 'девочка', $template);
 
         $wool_length = ItemField::get($this->id, Field::wool_field_id());
         $template = str_replace('{{dlina_sher}}', $wool_length, $template);
@@ -151,17 +158,28 @@ class Item extends ActiveRecord\Model
     {
         $template = $this->main_kind->text_template;
 
-
         $template = str_replace('{{ears}}', ItemField::get($this->id, Field::ears_field_id()), $template);
         $template = str_replace('{{tail}}', ItemField::get($this->id, Field::tail_field_id()), $template);
         $template = str_replace('{{wool_length}}', ItemField::get($this->id, Field::wool_field_id()), $template);
         $template = str_replace('{{bite}}', ItemField::get($this->id, Field::bite_field_id()), $template);
         $template = str_replace('{{okras}}', ItemField::get($this->id, Field::okras_field_id()), $template);
-		if($this->type != "paid_2")
-        $template = str_replace('{{kontakt}}', $this->type != 'free' ? '<span style="color: #F26521;font-weight: bold;font-size: 16px;">Звоните: ' . $this->user->phone . " " . $this->user->name . '</span>' :
-                    '<span style="color: #F26521;font-weight: bold;font-size: 16px;">' . KindSetting::get($this->main_kind_id, $this->city_id)->phone . '</span>   Консультант по породе бесплатно поможет вам выбрать ' . ($this->animal_id == 1 ? 'щенка' : 'котёнка') . ', посоветует питомник и даст номер телефона заводчика у которого вы сможете посмотреть и купить ' . ($this->animal_id == 1 ? 'щенка' : 'котёнка')
-            , $template);
-		$template = str_replace('{{kontakt}}', '', $template);
+        $template = str_replace('{{title}}', $this->title, $template);
+        $template = str_replace('{{id}}', $this->id, $template);
+        $template = str_replace('{{weight}}', $this->field_weight . ' кг.', $template);
+        $template = str_replace('{{rost}}', $this->field_height . ' см.', $template);
+        $template = str_replace('{{city}}', $this->city->name, $template);
+        $template = str_replace('{{sex}}', $this->sex == 'man' ? 'мальчик' : 'девочка', $template);
+
+        /*
+		if($this->type != "paid_2"){
+			$template = str_replace('{{kontakt}}', $this->type != 'free' ? '<noindex><span style="color: #F26521;font-weight: bold;font-size: 16px;">Звоните: ' . $this->user->phone . " " . $this->user->name . '</span></noindex>' :
+                    '<noindex><span style="color: #F26521;font-weight: bold;font-size: 16px;">' . KindSetting::get($this->main_kind_id, $this->city_id)->phone . '</span> - звоните и вам ответит консультант сайта. Если нужно он расскажет подробнее о ' . ($this->animal_id == 1 ? 'щенке' : 'котёнке') . ', о владельце питомника и отзывах о нем или просто даст вам номер владельца щенка, чтобы вы могли договориться о времени просмотра ' . ($this->animal_id == 1 ? 'щенка' : 'котёнка') . ' у заводчика и покупке.</noindex>'
+			, $template);
+		}
+        */
+
+
+        $template = str_replace('{{kontakt}}', '', $template);
 
         $template = str_replace('{{metro}}', $this->user->metro, $template);
 
@@ -191,10 +209,11 @@ class Item extends ActiveRecord\Model
         $template = str_replace('{{description}}', $this->description, $template);
         $template = str_replace('{{another}}', $this->another, $template);
 
-        $template = str_replace('{{paid_phone_text}}', $this->type == "free" ? '' : 'Звоните: '.$this->user->phone.' '.$this->user->name, $template);
-        $template = str_replace('{{site_phone}}',KindSetting::get($this->main_kind_id, $this->city_id)->phone, $template);
+        $template = str_replace('{{paid_phone_text}}', $this->type == "free" ? '' : 'Звоните: ' . $this->user->phone . ' ' . $this->user->name, $template);
+        $template = str_replace('{{site_phone}}', KindSetting::get($this->main_kind_id, $this->city_id)->phone, $template);
 
         $template = str_replace("\n", "<br/>", $template);
+
 
         return $template;
     }
@@ -215,27 +234,23 @@ class Item extends ActiveRecord\Model
             $this->closed_by = $this->publish_by = $this->changed_by = 0;
             $this->created_by = $this->user->id;
             $this->created_time = time_to_mysqldatetime(time());
-        }
-        else if ($status == 'edited') {
+        } else if ($status == 'edited') {
             $this->closed_time = $this->publish_time = $this->finish_time = null;
             $this->closed_by = $this->publish_by = 0;
             $this->changed_by = $this->user->id;
             $this->changed_time = time_to_mysqldatetime(time());
-        }
-        else if ($status == 'public') {
+        } else if ($status == 'public') {
             $now = time_to_mysqldatetime(time());
             $this->publish_time = $now;
             $this->publish_by = $this->user->id;
             if (!isset($params['publish_till'])) {
                 $this->finish_time = new DateTime();
                 $this->finish_time = $this->finish_time->add(new DateInterval('P30D'));
-            }
-            else
+            } else
                 $this->finish_time = inputdate_to_mysqldate($params['publish_till']) . substr($now, 10);
             $this->closed_time = null;
             $this->closed_by = 0;
-        }
-        else if ($status == 'saled') {
+        } else if ($status == 'saled') {
             $saled_by = $params['saled_by'];
             if ($saled_by && $saled_by != 'site' && $saled_by != 'plant') die;
             $old_saled = $this->saled_by;
@@ -266,11 +281,13 @@ class Item extends ActiveRecord\Model
         $this->save();
     }
 
-    public function get_main_kind(){
+    public function get_main_kind()
+    {
         return $this->kind->parent_id == 0 ? $this->kind : Kind::find_by_id($this->kind->parent_id);
     }
 
-    public function get_main_kind_id(){
+    public function get_main_kind_id()
+    {
         $kind = Kind::find_by_id($this->kind_id);
         return $this->kind->parent_id == 0 ? $this->kind->id : $this->kind->parent_id;
     }
@@ -278,9 +295,25 @@ class Item extends ActiveRecord\Model
     public function get_plain_price()
     {
         $city = City::find_by_id($this->city_id);
-        return $this->price." ".$city->valute;
+        return $this->price . " " . $city->valute;
     }
 
+    public function get_url(){
+
+        $city = City::find_by_id($this->city_id);
+        $kind = Kind::find_by_id($this->kind_id);
+
+        return 'http://'.$_SERVER['HTTP_HOST'].'/'.$city->alias.'/'.$kind->alias.'_'.$this->id;
+
+
+    }
+
+
+    public function getKindAlias()
+    {
+        $kind = Kind::find_by_id($this->kind_id);
+        return $kind ? $kind->alias : '';
+    }
 }
 
 ?>

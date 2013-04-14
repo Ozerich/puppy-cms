@@ -41,8 +41,8 @@
             <?=$item->plain_paidtype?>
         </td>
         <td class="actions-col">
-
-            <? if ($item->status == 'created' || $item->status == 'edited' || $item->status == 'public' || $item->status == 'canceled'): ?>
+			
+            <? if ($item->status == 'created' || $item->status == 'edited' || $item->status == 'finished' || $item->status == 'public' || $item->status == 'canceled'): ?>
             <div class="action">
                 <a href="edit/<?=$item->id?>">Редактировать</a>
 

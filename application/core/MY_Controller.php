@@ -30,7 +30,7 @@ class MY_Controller extends CI_Controller
         }
 		
 		$reviews = array();
-		foreach(Article::find('all', array('conditions' => array('category_id = ?', 7), 'order' => 'created_time DESC')) as $review)
+		foreach(Article::find('all', array('conditions' => array('category_id = ?', 7), 'order' => 'created_time DESC','limit' => '3')) as $review)
 			$reviews[] = array(
 				'id' => $review->id,
 				'image' => site_url('img/articles/'.$review->image),

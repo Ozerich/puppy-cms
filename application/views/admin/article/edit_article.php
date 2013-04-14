@@ -33,7 +33,7 @@
     </div>
     <div class="param">
         <label for="meta_description">META Description:</label>
-        <input type="text" name="meta_description" value="<?=$item->meta_keywords?>" id="meta_description"
+        <input type="text" name="meta_description" value="<?=$item->meta_description?>" id="meta_description"
                maxlength="2000"/>
     </div>
 

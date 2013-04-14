@@ -28,7 +28,7 @@ class Animal_Controller extends MY_Controller
 
     public function view($animal_id = 0)
     {
-        $animal = Animal::find_by_id($animal_id);
+		$animal = Animal::find_by_id($animal_id);
 
         if (!$animal) {
             show_404();

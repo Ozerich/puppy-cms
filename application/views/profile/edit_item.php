@@ -2,6 +2,10 @@
 <div class="block" id="new-item">
 <div class="block-header">Новое объявление</div>
 <div class="block-content">
+<div class="param param-title" style="margin-bottom: 10px;">
+    <label for="title">Заголовок объявления <span class="example">(пр.: Предлагаю мальчика йоркширского терьера с отличной родословной!)</span></label>
+    <input type="text" id="title" value="<?=$item->title?>"/>
+</div>
 <div class="top-info">
     <div class="param">
         <label for="kind">Порода:</label>
